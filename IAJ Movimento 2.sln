@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2015
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IAJ Movimento 2.CSharp", "IAJ Movimento 2.CSharp.csproj", "{FA144860-1A92-8705-ABF9-E73D3EB573BC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IAJ Movimento 2.CSharp.Editor", "IAJ Movimento 2.CSharp.Editor.csproj", "{FA916623-1ACD-F16E-0243-7C3619DACA1C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FA144860-1A92-8705-ABF9-E73D3EB573BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA144860-1A92-8705-ABF9-E73D3EB573BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA144860-1A92-8705-ABF9-E73D3EB573BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA144860-1A92-8705-ABF9-E73D3EB573BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA916623-1ACD-F16E-0243-7C3619DACA1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA916623-1ACD-F16E-0243-7C3619DACA1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA916623-1ACD-F16E-0243-7C3619DACA1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA916623-1ACD-F16E-0243-7C3619DACA1C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
