@@ -21,7 +21,7 @@ namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
 
             if(distance< stopRadius)
             {
-                return new MovementOutput();
+                targetSpeed = 0;
             }
 
             if(distance > slowRadius)
@@ -32,7 +32,7 @@ namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
             {
                 targetSpeed = maxSpeed * (distance / slowRadius);
             }
-
+            
             Target.velocity = direction.normalized * targetSpeed;
 
             MovingTarget = this.Target;

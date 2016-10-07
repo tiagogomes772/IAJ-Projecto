@@ -16,16 +16,16 @@ namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
 
         public FlockVelocityMatching()
         {
-            this.TimeToTargetSpeed = 0.5f;
+            this.TimeToTargetSpeed = 0.1f;
         }
 
-        private float ShortestAngleDifference(float source, float Target)
+        private float ShortestAngleDifference(float source, float target)
         {
-            float delta = Target - source;
+            float delta = target - source;
             if (delta > Math.PI)
-                delta -= 360;
+                delta -= 2 * (float)Math.PI;
             else if (delta < Math.PI)
-                delta += 360;
+                delta += (float)Math.PI;
 
             return delta;
         }
