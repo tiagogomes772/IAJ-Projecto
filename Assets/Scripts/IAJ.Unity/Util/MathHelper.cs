@@ -25,5 +25,15 @@ namespace Assets.Scripts.IAJ.Unity.Util
             return new Vector3(x,vector.y,z);
         }
 
+        public static float ShortestAngleDifference(float source, float target)
+        {
+            float delta = target - source;
+            if (delta > MathConstants.MATH_PI)
+                delta -= MathConstants.MATH_2PI;
+            else if (delta < MathConstants.MATH_PI)
+                delta += MathConstants.MATH_2PI;
+
+            return delta;
+        }
     }
 }

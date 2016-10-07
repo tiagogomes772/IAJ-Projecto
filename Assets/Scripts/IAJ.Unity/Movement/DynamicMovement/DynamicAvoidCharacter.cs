@@ -49,10 +49,20 @@ namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
             MovementOutput output = new MovementOutput();
             Vector3 deltaPos = target.position - Character.position;
             Vector3 deltaVel = target.velocity - Character.velocity;
-            float deltaSpeed = deltaVel.magnitude;            if (deltaSpeed == 0)
-                return output;            float timeToClosest = -Vector3.Dot(deltaPos, deltaVel) / (deltaSpeed * deltaSpeed);            if (timeToClosest > maxTimeLookAhead)
-                return output;            Vector3 futureDeltaPos = deltaPos + deltaVel * timeToClosest;
-            float futureDistance = futureDeltaPos.magnitude;            if (futureDistance > 2 * collisionRadius)
+            float deltaSpeed = deltaVel.magnitude;
+
+            if (deltaSpeed == 0)
+                return output;
+
+            float timeToClosest = -Vector3.Dot(deltaPos, deltaVel) / (deltaSpeed * deltaSpeed);
+
+            if (timeToClosest > maxTimeLookAhead)
+                return output;
+
+            Vector3 futureDeltaPos = deltaPos + deltaVel * timeToClosest;
+            float futureDistance = futureDeltaPos.magnitude;
+
+            if (futureDistance > 2 * collisionRadius)
                 return new MovementOutput();
 
             if (futureDistance <= 0 || deltaPos.magnitude < 2 * collisionRadius)

@@ -19,17 +19,6 @@ namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
             this.TimeToTargetSpeed = 0.1f;
         }
 
-        private float ShortestAngleDifference(float source, float target)
-        {
-            float delta = target - source;
-            if (delta > Math.PI)
-                delta -= 2 * (float)Math.PI;
-            else if (delta < Math.PI)
-                delta += (float)Math.PI;
-
-            return delta;
-        }
-
         public override MovementOutput GetMovement()
         {
             Vector3 averageVelocity = new Vector3();
@@ -44,7 +33,8 @@ namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
                     if (direction.magnitude <= radius)
                     {
                         float angle = MathHelper.ConvertVectorToOrientation(direction);
-                        float angleDifference = ShortestAngleDifference(Character.orientation, angle);
+                        float angleDifference = MathHelper.ShortestAngleDifference(Character.orientation, angle);
+                        
                         if (Math.Abs(angleDifference) <= fanAngle)
                         {
                             averageVelocity += boid.velocity;

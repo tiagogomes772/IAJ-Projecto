@@ -14,17 +14,6 @@ namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
         public float radius;
         public float fanAngle;
 
-        private float ShortestAngleDifference(float source, float target)
-        {
-            float delta = target - source;
-            if (delta > Math.PI)
-                delta -=  2 * (float) Math.PI;
-            else if (delta < Math.PI)
-                delta += (float) Math.PI;
-
-            return delta;
-        }
-
         public Cohesion()
         {
             this.TimeToTargetSpeed = 0.5f;
@@ -45,7 +34,7 @@ namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
                     if(direction.magnitude <= radius)
                     {
                         float angle = MathHelper.ConvertVectorToOrientation(direction);
-                        float angleDifference = ShortestAngleDifference(Character.orientation, angle);
+                        float angleDifference = MathHelper.ShortestAngleDifference(Character.orientation, angle);
 
                         if(Math.Abs(angleDifference) <= fanAngle)
                         {

@@ -10,32 +10,37 @@ using Assets.Scripts.IAJ.Unity.Movement;
 
 public class PriorityManager : MonoBehaviour
 {
+    // WORLD
     public const float X_WORLD_SIZE = 55;
     public const float Z_WORLD_SIZE = 32.5f;
+    public int MAX_BOIDS = 20;
+
+    // BOIDS
     public const float MAX_LOOK_AHEAD = 16.0f;
     public const float AVOID_MARGIN = 8.0f;
     public const float MAX_SPEED = 20.0f;
     public const float MAX_ACCELERATION = 40.0f;
     public const float DRAG = 0.1f;
-    public const float MAX_FAN_ANGLE = 120;
+    public const float MAX_FAN_ANGLE = MathConstants.MATH_2PI; // verificar este valor...
     public const float MAX_SLOW_RADIUS = 8;
-    public const float MAX_STOP_RADIUS = 1;
+    public const float MAX_STOP_RADIUS = 2;
     public const float MAX_SEPARATION_FACTOR = 30;
     public const float MAX_RADIUS = 10;
     public const float MIN_SPEED = 4.0f;
-    public int MAX_BOIDS = 20;
     public float WANDER_RADIUS = 0;
     public float WANDER_OFFSET = 3;
     public float WHISKER_ANGLE = 30;
     public float WHISKER_LOOK_AHEAD = 3;
 
+    // WEIGHTS
+    public float AVOID_OBSTACLE_WEIGHT = 50.0f;
+    public float SEPARATION_WEIGHT = 5.0f;
+    public float COHESION_WEIGHT = 5.0f;
+    public float FLOCK_MATCHING_WEIGHT = 15.0f;
+    public float STRAIGHT_AHEAD_WEIGHT = 20.0f;
+    public float WANDER_WEIGHT = 0.0f;
+
     private DynamicCharacter RedCharacter { get; set; }
-
-    private Text RedMovementText { get; set; }
-
-    private BlendedMovement Blended { get; set; }
-
-    private PriorityMovement Priority { get; set; }
 
     private List<DynamicCharacter> Characters { get; set; }
 
@@ -49,12 +54,9 @@ public class PriorityManager : MonoBehaviour
 		{
 			textObj.GetComponent<Text>().text = 
 				"Instructions\n\n" +
-				"B - Blended\n" +
-				"P - Priority\n"+
-                "Q - stop"; 
+				"Click wherever you want"; 
 		}
 
-	    this.RedMovementText = GameObject.Find("RedMovement").GetComponent<Text>();
 		var redObj = GameObject.Find ("Red");
 
 	    this.RedCharacter = new DynamicCharacter(redObj)
@@ -68,124 +70,15 @@ public class PriorityManager : MonoBehaviour
 	    this.Characters = this.CloneSecondaryCharacters(redObj, MAX_BOIDS, obstacles);
 	    this.Characters.Add(this.RedCharacter);
 
-        this.InitializeMainCharacter(obstacles);
-
         //initialize all but the last character (because it was already initialized as the main character)
-	    foreach (var character in this.Characters.Take(this.Characters.Count-1))
+	    foreach (var character in this.Characters)
 	    {
-	        this.InitializeSecondaryCharacter(character, obstacles);
+	        this.InitializeCharacter(character, obstacles);
 	    }
 	}
 
-    private void InitializeMainCharacter(GameObject[] obstacles)
+    private void InitializeCharacter(DynamicCharacter character, GameObject[] obstacles)
     {
-        
-
-        this.Blended = new BlendedMovement
-        {
-            Character = this.RedCharacter.KinematicData
-        };
-        
-	    foreach (var obstacle in obstacles)
-	    {
-
-            DynamicAvoidObstacle avoidObstacleMovement = new DynamicAvoidObstacle(obstacle)
-            {
-                MaxAcceleration = MAX_ACCELERATION,
-                avoidMargin = AVOID_MARGIN,
-                maxLookAhead = MAX_LOOK_AHEAD,
-                whiskerAngle = WHISKER_ANGLE,
-                whiskerLookAhead = WHISKER_LOOK_AHEAD,
-                Character = this.RedCharacter.KinematicData,
-                Target = new KinematicData(),
-                MovementDebugColor = Color.magenta
-            };
-
-
-            #region Blended Movements
-            this.Blended.Movements.Add(new MovementWithWeight(avoidObstacleMovement, 50f));
-
-            #endregion
-
-        }
-
-        FlockVelocityMatching flockVelocityMatching = new FlockVelocityMatching()
-        {
-            Character = this.RedCharacter.KinematicData,
-            Target = new KinematicData(),
-            MovementDebugColor = Color.magenta,
-            fanAngle = MAX_FAN_ANGLE,
-            flock = Characters,
-            MaxAcceleration = MAX_ACCELERATION,
-            radius = MAX_RADIUS
-        };
-        Cohesion cohesionMovement = new Cohesion()
-        {
-            Character = this.RedCharacter.KinematicData,
-            Target = new KinematicData(),
-            MovementDebugColor = Color.magenta,
-            flock = Characters,
-            fanAngle = MAX_FAN_ANGLE,
-            MaxAcceleration = MAX_ACCELERATION,
-            maxSpeed = MAX_SPEED,
-            name = "Cohesion",
-            radius = MAX_RADIUS,
-            slowRadius = MAX_SLOW_RADIUS,
-            stopRadius = MAX_STOP_RADIUS
-        };
-        Separation separationMovement = new Separation()
-        {
-            character = this.RedCharacter.KinematicData,
-            flock = Characters,
-            maxAcceleration = MAX_ACCELERATION,
-            radius = MAX_STOP_RADIUS,
-            separationFactor = MAX_SEPARATION_FACTOR
-        };
-        this.Blended.Movements.Add(new MovementWithWeight(cohesionMovement, 5f));
-        this.Blended.Movements.Add(new MovementWithWeight(separationMovement, 15f));
-        this.Blended.Movements.Add(new MovementWithWeight(flockVelocityMatching, 15.0f));
-
-        foreach (var otherCharacter in this.Characters)
-        {
-            if (otherCharacter != this.RedCharacter)
-            {
-                //TODO: add your AvoidCharacter movement here
-                var avoidCharacter = new DynamicAvoidCharacter(otherCharacter.KinematicData)
-                {
-                    Character = this.RedCharacter.KinematicData,
-                    maxacceleration = MAX_ACCELERATION,
-                    avoidmargin = AVOID_MARGIN,
-                    //movementdebugcolor = color.cyan
-                };
-
-                this.Blended.Movements.Add(new MovementWithWeight(avoidCharacter, 12.5f));
-                //TODO: ASK THIS TO THE PROFESSOR
-                //this.Priority.Movements.Add(avoidCharacter);
-            }
-        }
-
-        var wander = new DynamicWander
-        {
-            Character = this.RedCharacter.KinematicData,
-            MovementDebugColor = Color.yellow,
-            MaxAcceleration = MAX_ACCELERATION,
-            WanderRate = MathConstants.MATH_PI_2,
-            WanderRadius = WANDER_RADIUS,
-            WanderOffset = WANDER_OFFSET
-        };
-
-        this.Blended.Movements.Add(new MovementWithWeight(wander, 20f));
-
-        this.RedCharacter.Movement = this.Blended;
-
-    }
-
-    private void InitializeSecondaryCharacter(DynamicCharacter character, GameObject[] obstacles)
-    {
-        //this.Priority = new PriorityMovement
-        //{
-        //    Character = this.RedCharacter.KinematicData
-        //};
 
         BlendedMovement tempBlended = new BlendedMovement
         {
@@ -207,8 +100,9 @@ public class PriorityManager : MonoBehaviour
                 MovementDebugColor = Color.magenta
             };
 
-            tempBlended.Movements.Add(new MovementWithWeight(avoidObstacleMovement, 50f));
+            tempBlended.Movements.Add(new MovementWithWeight(avoidObstacleMovement, AVOID_OBSTACLE_WEIGHT));
         }
+
         FlockVelocityMatching flockVelocityMatching = new FlockVelocityMatching()
         {
             Character = character.KinematicData,
@@ -241,17 +135,34 @@ public class PriorityManager : MonoBehaviour
             radius = MAX_STOP_RADIUS,
             separationFactor = MAX_SEPARATION_FACTOR
         };
+        DynamicStraightAhead straightAhead = new DynamicStraightAhead
+        {
+            Character = character.KinematicData,
+            MaxAcceleration = MAX_ACCELERATION,
+            MovementDebugColor = Color.yellow
+        };
+        DynamicWander wander = new DynamicWander
+        {
+            Character = character.KinematicData,
+            MovementDebugColor = Color.yellow,
+            MaxAcceleration = MAX_ACCELERATION,
+            WanderRate = MathConstants.MATH_PI_2,
+            WanderRadius = WANDER_RADIUS,
+            WanderOffset = WANDER_OFFSET
+        };
 
         #region Blended Movements
-         
-        tempBlended.Movements.Add(new MovementWithWeight(cohesionMovement, 5f));
-        tempBlended.Movements.Add(new MovementWithWeight(separationMovement, 15f));
-        tempBlended.Movements.Add(new MovementWithWeight(flockVelocityMatching, 15.0f));
+
+        tempBlended.Movements.Add(new MovementWithWeight(cohesionMovement, COHESION_WEIGHT));
+        tempBlended.Movements.Add(new MovementWithWeight(separationMovement, SEPARATION_WEIGHT));
+        tempBlended.Movements.Add(new MovementWithWeight(flockVelocityMatching, FLOCK_MATCHING_WEIGHT));
+        tempBlended.Movements.Add(new MovementWithWeight(straightAhead, STRAIGHT_AHEAD_WEIGHT));
+        tempBlended.Movements.Add(new MovementWithWeight(wander, WANDER_WEIGHT));
         #endregion
 
 
 
-        foreach (var otherCharacter in this.Characters)
+        /*foreach (var otherCharacter in this.Characters)
         {
             if (otherCharacter != character)
             {
@@ -268,31 +179,7 @@ public class PriorityManager : MonoBehaviour
                 #endregion
                 //priority.Movements.Add(avoidCharacter);
             }
-        }
-
-        var straightAhead = new DynamicStraightAhead
-        {
-            Character = character.KinematicData,
-            MaxAcceleration = MAX_ACCELERATION,
-            MovementDebugColor = Color.yellow
-        };
-
-
-        #region Blended Movements
-        tempBlended.Movements.Add(new MovementWithWeight(straightAhead, 10f));
-        #endregion
-
-        var wander = new DynamicWander
-        {
-            Character = character.KinematicData,
-            MovementDebugColor = Color.yellow,
-            MaxAcceleration = MAX_ACCELERATION,
-            WanderRate = MathConstants.MATH_PI_2,
-            WanderRadius = WANDER_RADIUS,
-            WanderOffset = WANDER_OFFSET
-        };
-
-        tempBlended.Movements.Add(new MovementWithWeight(wander, 20f));
+        }*/
 
         character.Movement = tempBlended;
     }
@@ -346,25 +233,10 @@ public class PriorityManager : MonoBehaviour
 
 	void Update()
 	{
-		if (Input.GetKeyDown (KeyCode.Q)) 
-		{
-			this.RedCharacter.Movement = null;
-		} 
-		else if (Input.GetKeyDown (KeyCode.B))
-		{
-		    this.RedCharacter.Movement = this.Blended;
-		}
-		else if (Input.GetKeyDown (KeyCode.P))
-		{
-		    this.RedCharacter.Movement = this.Priority;
-		}
-
 	    foreach (var character in this.Characters)
 	    {
 	        this.UpdateMovingGameObject(character);
 	    }
-
-        this.UpdateMovementText();
 	}
 
     private void UpdateMovingGameObject(DynamicCharacter movingCharacter)
@@ -377,15 +249,4 @@ public class PriorityManager : MonoBehaviour
         }
     }
 
-    private void UpdateMovementText()
-    {
-        if (this.RedCharacter.Movement == null)
-        {
-            this.RedMovementText.text = "Red Movement: Stationary";
-        }
-        else
-        {
-            this.RedMovementText.text = "Red Movement: " + this.RedCharacter.Movement.Name;
-        }
-    }
 }
