@@ -23,10 +23,13 @@ namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
 
         public override MovementOutput GetMovement()
         {
+            if(Character.velocity.magnitude == 0)
+                return new MovementOutput();
+            
             Vector3 leftRayDirection = Quaternion.Euler(0, whiskerAngle, 0) * Character.velocity;
             Vector3 rightRayDirection = Quaternion.Euler(0, -whiskerAngle, 0) * Character.velocity;
 
-            Ray r = new Ray(Character.position, Character.velocity.normalized);
+            Ray middleRay = new Ray(Character.position, Character.velocity.normalized);
             Ray whiskerLeftRay = new Ray(Character.position, leftRayDirection.normalized);
             Ray whiskerRightRay = new Ray(Character.position, rightRayDirection.normalized);
 
@@ -36,7 +39,7 @@ namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
 
             RaycastHit hit;
 
-            if(collisionDetector.Raycast(r, out hit, maxLookAhead) || 
+            if(collisionDetector.Raycast(middleRay, out hit, maxLookAhead) || 
                collisionDetector.Raycast(whiskerLeftRay, out hit, maxLookAhead) || 
                collisionDetector.Raycast(whiskerRightRay, out hit, maxLookAhead))
             {

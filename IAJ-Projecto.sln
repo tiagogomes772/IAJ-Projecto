@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2015
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IAJ-Projecto.CSharp", "IAJ-Projecto.CSharp.csproj", "{EEEBA8FF-B5D9-C3E0-4C6E-B71A285712A3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IAJ-Projecto.CSharp.Editor", "IAJ-Projecto.CSharp.Editor.csproj", "{EF4A7068-3B0E-2AE2-E1A1-F2ED1C3B4AB5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EEEBA8FF-B5D9-C3E0-4C6E-B71A285712A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EEEBA8FF-B5D9-C3E0-4C6E-B71A285712A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EEEBA8FF-B5D9-C3E0-4C6E-B71A285712A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EEEBA8FF-B5D9-C3E0-4C6E-B71A285712A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF4A7068-3B0E-2AE2-E1A1-F2ED1C3B4AB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF4A7068-3B0E-2AE2-E1A1-F2ED1C3B4AB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF4A7068-3B0E-2AE2-E1A1-F2ED1C3B4AB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF4A7068-3B0E-2AE2-E1A1-F2ED1C3B4AB5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -6,20 +6,44 @@ using UnityEngine;
 
 namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
 {
-    class Separation
+    class Separation: DynamicMovement
     {
         public KinematicData character;
-        public List<KinematicData> flock;
+        public List<DynamicCharacter> flock;
         public float maxAcceleration;
         public float radius;
         public float separationFactor;
 
-        public MovementOutput GetMovement()
+        public override string Name
+        {
+            get
+            {
+                return "Separation";
+            }
+        }
+
+        public override KinematicData Target
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+        
+
+        public override MovementOutput GetMovement()
         {
             MovementOutput output = new MovementOutput();
 
-            foreach(var boid in flock)
+            foreach(var bird in flock)
             {
+                var boid = bird.KinematicData;
+
                 if(boid != character)
                 {
                     Vector3 direction = character.position - boid.position;

@@ -9,15 +9,19 @@ namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
 {
     class FlockVelocityMatching : DynamicVelocityMatch
     {
-        public KinematicData character;
-        public KinematicData target;
-        public List<KinematicData> flock;
+        public List<DynamicCharacter> flock;
         public float radius;
         public float fanAngle;
 
-        private float ShortestAngleDifference(float source, float target)
+
+        public FlockVelocityMatching()
         {
-            float delta = target - source;
+            this.TimeToTargetSpeed = 0.5f;
+        }
+
+        private float ShortestAngleDifference(float source, float Target)
+        {
+            float delta = Target - source;
             if (delta > Math.PI)
                 delta -= 360;
             else if (delta < Math.PI)
@@ -25,20 +29,22 @@ namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
 
             return delta;
         }
+
         public override MovementOutput GetMovement()
         {
             Vector3 averageVelocity = new Vector3();
             int closeBoids = 0;
            
-            foreach(var boid in flock)
+            foreach(var bird in flock)
             {
-                if (character != boid)
+                var boid = bird.KinematicData;
+                if (Character != boid)
                 { 
-                    Vector3 direction = boid.position - character.position;
+                    Vector3 direction = boid.position - Character.position;
                     if (direction.magnitude <= radius)
                     {
                         float angle = MathHelper.ConvertVectorToOrientation(direction);
-                        float angleDifference = ShortestAngleDifference(character.orientation, angle);
+                        float angleDifference = ShortestAngleDifference(Character.orientation, angle);
                         if (Math.Abs(angleDifference) <= fanAngle)
                         {
                             averageVelocity += boid.velocity;
@@ -50,7 +56,9 @@ namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
             if (closeBoids == 0)
                 return new MovementOutput();
             averageVelocity /= closeBoids;
-            target.velocity = averageVelocity;
+            Target.velocity = averageVelocity;
+            MovingTarget = new KinematicData();
+            MovingTarget.velocity=averageVelocity;
             return base.GetMovement();
         }
     }

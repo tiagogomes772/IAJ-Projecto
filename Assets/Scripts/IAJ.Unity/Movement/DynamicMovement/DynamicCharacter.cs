@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.IAJ.Unity.Util;
+﻿using Assets.Scripts.IAJ.Unity.Movement.Arbitration;
+using Assets.Scripts.IAJ.Unity.Util;
 using UnityEngine;
 
 namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
@@ -8,6 +9,9 @@ namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
         public GameObject GameObject { get; protected set; }
         public KinematicData KinematicData { get; protected set; }
         private DynamicMovement movement;
+        public BlendedMovement Blended { get; set; }
+
+
         public DynamicMovement Movement 
         { 
             get { return this.movement; }

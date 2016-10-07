@@ -8,11 +8,9 @@ using UnityEngine;
 namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
 {
     // TODO find SuperClass
-    class Cohesion : DynamicSeek
+    class Cohesion : DynamicArrive
     {
-        public KinematicData character;
-        public KinematicData target;
-        public List<KinematicData> flock;
+        public List<DynamicCharacter> flock;
         public float radius;
         public float fanAngle;
 
@@ -27,20 +25,27 @@ namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
             return delta;
         }
 
+        public Cohesion()
+        {
+            this.TimeToTargetSpeed = 0.5f;
+        }
+
         public override MovementOutput GetMovement()
         {
             Vector3 massCenter = new Vector3();
             float closeBoids = 0;
-            foreach(var boid in flock)
+            foreach(var bird in flock)
             {
-                if(character != boid)
+                var boid = bird.KinematicData;
+
+                if (Character != boid)
                 {
-                    Vector3 direction = boid.position - character.position;
+                    Vector3 direction = boid.position - Character.position;
 
                     if(direction.magnitude <= radius)
                     {
                         float angle = MathHelper.ConvertVectorToOrientation(direction);
-                        float angleDifference = ShortestAngleDifference(character.orientation, angle);
+                        float angleDifference = ShortestAngleDifference(Character.orientation, angle);
 
                         if(Math.Abs(angleDifference) <= fanAngle)
                         {
@@ -53,7 +58,7 @@ namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
             if (closeBoids == 0)
                 return new MovementOutput();
             massCenter /= closeBoids;
-            target.position = massCenter;
+            Target.position = massCenter;
 
             //TODO: Understand which superclass belongs
             return base.GetMovement();
