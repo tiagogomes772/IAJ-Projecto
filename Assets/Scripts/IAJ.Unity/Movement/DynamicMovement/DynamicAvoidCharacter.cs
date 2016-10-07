@@ -27,12 +27,12 @@ namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
         {
             get
             {
-                return target;
+                return Target;
             }
 
             set
             {
-                throw new NotImplementedException();
+                Target = target;
             }
         }
 

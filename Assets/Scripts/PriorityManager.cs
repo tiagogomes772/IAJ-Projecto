@@ -17,7 +17,7 @@ public class PriorityManager : MonoBehaviour
     public const float MAX_SPEED = 20.0f;
     public const float MAX_ACCELERATION = 40.0f;
     public const float DRAG = 0.1f;
-    public const float MAX_FAN_ANGLE = MathConstants.MATH_PI_2 * 1.5f;
+    public const float MAX_FAN_ANGLE = 180;
     public const float MAX_SLOW_RADIUS = 20;
     public const float MAX_STOP_RADIUS = 2;
     public const float MAX_SEPARATION_FACTOR = 30;

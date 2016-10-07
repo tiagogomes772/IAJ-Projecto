@@ -44,19 +44,22 @@ namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
 
                     if(direction.magnitude <= radius)
                     {
-                        float angle = MathHelper.ConvertVectorToOrientation(direction);
-                        float angleDifference = ShortestAngleDifference(Character.orientation, angle);
+                        //float angle = MathHelper.ConvertVectorToOrientation(direction);
+                        //float angleDifference = ShortestAngleDifference(Character.orientation, angle);
 
-                        if(Math.Abs(angleDifference) <= fanAngle)
-                        {
+                        //if(Math.Abs(angleDifference) <= fanAngle)
+                        //{
                             massCenter += boid.position;
                             closeBoids++;
-                        }
+                        //}
                     }
                 }
             }
             if (closeBoids == 0)
+            {
                 return new MovementOutput();
+            }
+                
             massCenter /= closeBoids;
             Target.position = massCenter;
 
