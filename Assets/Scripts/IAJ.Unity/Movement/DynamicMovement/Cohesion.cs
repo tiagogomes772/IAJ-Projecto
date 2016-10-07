@@ -18,9 +18,9 @@ namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
         {
             float delta = target - source;
             if (delta > Math.PI)
-                delta -= 360;
+                delta -=  2 * (float) Math.PI;
             else if (delta < Math.PI)
-                delta += 360;
+                delta += (float) Math.PI;
 
             return delta;
         }
@@ -44,14 +44,14 @@ namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
 
                     if(direction.magnitude <= radius)
                     {
-                        //float angle = MathHelper.ConvertVectorToOrientation(direction);
-                        //float angleDifference = ShortestAngleDifference(Character.orientation, angle);
+                        float angle = MathHelper.ConvertVectorToOrientation(direction);
+                        float angleDifference = ShortestAngleDifference(Character.orientation, angle);
 
-                        //if(Math.Abs(angleDifference) <= fanAngle)
-                        //{
+                        if(Math.Abs(angleDifference) <= fanAngle)
+                        {
                             massCenter += boid.position;
                             closeBoids++;
-                        //}
+                        }
                     }
                 }
             }

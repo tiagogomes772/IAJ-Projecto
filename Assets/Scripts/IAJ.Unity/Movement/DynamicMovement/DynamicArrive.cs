@@ -21,7 +21,7 @@ namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
 
             if(distance< stopRadius)
             {
-                return null;
+                return new MovementOutput();
             }
 
             if(distance > slowRadius)
