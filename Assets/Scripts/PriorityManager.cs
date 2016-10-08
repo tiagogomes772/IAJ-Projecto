@@ -207,8 +207,11 @@ public class PriorityManager : MonoBehaviour
         character.Blended = tempBlended;
     }
 
-    private List<DynamicCharacter> CloneSecondaryCharacters(GameObject objectToClone,int numberOfCharacters, GameObject[] obstacles)
+    private List<DynamicCharacter> CloneSecondaryCharacters(GameObject objectToClone,int MaxNumberOfCharacters, GameObject[] obstacles)
     {
+        System.Random randGenerator = new System.Random();
+        int numberOfCharacters = randGenerator.Next(1, MaxNumberOfCharacters);
+
         var characters = new List<DynamicCharacter>();
         for (int i = 0; i < numberOfCharacters; i++)
         {
