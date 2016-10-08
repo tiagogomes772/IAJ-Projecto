@@ -40,16 +40,22 @@ public class PriorityManager : MonoBehaviour
     public float STRAIGHT_AHEAD_WEIGHT = 20.0f;
     public float WANDER_WEIGHT = 0.0f;
 
+    private Camera MainCamera { get; set; }
+
     private DynamicCharacter RedCharacter { get; set; }
 
     private List<DynamicCharacter> Characters { get; set; }
 
+    private bool MousePressed { get; set; }
 
+    private Vector3 Point { get; set; }
 
     // Use this for initialization
     void Start () 
 	{
-		var textObj = GameObject.Find ("InstructionsText");
+        this.MainCamera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
+
+        var textObj = GameObject.Find ("InstructionsText");
 		if (textObj != null) 
 		{
 			textObj.GetComponent<Text>().text = 
@@ -79,6 +85,10 @@ public class PriorityManager : MonoBehaviour
 
     private void InitializeCharacter(DynamicCharacter character, GameObject[] obstacles)
     {
+        PriorityMovement tempPriorityPrimary = new PriorityMovement
+        {
+            Character = character.KinematicData
+        };
 
         BlendedMovement tempBlended = new BlendedMovement
         {
@@ -99,8 +109,8 @@ public class PriorityManager : MonoBehaviour
                 Target = new KinematicData(),
                 MovementDebugColor = Color.magenta
             };
-
-            tempBlended.Movements.Add(new MovementWithWeight(avoidObstacleMovement, AVOID_OBSTACLE_WEIGHT));
+            tempPriorityPrimary.Movements.Add(avoidObstacleMovement);
+            //tempBlended.Movements.Add(new MovementWithWeight(avoidObstacleMovement, AVOID_OBSTACLE_WEIGHT));
         }
 
         FlockVelocityMatching flockVelocityMatching = new FlockVelocityMatching()
@@ -135,6 +145,7 @@ public class PriorityManager : MonoBehaviour
             radius = MAX_STOP_RADIUS,
             separationFactor = MAX_SEPARATION_FACTOR
         };
+
         DynamicStraightAhead straightAhead = new DynamicStraightAhead
         {
             Character = character.KinematicData,
@@ -150,6 +161,13 @@ public class PriorityManager : MonoBehaviour
             WanderRadius = WANDER_RADIUS,
             WanderOffset = WANDER_OFFSET
         };
+        DynamicFleeRadius flee = new DynamicFleeRadius
+        {
+            Character = character.KinematicData,
+            MovementDebugColor = Color.yellow,
+            MaxAcceleration = MAX_ACCELERATION,
+            radius = 10
+        };
 
         #region Blended Movements
 
@@ -158,9 +176,10 @@ public class PriorityManager : MonoBehaviour
         tempBlended.Movements.Add(new MovementWithWeight(flockVelocityMatching, FLOCK_MATCHING_WEIGHT));
         tempBlended.Movements.Add(new MovementWithWeight(straightAhead, STRAIGHT_AHEAD_WEIGHT));
         tempBlended.Movements.Add(new MovementWithWeight(wander, WANDER_WEIGHT));
+        tempBlended.Movements.Add(new MovementWithWeight(flee, 0.0f));
         #endregion
 
-
+        tempPriorityPrimary.Movements.Add(tempBlended);
 
         /*foreach (var otherCharacter in this.Characters)
         {
@@ -181,7 +200,8 @@ public class PriorityManager : MonoBehaviour
             }
         }*/
 
-        character.Movement = tempBlended;
+        character.Movement = tempPriorityPrimary;
+        character.Blended = tempBlended;
     }
 
     private List<DynamicCharacter> CloneSecondaryCharacters(GameObject objectToClone,int numberOfCharacters, GameObject[] obstacles)
@@ -233,14 +253,31 @@ public class PriorityManager : MonoBehaviour
 
 	void Update()
 	{
-	    foreach (var character in this.Characters)
+        if (Input.GetMouseButton(0))
+        {
+            var mousePos = Input.mousePosition;
+            mousePos.z = this.MainCamera.transform.position.y;
+            this.Point = this.MainCamera.ScreenToWorldPoint(mousePos);
+            this.Point.Set(this.Point.x, 0.0f, this.Point.z);
+            this.MousePressed = true;
+        }
+
+        foreach (var character in this.Characters)
 	    {
 	        this.UpdateMovingGameObject(character);
 	    }
+        this.MousePressed = false;
 	}
 
     private void UpdateMovingGameObject(DynamicCharacter movingCharacter)
     {
+        if (this.MousePressed)
+        {
+            MovementWithWeight movementW = movingCharacter.Blended.Movements.Find(obj => obj.Movement is DynamicFleeRadius);
+
+            movementW.Movement.Target = new KinematicData { position = this.Point };
+            movementW.Weight = 150.0f;
+        }
         if (movingCharacter.Movement != null)
         {
             movingCharacter.Update();

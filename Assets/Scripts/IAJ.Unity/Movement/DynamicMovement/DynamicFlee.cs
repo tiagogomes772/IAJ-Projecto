@@ -17,8 +17,9 @@
             {
                 output.linear.Normalize();
                 output.linear *= this.MaxAcceleration;
+                output.linear.y = 0; //FIXME!!
             }
-
+            
             return output;
         }
     }
