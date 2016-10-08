@@ -10,12 +10,13 @@ using Assets.Scripts.IAJ.Unity.Movement;
 
 public class PriorityManager : MonoBehaviour
 {
-    // WORLD
+    #region World
     public const float X_WORLD_SIZE = 55;
     public const float Z_WORLD_SIZE = 32.5f;
     public int MAX_BOIDS = 20;
+    #endregion
 
-    // BOIDS
+    #region BOIDS variables
     public const float MAX_LOOK_AHEAD = 16.0f;
     public const float AVOID_MARGIN = 8.0f;
     public const float MAX_SPEED = 20.0f;
@@ -31,14 +32,16 @@ public class PriorityManager : MonoBehaviour
     public float WANDER_OFFSET = 3;
     public float WHISKER_ANGLE = 30;
     public float WHISKER_LOOK_AHEAD = 3;
+    #endregion
 
-    // WEIGHTS
+    #region Weights
     public float AVOID_OBSTACLE_WEIGHT = 50.0f;
     public float SEPARATION_WEIGHT = 5.0f;
     public float COHESION_WEIGHT = 5.0f;
     public float FLOCK_MATCHING_WEIGHT = 15.0f;
     public float STRAIGHT_AHEAD_WEIGHT = 20.0f;
     public float WANDER_WEIGHT = 0.0f;
+    #endregion
 
     private Camera MainCamera { get; set; }
 
