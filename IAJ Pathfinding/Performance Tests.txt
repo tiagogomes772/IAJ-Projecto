@@ -1,0 +1,10 @@
+OrderOnAddNodeList:
+	Processing Time 2495000ms
+	NodesVisited=2373
+	Time per Node= 1051.412
+
+SimpleUnorderedNodeList:
+	Processing Time 2355000ms
+	NodesVisited=2379
+	Time per Node= 989.9117ms
+

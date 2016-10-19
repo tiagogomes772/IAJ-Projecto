@@ -3,8 +3,9 @@ using Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures;
 using Assets.Scripts.IAJ.Unity.Pathfinding.Heuristics;
 using UnityEngine;
 using RAIN.Navigation;
-using RAIN.Navigation.NavMesh; 
+using RAIN.Navigation.NavMesh;
 using RAIN.Navigation.Graph;
+
 
 public class PathfindingManager : MonoBehaviour {
 
@@ -14,6 +15,7 @@ public class PathfindingManager : MonoBehaviour {
 	public Camera camera;
     public uint NodesPerSearch= uint.MaxValue;
     public bool AcceptPartialPaths = false;
+    public bool DebugMode = false;
 
     //private fields for internal use only
     private Vector3 startPosition;
@@ -82,8 +84,21 @@ public class PathfindingManager : MonoBehaviour {
         //call the pathfinding method if the user specified a new goal
 	    if (this.aStarPathFinding.InProgress)
 	    {
-	        var finished = this.aStarPathFinding.Search(out this.currentSolution, AcceptPartialPaths);
-	        if (finished && this.currentSolution != null)
+            #region Debug
+            System.Diagnostics.Stopwatch stopwatch = null;
+            if (DebugMode/*ON*/)
+                stopwatch = System.Diagnostics.Stopwatch.StartNew();
+            #endregion
+            var finished = this.aStarPathFinding.Search(out this.currentSolution, AcceptPartialPaths);
+            #region Debug
+            if (DebugMode/*ON*/)
+            {
+                stopwatch.Stop();
+                this.aStarPathFinding.TotalProcessingTime = stopwatch.ElapsedMilliseconds;
+            }
+            #endregion
+
+            if (finished && this.currentSolution != null)
 	        {
 	            //here I would make a character follow the path   
 	        }

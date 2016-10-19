@@ -17,7 +17,7 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
 
         public uint TotalProcessedNodes { get; protected set; }
         public int MaxOpenNodes { get; protected set; }
-        public float TotalProcessingTime { get; protected set; }
+        public float TotalProcessingTime { get; set; }
         public bool InProgress { get; protected set; }
 
         public IOpenSet Open { get; protected set; }
@@ -228,10 +228,4 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
 
 
 
-public class NodeComparator : IComparer<NodeRecord>
-{
-    public int Compare(NodeRecord x, NodeRecord y)
-    {
-        return (int)Math.Round(x.fValue - y.fValue);
-    }
-}
+
