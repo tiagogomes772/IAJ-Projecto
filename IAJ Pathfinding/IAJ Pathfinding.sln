@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2015
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IAJ Pathfinding.CSharp", "IAJ Pathfinding.CSharp.csproj", "{E4E1DFF2-B538-0B4E-589B-D3B4E9E12A6B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IAJ Pathfinding.CSharp.Editor", "IAJ Pathfinding.CSharp.Editor.csproj", "{90D29CA9-F127-81D5-AA79-B51047895EB7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E4E1DFF2-B538-0B4E-589B-D3B4E9E12A6B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E4E1DFF2-B538-0B4E-589B-D3B4E9E12A6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E4E1DFF2-B538-0B4E-589B-D3B4E9E12A6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E4E1DFF2-B538-0B4E-589B-D3B4E9E12A6B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90D29CA9-F127-81D5-AA79-B51047895EB7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90D29CA9-F127-81D5-AA79-B51047895EB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90D29CA9-F127-81D5-AA79-B51047895EB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90D29CA9-F127-81D5-AA79-B51047895EB7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
