@@ -36,7 +36,7 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
             this.NavMeshGraph = graph;
             this.Open = open;
             this.Closed = closed;
-            this.NodesPerSearch = uint.MaxValue; //by default we process all nodes in a single request
+            //this.NodesPerSearch = uint.MaxValue; //by default we process all nodes in a single request
             this.InProgress = false;
             this.Heuristic = heuristic;
         }
@@ -110,7 +110,7 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
             solution = null;
             NodeRecord best = null;
 
-            for ( TotalProcessedNodes = 0; TotalProcessedNodes < 100000; TotalProcessedNodes++)
+            for ( TotalProcessedNodes = 0; TotalProcessedNodes < NodesPerSearch; TotalProcessedNodes++)
             {
                 if (Open.Count() <= 0)
                 {

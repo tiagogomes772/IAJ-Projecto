@@ -12,9 +12,11 @@ public class PathfindingManager : MonoBehaviour {
 	public GameObject startDebugSphere;
 	public GameObject endDebugSphere;
 	public Camera camera;
+    public uint NodesPerSearch= uint.MaxValue;
+    public bool AcceptPartialPaths = false;
 
-	//private fields for internal use only
-	private Vector3 startPosition;
+    //private fields for internal use only
+    private Vector3 startPosition;
 	private Vector3 endPosition;
 	private NavMeshPathGraph navMesh;
 	private ushort currentClickNumber;
@@ -31,7 +33,10 @@ public class PathfindingManager : MonoBehaviour {
 		this.currentClickNumber = 1;
 		this.navMesh = NavigationManager.Instance.NavMeshGraphs [0];
 
-	    this.aStarPathFinding = new AStarPathfinding(this.navMesh, new SimpleUnorderedNodeList(), new SimpleUnorderedNodeList(), new ZeroHeuristic());
+        this.aStarPathFinding = new AStarPathfinding(this.navMesh, new SimpleUnorderedNodeList(), new SimpleUnorderedNodeList(), new ZeroHeuristic())
+        {
+            NodesPerSearch = this.NodesPerSearch
+        };
 	}
 	
 	// Update is called once per frame
@@ -77,7 +82,7 @@ public class PathfindingManager : MonoBehaviour {
         //call the pathfinding method if the user specified a new goal
 	    if (this.aStarPathFinding.InProgress)
 	    {
-	        var finished = this.aStarPathFinding.Search(out this.currentSolution);
+	        var finished = this.aStarPathFinding.Search(out this.currentSolution, AcceptPartialPaths);
 	        if (finished && this.currentSolution != null)
 	        {
 	            //here I would make a character follow the path   
