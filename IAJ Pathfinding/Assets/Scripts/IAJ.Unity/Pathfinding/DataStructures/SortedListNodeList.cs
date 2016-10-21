@@ -7,11 +7,11 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures
 {
     class SortedListNodeList : IOpenSet
     {
-        private SortedList<float,NodeRecord> NodeRecords { get; set; }
+        private SortedList<NodeRecord, NodeRecord> NodeRecords { get; set; }
 
         public SortedListNodeList()
         {
-            this.NodeRecords = new SortedList<float, NodeRecord>(new DuplicateNodeComparator());
+            NodeRecords = new SortedList<NodeRecord, NodeRecord>(new DuplicateNodeComparer());
         }
 
         public void Initialize()
@@ -26,23 +26,30 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures
 
         public void Add(NodeRecord nodeRecord)
         {
-            this.NodeRecords.Add(nodeRecord.fValue, nodeRecord);
+            try
+            {
+                this.NodeRecords.Add(nodeRecord, nodeRecord);
+            }
+            catch(Exception exception)
+            {
+                int i = 1;
+            }
         }
 
         public void Remove(NodeRecord nodeRecord)
         {
-            this.NodeRecords.RemoveAt(this.NodeRecords.IndexOfValue(nodeRecord));
+            this.NodeRecords.Remove(nodeRecord);
         }
 
         public NodeRecord Search(NodeRecord nodeRecord)
         {
-            int indexOfNode = this.NodeRecords.IndexOfValue(nodeRecord);
+            bool exists = this.NodeRecords.Keys.Contains(nodeRecord);
 
-            if(indexOfNode == -1)
+            if(!exists)
                 return null;
 
             else
-                return this.NodeRecords.Values.ElementAt(indexOfNode);
+                return this.NodeRecords[nodeRecord];
         }
 
         public ICollection<NodeRecord> All()
@@ -53,6 +60,18 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures
         public void Replace(NodeRecord nodeToBeReplaced, NodeRecord nodeToReplace)
         {
             this.Remove(nodeToBeReplaced);
+
+            if (!NodeRecords.ContainsKey(nodeToBeReplaced))
+            {
+                Console.WriteLine("Key to be replaced is not found.");
+            }
+
+            this.Remove(nodeToReplace);
+            if (!NodeRecords.ContainsKey(nodeToReplace))
+            {
+                Console.WriteLine("Key to replace is not found.");
+            }
+            
             this.Add(nodeToReplace);
         }
 
@@ -76,7 +95,7 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures
     /// If the fvalue of both nodes is equal then to avoid removing duplicates in the Sorted List lets create a convention where we say that node X is allways bigger than node Y
     /// NOTE: This will make the search by key ambiguous as there will be multiple repeated keys but for matters of ordering and finding indexes by object this isn't a problem.
     /// </summary>
-    public class DuplicateNodeComparator : IComparer<float>
+    public class DuplicateNodeFValueComparer : IComparer<float>
     {
         public int Compare(float x, float y)
         {
@@ -85,6 +104,20 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures
                 return -1;
             else
                 return (int)Math.Round(x - y);
+        }
+    }
+
+    /// <summary>
+    /// If the fvalue of both nodes is equal then to avoid removing duplicates in the Sorted List lets create a convention where we say that node X is allways bigger than node Y
+    /// </summary>
+    public class DuplicateNodeComparer : IComparer<NodeRecord>
+    {
+        public int Compare(NodeRecord x, NodeRecord y)
+        {
+            if (x.fValue == y.fValue)
+                return -1;
+            else
+                return (int)Math.Round(x.fValue - y.fValue);
         }
     }
 }
