@@ -14,7 +14,7 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
 
         public uint TotalProcessedNodes { get; protected set; }
         public int MaxOpenNodes { get; protected set; }
-        public float TotalProcessingTime { get; protected set; }
+        public float TotalProcessingTime { get;  set; }
         public bool InProgress { get; protected set; }
 
         public IOpenSet Open { get; protected set; }
@@ -105,8 +105,9 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
             solution = null;
             NodeRecord best = null;
 
-            for (TotalProcessedNodes = 0; TotalProcessedNodes < NodesPerSearch; TotalProcessedNodes++)
+            for (int processNodes = 0; processNodes < NodesPerSearch; processNodes++, TotalProcessedNodes++)
             {
+                
                 if (Open.CountOpen() <= 0)
                 {
                     solution = null;

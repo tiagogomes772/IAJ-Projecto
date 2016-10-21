@@ -24,15 +24,18 @@ public class PathfindingManager : MonoBehaviour {
 
     private bool draw;
 
-	// Use this for initialization
-	void Awake ()
+    public bool DebugMode= true;
+
+
+    // Use this for initialization
+    void Awake ()
 	{
 	    this.draw = false;
 		this.currentClickNumber = 1;
 		this.navMesh = NavigationManager.Instance.NavMeshGraphs [0];
 
         //this.aStarPathFinding = new NodeArrayAStarPathFinding(this.navMesh,new EuclideanDistanceHeuristic());
-	    this.aStarPathFinding = new AStarPathfinding(this.navMesh, new SimpleUnorderedNodeList(), new SimpleUnorderedNodeList(), new ZeroHeuristic());
+	    this.aStarPathFinding = new AStarPathfinding(this.navMesh, new SimpleUnorderedNodeList(), new SimpleUnorderedNodeList(), new EuclideanDistanceHeuristic());
 	    this.aStarPathFinding.NodesPerSearch = 100;
 	}
 	
@@ -71,9 +74,21 @@ public class PathfindingManager : MonoBehaviour {
 					this.endPosition = position;
 				    this.draw = true;
                     //initialize the search algorithm
+                    #region Debug
+                    System.Diagnostics.Stopwatch stopwatch = null;
+                    if (DebugMode/*ON*/)
+                        stopwatch = System.Diagnostics.Stopwatch.StartNew();
+                    #endregion
                     this.aStarPathFinding.InitializePathfindingSearch(this.startPosition,this.endPosition);
-				}
-			}
+                    #region Debug
+                    if (DebugMode/*ON*/)
+                    {
+                        stopwatch.Stop();
+                        this.aStarPathFinding.TotalProcessingTime = stopwatch.ElapsedMilliseconds;
+                    }
+                    #endregion
+                }
+            }
 		}
 
         //call the pathfinding method if the user specified a new goal
@@ -91,7 +106,8 @@ public class PathfindingManager : MonoBehaviour {
     {
         if (this.currentSolution != null)
         {
-            var time = this.aStarPathFinding.TotalProcessingTime*1000;
+            //var time = this.aStarPathFinding.TotalProcessingTime*1000;
+            var time = this.aStarPathFinding.TotalProcessingTime;
             float timePerNode;
             if (this.aStarPathFinding.TotalProcessedNodes > 0)
             {
