@@ -86,12 +86,43 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
         //if the parameter returnPartialSolution is true, then the user wants to have a partial path to the best node so far even when the search has not finished searching
         public virtual bool Search(out Path solution, bool returnPartialSolution = false)
         {
-            //TODO put the code from the previous LAB here
-            //you will get compiler errors, because I change the method names in the IOpenSet and IClosedSet interfaces
-            //sorry but I had to do it because if not, Unity profiler would consider the Search method in Open and Closed to be the same
-            //and you would not be able to see the difference in performance searching the Open Set and in searching the closed set
-            
-            //so just replace this.Open.Search(...) by this.Open.SearchInOpen(...) and all other methods where you get the compilation errors
+            solution = null;
+            NodeRecord best = null;
+
+            for (TotalProcessedNodes = 0; TotalProcessedNodes < NodesPerSearch; TotalProcessedNodes++)
+            {
+                if (Open.CountOpen() <= 0)
+                {
+                    solution = null;
+                    this.InProgress = false;
+                    return true;
+                }
+                best = Open.GetBestAndRemove();
+
+                if (best.node.Equals(GoalNode))
+                {
+                    solution = CalculateSolution(best, false);
+                    this.InProgress = false;
+                    this.CleanUp();
+                    return true;
+                }
+
+                Closed.AddToClosed(best);
+
+                var outConnections = best.node.OutEdgeCount;
+
+                for (int i = 0; i < outConnections; i++)
+                {
+                    this.ProcessChildNode(best, best.node.EdgeOut(i));
+                }
+            }
+
+            if (returnPartialSolution)
+                solution = CalculateSolution(best, true);
+
+            else
+                solution = null;
+            return false;
         }
 
         protected NavigationGraphNode Quantize(Vector3 position)
