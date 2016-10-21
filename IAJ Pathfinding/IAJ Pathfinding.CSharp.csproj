@@ -72,11 +72,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\IAJ.Unity\Pathfinding\AStartPathfinding.cs" />
+    <Compile Include="Assets\Scripts\IAJ.Unity\Pathfinding\DataStructures\HashNodeMap.cs" />
     <Compile Include="Assets\Scripts\IAJ.Unity\Pathfinding\DataStructures\IClosedSet.cs" />
     <Compile Include="Assets\Scripts\IAJ.Unity\Pathfinding\DataStructures\IOpenSet.cs" />
     <Compile Include="Assets\Scripts\IAJ.Unity\Pathfinding\DataStructures\OrderOnAddNodeList.cs" />
     <Compile Include="Assets\Scripts\IAJ.Unity\Pathfinding\DataStructures\SortedListNodeList.cs" />
     <Compile Include="Assets\Scripts\IAJ.Unity\Pathfinding\DataStructures\SimpleUnorderedNodeList.cs" />
+    <Compile Include="Assets\Scripts\IAJ.Unity\Pathfinding\Heuristics\EuclideanDistanceHeuristic.cs" />
     <Compile Include="Assets\Scripts\IAJ.Unity\Pathfinding\Heuristics\IHeuristic.cs" />
     <Compile Include="Assets\Scripts\IAJ.Unity\Pathfinding\Heuristics\ZeroHeuristic.cs" />
     <Compile Include="Assets\Scripts\IAJ.Unity\Pathfinding\NodeRecord.cs" />
