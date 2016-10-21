@@ -77,7 +77,23 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
         {
             //this is where you process a child node 
             var childNode = GenerateChildNodeRecord(bestNode, connectionEdge);
-            //TODO put the code from the previous LAB here
+
+            var node = Open.SearchInOpen(childNode);
+            var closedNode = Closed.SearchInClosed(childNode);
+
+            if (node == null && closedNode == null)
+            {
+                Open.AddToOpen(childNode);
+            }
+            else if (node != null && node.fValue > childNode.fValue)
+            {
+                Open.Replace(node, childNode);
+            }
+            else if (closedNode != null && closedNode.fValue > childNode.fValue)
+            {
+                Closed.RemoveFromClosed(closedNode);
+                Open.AddToOpen(childNode);
+            }
         }
 
         //this method should return true if the Search process finished (i.e either because it found a solution or because there was no solution
