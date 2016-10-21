@@ -73,20 +73,8 @@ public class PathfindingManager : MonoBehaviour {
 					this.currentClickNumber = 1;
 					this.endPosition = position;
 				    this.draw = true;
-                    //initialize the search algorithm
-                    #region Debug
-                    System.Diagnostics.Stopwatch stopwatch = null;
-                    if (DebugMode/*ON*/)
-                        stopwatch = System.Diagnostics.Stopwatch.StartNew();
-                    #endregion
-                    this.aStarPathFinding.InitializePathfindingSearch(this.startPosition,this.endPosition);
-                    #region Debug
-                    if (DebugMode/*ON*/)
-                    {
-                        stopwatch.Stop();
-                        this.aStarPathFinding.TotalProcessingTime = stopwatch.ElapsedMilliseconds;
-                    }
-                    #endregion
+                    //initialize the search algorithm                 
+                    this.aStarPathFinding.InitializePathfindingSearch(this.startPosition,this.endPosition);          
                 }
             }
 		}
