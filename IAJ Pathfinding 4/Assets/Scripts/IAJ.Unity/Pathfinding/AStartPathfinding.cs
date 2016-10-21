@@ -84,8 +84,6 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
             if (node == null && closedNode == null)
             {
                 Open.AddToOpen(childNode);
-                if (Open.CountOpen() > MaxOpenNodes)
-                    MaxOpenNodes = Open.CountOpen();
             }
             else if (node != null && node.fValue > childNode.fValue)
             {
@@ -95,8 +93,6 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
             {
                 Closed.RemoveFromClosed(closedNode);
                 Open.AddToOpen(childNode);
-                if (Open.CountOpen() > MaxOpenNodes)
-                    MaxOpenNodes = Open.CountOpen();
             }
         }
 
@@ -106,7 +102,6 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
         //if the parameter returnPartialSolution is true, then the user wants to have a partial path to the best node so far even when the search has not finished searching
         public virtual bool Search(out Path solution, bool returnPartialSolution = false)
         {
-            float initialTime = Time.realtimeSinceStartup;
             solution = null;
             NodeRecord best = null;
 
@@ -117,7 +112,6 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
                 {
                     solution = null;
                     this.InProgress = false;
-                    this.TotalProcessingTime += Time.realtimeSinceStartup - initialTime;
                     return true;
                 }
                 best = Open.GetBestAndRemove();
@@ -127,7 +121,6 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
                     solution = CalculateSolution(best, false);
                     this.InProgress = false;
                     this.CleanUp();
-                    this.TotalProcessingTime += Time.realtimeSinceStartup - initialTime;
                     return true;
                 }
 
@@ -146,7 +139,6 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
 
             else
                 solution = null;
-            this.TotalProcessingTime += Time.realtimeSinceStartup - initialTime;
             return false;
         }
 

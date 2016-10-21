@@ -67,14 +67,24 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures
 
         void IClosedSet.Initialize()
         {
-            //TODO implement
-            throw new NotImplementedException();
+            this.Open.Initialize();
+            //we want this to be very efficient (that's why we use for)
+            for (int i = 0; i < this.NodeRecords.Length; i++)
+            {
+                this.NodeRecords[i].status = NodeStatus.Unvisited;
+            }
+
+            this.SpecialCaseNodes.Clear();
         }
 
         public void AddToOpen(NodeRecord nodeRecord)
         {
-            //TODO implement
-            throw new NotImplementedException();
+           
+            if(! (NodeRecords[nodeRecord.node.NodeIndex].status == NodeStatus.Open))
+            {
+                NodeRecords[nodeRecord.node.NodeIndex].status = NodeStatus.Open;
+                this.Open.AddToOpen(nodeRecord);
+            }
         }
 
         public void AddToClosed(NodeRecord nodeRecord)

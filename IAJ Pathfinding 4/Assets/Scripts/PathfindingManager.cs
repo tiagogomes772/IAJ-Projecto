@@ -35,7 +35,7 @@ public class PathfindingManager : MonoBehaviour {
 		this.navMesh = NavigationManager.Instance.NavMeshGraphs [0];
 
         //this.aStarPathFinding = new NodeArrayAStarPathFinding(this.navMesh,new EuclideanDistanceHeuristic());
-	    this.aStarPathFinding = new AStarPathfinding(this.navMesh, new SimpleUnorderedNodeList(), new SimpleUnorderedNodeList(), new EuclideanDistanceHeuristic());
+	    this.aStarPathFinding = new AStarPathfinding(this.navMesh, new RightPriorityList(), new DictionaryNodeList(), new EuclideanDistanceHeuristic());
 	    this.aStarPathFinding.NodesPerSearch = 100;
 	}
 	
@@ -73,8 +73,20 @@ public class PathfindingManager : MonoBehaviour {
 					this.currentClickNumber = 1;
 					this.endPosition = position;
 				    this.draw = true;
-                    //initialize the search algorithm                 
-                    this.aStarPathFinding.InitializePathfindingSearch(this.startPosition,this.endPosition);          
+                    //initialize the search algorithm
+                    #region Debug
+                    System.Diagnostics.Stopwatch stopwatch = null;
+                    if (DebugMode/*ON*/)
+                        stopwatch = System.Diagnostics.Stopwatch.StartNew();
+                    #endregion
+                    this.aStarPathFinding.InitializePathfindingSearch(this.startPosition,this.endPosition);
+                    #region Debug
+                    if (DebugMode/*ON*/)
+                    {
+                        stopwatch.Stop();
+                        this.aStarPathFinding.TotalProcessingTime = stopwatch.ElapsedMilliseconds;
+                    }
+                    #endregion
                 }
             }
 		}
@@ -107,8 +119,8 @@ public class PathfindingManager : MonoBehaviour {
             }
             var text = "Nodes Visited: " + this.aStarPathFinding.TotalProcessedNodes
                        + "\nMaximum Open Size: " + this.aStarPathFinding.MaxOpenNodes
-                       + "\nProcessing time (ms): " + time
-                       + "\nTime per Node (ms):" + timePerNode;
+                       + "\nProcessing time (ms): " + time * 1000
+                       + "\nTime per Node (ms):" + timePerNode * 1000;
             GUI.contentColor = Color.black;
             GUI.Label(new Rect(10,10,200,100),text);
         }

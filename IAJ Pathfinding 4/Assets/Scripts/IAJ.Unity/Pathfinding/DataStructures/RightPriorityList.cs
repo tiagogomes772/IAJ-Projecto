@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures
 {
@@ -13,67 +14,69 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures
         }
         public void Initialize()
         {
-            //TODO implement
-            throw new NotImplementedException();
+            this.Open = new List<NodeRecord>();
         }
 
         public void Replace(NodeRecord nodeToBeReplaced, NodeRecord nodeToReplace)
         {
-            //TODO implement
-            throw new NotImplementedException();
+            this.RemoveFromOpen(nodeToBeReplaced);
+            this.AddToOpen(nodeToReplace);
         }
 
         public NodeRecord GetBestAndRemove()
         {
-            //TODO implement
-            throw new NotImplementedException();
+            var nodeRecord = PeekBest();
+            this.Open.Remove(nodeRecord);
+            return nodeRecord;
         }
 
         public NodeRecord PeekBest()
         {
-            //TODO implement
-            throw new NotImplementedException();
+            return this.Open.Last();
         }
 
         public void AddToOpen(NodeRecord nodeRecord)
         {
-            //a little help here, notice the difference between this method and the one for the LeftPriority list
-            //...this one uses a different comparer with an explicit compare function (which you will have to define below)
-            int index = this.Open.BinarySearch(nodeRecord,this);
+            //a little help here
+            //is very nice that the List<T> already implements a binary search method
+            int index = this.Open.BinarySearch(nodeRecord, this);
+
             if (index < 0)
             {
                 this.Open.Insert(~index, nodeRecord);
-            }
+            } else this.Open.Insert(index, nodeRecord);
         }
 
         public void RemoveFromOpen(NodeRecord nodeRecord)
         {
-            //TODO implement
-            throw new NotImplementedException();
+            this.Open.Remove(nodeRecord);
         }
 
         public NodeRecord SearchInOpen(NodeRecord nodeRecord)
         {
-            //TODO implement
-            throw new NotImplementedException();
+            return Open.FirstOrDefault(x => x.Equals(nodeRecord));
         }
 
         public ICollection<NodeRecord> All()
         {
-            //TODO implement
-            throw new NotImplementedException();
+            return Open;
         }
 
         public int CountOpen()
         {
-            //TODO implement
-            throw new NotImplementedException();
+            return Open.Count;
         }
 
         public int Compare(NodeRecord x, NodeRecord y)
         {
-            //TODO implement
-            throw new NotImplementedException();
+            if (x.fValue == y.fValue) {
+                if (x.gValue == y.gValue)
+                    return 1;
+                else
+                    return -(int)Math.Round(x.gValue - y.gValue);
+            }
+            else
+                return -(int)Math.Round(x.fValue - y.fValue);
         }
     }
 }
