@@ -20,10 +20,6 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
 
         protected override void ProcessChildNode(NodeRecord bestNode, NavigationGraphEdge connectionEdge)
         {
-            float f;
-            float g;
-            float h;
-
             var childNode = connectionEdge.ToNode;
             var childNodeRecord = this.NodeRecordArray.GetNodeRecord(childNode);
 
@@ -42,7 +38,32 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
                 this.NodeRecordArray.AddSpecialCaseNode(childNodeRecord);
             }
 
-            //TODO implement the rest of your code here
+            float g = bestNode.gValue + connectionEdge.Cost;
+            float h = this.Heuristic.H(childNode, this.GoalNode);
+            float f = F(g, h);
+
+            if (childNodeRecord.status == NodeStatus.Unvisited)
+            {
+                childNodeRecord.gValue = g;
+                childNodeRecord.hValue = h;
+                childNodeRecord.fValue = f;
+                childNodeRecord.parent = bestNode;
+                Open.AddToOpen(childNodeRecord);
+            }
+            else if (childNodeRecord.status == NodeStatus.Open && childNodeRecord.fValue > f)
+            {
+                childNodeRecord.gValue = g;
+                childNodeRecord.hValue = h;
+                childNodeRecord.fValue = f;
+                Open.Replace(childNodeRecord, childNodeRecord);
+            }
+            else if (childNodeRecord.status == NodeStatus.Closed && childNodeRecord.fValue > f)
+            {
+                childNodeRecord.gValue = g;
+                childNodeRecord.hValue = h;
+                childNodeRecord.fValue = f;
+                Open.Replace(childNodeRecord, childNodeRecord);
+            }
         }
             
         private List<NavigationGraphNode> GetNodesHack(NavMeshPathGraph graph)

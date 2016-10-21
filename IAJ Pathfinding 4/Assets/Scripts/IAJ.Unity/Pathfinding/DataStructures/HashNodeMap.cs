@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures
 {
-    class DictionaryNodeList : IClosedSet
+    class HashNodeList : IClosedSet
     {
         private Dictionary<Vector3, NodeRecord> NodeRecords { get; set; }
 

@@ -67,90 +67,90 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures
 
         void IClosedSet.Initialize()
         {
-            this.Open.Initialize();
-            //we want this to be very efficient (that's why we use for)
-            for (int i = 0; i < this.NodeRecords.Length; i++)
-            {
-                this.NodeRecords[i].status = NodeStatus.Unvisited;
-            }
-
-            this.SpecialCaseNodes.Clear();
+            //Heyyeh
         }
 
         public void AddToOpen(NodeRecord nodeRecord)
         {
-           
-            if(! (NodeRecords[nodeRecord.node.NodeIndex].status == NodeStatus.Open))
+            if (!(NodeRecords[nodeRecord.node.NodeIndex].status == NodeStatus.Open))
             {
-                NodeRecords[nodeRecord.node.NodeIndex].status = NodeStatus.Open;
-                this.Open.AddToOpen(nodeRecord);
+                nodeRecord.status = NodeStatus.Open;
+                NodeRecords[nodeRecord.node.NodeIndex] = nodeRecord;
+                
+                Open.AddToOpen(nodeRecord);
             }
         }
 
         public void AddToClosed(NodeRecord nodeRecord)
         {
-            //TODO implement
-            throw new NotImplementedException();
+            nodeRecord.status = NodeStatus.Closed;
+            NodeRecords[nodeRecord.node.NodeIndex] = nodeRecord;
         }
 
         public NodeRecord SearchInOpen(NodeRecord nodeRecord)
         {
-            //TODO implement
-            throw new NotImplementedException();
+            if (NodeRecords[nodeRecord.node.NodeIndex].status == NodeStatus.Open)
+            {
+                return NodeRecords[nodeRecord.node.NodeIndex];
+            }
+            else return null;
         }
 
         public NodeRecord SearchInClosed(NodeRecord nodeRecord)
         {
-            //TODO implement
-            throw new NotImplementedException();
+            if (NodeRecords[nodeRecord.node.NodeIndex].status == NodeStatus.Closed)
+            {
+                return NodeRecords[nodeRecord.node.NodeIndex];
+            }
+            else return null;
         }
 
         public NodeRecord GetBestAndRemove()
         {
-            //TODO implement
-            throw new NotImplementedException();
+            return this.Open.GetBestAndRemove();
         }
 
         public NodeRecord PeekBest()
         {
-            //TODO implement
-            throw new NotImplementedException();
+            return this.Open.PeekBest();
         }
 
         public void Replace(NodeRecord nodeToBeReplaced, NodeRecord nodeToReplace)
         {
-            //TODO implement
-            throw new NotImplementedException();
+            NodeRecords[nodeToBeReplaced.node.NodeIndex] = nodeToReplace;
+            Open.Replace(nodeToBeReplaced, nodeToReplace);
+
         }
 
         public void RemoveFromOpen(NodeRecord nodeRecord)
         {
-            //TODO implement
-            throw new NotImplementedException();
+            if (NodeRecords[nodeRecord.node.NodeIndex].status == NodeStatus.Open)
+            {
+                this.Open.RemoveFromOpen(nodeRecord);
+            }
         }
 
         public void RemoveFromClosed(NodeRecord nodeRecord)
         {
-            //TODO implement
-            throw new NotImplementedException();
+            if (NodeRecords[nodeRecord.node.NodeIndex].status == NodeStatus.Closed)
+            {
+                this.Open.RemoveFromOpen(nodeRecord);
+            }
         }
 
         ICollection<NodeRecord> IOpenSet.All()
         {
-            //TODO implement
-            throw new NotImplementedException();
+            return Open.All();
         }
 
         ICollection<NodeRecord> IClosedSet.All()
         {
-            //TODO implement
-            throw new NotImplementedException();
+            return Open.All();
         }
 
         public int CountOpen()
         {
-            //TODO implement
-            throw new NotImplementedException();
+            return Open.CountOpen();
         }
     }
 }
