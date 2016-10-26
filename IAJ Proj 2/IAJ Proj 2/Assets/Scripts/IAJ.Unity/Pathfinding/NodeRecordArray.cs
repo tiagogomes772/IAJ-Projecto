@@ -118,8 +118,11 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
 
         public void Replace(NodeRecord nodeToBeReplaced, NodeRecord nodeToReplace)
         {
-            NodeRecords[nodeToBeReplaced.node.NodeIndex] = nodeToReplace;
-            Open.Replace(nodeToBeReplaced, nodeToReplace);
+            NodeRecords[nodeToBeReplaced.node.NodeIndex].status = NodeStatus.Unvisited;
+            NodeRecords[nodeToReplace.node.NodeIndex].status = NodeStatus.Open;
+            nodeToBeReplaced.status = NodeStatus.Unvisited;
+            nodeToReplace.status = NodeStatus.Open;
+            this.Open.Replace(nodeToBeReplaced, nodeToReplace);
 
         }
 
@@ -127,16 +130,14 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
         {
             if (NodeRecords[nodeRecord.node.NodeIndex].status == NodeStatus.Open)
             {
+                nodeRecord.status = NodeStatus.Unvisited;
                 this.Open.RemoveFromOpen(nodeRecord);
             }
         }
 
-        public void RemoveFromClosed(NodeRecord nodeRecord)
+        public void RemoveFromClosed(NodeRecord nodeRecord) //FIXME
         {
-            if (NodeRecords[nodeRecord.node.NodeIndex].status == NodeStatus.Closed)
-            {
-                this.Open.RemoveFromOpen(nodeRecord);
-            }
+            //HEHEHEHE
         }
 
         ICollection<NodeRecord> IOpenSet.All()
@@ -146,7 +147,15 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
 
         ICollection<NodeRecord> IClosedSet.All()
         {
-            return Open.All();
+            List<NodeRecord> n = new List<NodeRecord>();
+            for (int i = 0; i < this.NodeRecords.Length; i++)
+            {
+                if (this.NodeRecords[i].status == NodeStatus.Closed)
+                {
+                    n.Add(this.NodeRecords[i]);
+                }
+            }
+            return n;
         }
 
         public int CountOpen()

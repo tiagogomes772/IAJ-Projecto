@@ -9,7 +9,7 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.Heuristics
     {
         public float H(NavigationGraphNode node, NavigationGraphNode goalNode)
         {
-            throw new NotImplementedException();
+            return (goalNode.LocalPosition - node.LocalPosition).magnitude;
         }
     }
 }

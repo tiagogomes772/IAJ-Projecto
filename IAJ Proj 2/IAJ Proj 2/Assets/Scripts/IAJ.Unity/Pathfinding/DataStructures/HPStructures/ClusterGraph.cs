@@ -16,6 +16,8 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures.HPStructures
         {
             this.clusters = new List<Cluster>();
             this.gateways = new List<Gateway>();
+            
+
         }
 
         public float? getDistance(int gatewayID1, int gatewayID2)

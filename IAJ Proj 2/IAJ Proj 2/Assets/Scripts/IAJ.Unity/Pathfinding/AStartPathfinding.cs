@@ -145,15 +145,17 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
 
             cost = 0;
 
-            NavigationGraphNode prevNode =solution.PathNodes[0];
-            NavigationGraphNode nextNode=null;
+            //NavigationGraphNode prevNode =solution.PathNodes[0];
+            //NavigationGraphNode nextNode=null;
 
-            for (int i =1 ; i < solution.PathNodes.Count; i++)
-            {
-                nextNode = solution.PathNodes[i];
-                cost += Vector3.Distance(prevNode.LocalPosition, nextNode.LocalPosition);
-                prevNode = nextNode;
-            }
+            cost=this.Open.PeekBest().gValue;
+
+            //for (int i =1 ; i < solution.PathNodes.Count; i++)
+            //{
+            //    nextNode = solution.PathNodes[i];
+            //    cost += Vector3.Distance(prevNode.LocalPosition, nextNode.LocalPosition);
+            //    prevNode = nextNode;
+            //}
             return retValue;
         }
 

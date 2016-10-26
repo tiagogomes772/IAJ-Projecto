@@ -7,6 +7,7 @@ using RAIN.Navigation;
 using RAIN.Navigation.NavMesh;
 using RAIN.Navigation.Graph;
 using Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures.HPStructures;
+using Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures;
 
 public class PathfindingManager : MonoBehaviour {
 
@@ -37,6 +38,11 @@ public class PathfindingManager : MonoBehaviour {
         this.draw = false;
         this.navMesh = NavigationManager.Instance.NavMeshGraphs[0];
         this.AStarPathFinding = new NodeArrayAStarPathFinding(NavigationManager.Instance.NavMeshGraphs[0], new GatewayHeuristic(clusterGraph));
+
+        //this.AStarPathFinding = new AStarPathfinding(this.navMesh, new SimpleUnorderedNodeList(), new SimpleUnorderedNodeList(), new EuclideanDistanceHeuristic())
+        //{
+        //    NodesPerSearch = uint.MaxValue
+        //};
         this.AStarPathFinding.NodesPerSearch = 100;
 	}
 	
