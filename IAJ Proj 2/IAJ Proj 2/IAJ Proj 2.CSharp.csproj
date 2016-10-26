@@ -76,6 +76,7 @@
     <Compile Include="Assets\Scripts\IAJ.Unity\Movement\DynamicMovement\DynamicFollowPath.cs" />
     <Compile Include="Assets\Scripts\IAJ.Unity\Movement\DynamicMovement\DynamicMovement.cs" />
     <Compile Include="Assets\Scripts\IAJ.Unity\Movement\DynamicMovement\DynamicSeek.cs" />
+    <Compile Include="Assets\Scripts\IAJ.Unity\Movement\DynamicMovement\DynamicVelocityMatch.cs" />
     <Compile Include="Assets\Scripts\IAJ.Unity\Movement\KinematicData.cs" />
     <Compile Include="Assets\Scripts\IAJ.Unity\Movement\KinematicMovement\KinematicArrive.cs" />
     <Compile Include="Assets\Scripts\IAJ.Unity\Movement\KinematicMovement\KinematicCharacter.cs" />
