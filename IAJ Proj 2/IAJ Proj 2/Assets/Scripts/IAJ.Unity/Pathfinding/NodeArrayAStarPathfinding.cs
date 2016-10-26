@@ -9,7 +9,7 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
     public class NodeArrayAStarPathFinding : AStarPathfinding
     {
         protected NodeRecordArray NodeRecordArray { get; set; }
-        public NodeArrayAStarPathFinding(NavMeshPathGraph graph, IHeuristic heuristic) : base(graph,null,null,heuristic)
+        public NodeArrayAStarPathFinding(NavMeshPathGraph graph, IHeuristic heuristic) : base(graph, null, null, heuristic)
         {
             //do not change this
             var nodes = this.GetNodesHack(graph);
@@ -20,10 +20,6 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
 
         protected override void ProcessChildNode(NodeRecord bestNode, NavigationGraphEdge connectionEdge)
         {
-            float f;
-            float g;
-            float h;
-
             var childNode = connectionEdge.ToNode;
             var childNodeRecord = this.NodeRecordArray.GetNodeRecord(childNode);
 
@@ -32,7 +28,7 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
                 //this piece of code is used just because of the special start nodes and goal nodes added to the RAIN Navigation graph when a new search is performed.
                 //Since these special goals were not in the original navigation graph, they will not be stored in the NodeRecordArray and we will have to add them
                 //to a special structure
-                //it's ok if you don't understand this, this is a hack and not part of the NodeArrayA* algorithm
+                //it's ok if you don't understand this, this is a hack and not part of the NodeArrayA* algorithm, just do NOT CHANGE THIS, or you algorithm wont work
                 childNodeRecord = new NodeRecord
                 {
                     node = childNode,
@@ -42,10 +38,32 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
                 this.NodeRecordArray.AddSpecialCaseNode(childNodeRecord);
             }
 
+            float g = bestNode.gValue + connectionEdge.Cost;
+            float h = this.Heuristic.H(childNode, this.GoalNode);
+            float f = F(g, h);
 
-            // implement the rest of your code here
-
-            
+            if (childNodeRecord.status == NodeStatus.Unvisited)
+            {
+                childNodeRecord.gValue = g;
+                childNodeRecord.hValue = h;
+                childNodeRecord.fValue = f;
+                childNodeRecord.parent = bestNode;
+                Open.AddToOpen(childNodeRecord);
+            }
+            else if (childNodeRecord.status == NodeStatus.Open && childNodeRecord.fValue > f)
+            {
+                childNodeRecord.gValue = g;
+                childNodeRecord.hValue = h;
+                childNodeRecord.fValue = f;
+                Open.Replace(childNodeRecord, childNodeRecord);
+            }
+            else if (childNodeRecord.status == NodeStatus.Closed && childNodeRecord.fValue > f)
+            {
+                childNodeRecord.gValue = g;
+                childNodeRecord.hValue = h;
+                childNodeRecord.fValue = f;
+                Open.Replace(childNodeRecord, childNodeRecord);
+            }
         }
 
         private List<NavigationGraphNode> GetNodesHack(NavMeshPathGraph graph)
@@ -56,7 +74,7 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
             //using reflection is not very efficient, but it is ok because this is only called once in the creation of the class
             //by the way, NavMeshPathGraph is a derived class from RAINNavigationGraph class and the _pathNodes field is defined in the base class,
             //that's why we're using the type of the base class in the reflection call
-            return (List<NavigationGraphNode>) Utils.Reflection.GetInstanceField(typeof(RAINNavigationGraph), graph, "_pathNodes");
+            return (List<NavigationGraphNode>)Utils.Reflection.GetInstanceField(typeof(RAINNavigationGraph), graph, "_pathNodes");
         }
     }
 }

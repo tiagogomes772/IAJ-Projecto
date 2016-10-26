@@ -95,6 +95,7 @@
     <Compile Include="Assets\Scripts\IAJ.Unity\Pathfinding\DataStructures\HPStructures\GatewayDistanceTableRow.cs" />
     <Compile Include="Assets\Scripts\IAJ.Unity\Pathfinding\DataStructures\IClosedSet.cs" />
     <Compile Include="Assets\Scripts\IAJ.Unity\Pathfinding\DataStructures\IOpenSet.cs" />
+    <Compile Include="Assets\Scripts\IAJ.Unity\Pathfinding\DataStructures\NodePriorityHeap.cs" />
     <Compile Include="Assets\Scripts\IAJ.Unity\Pathfinding\DataStructures\SimpleUnorderedNodeList.cs" />
     <Compile Include="Assets\Scripts\IAJ.Unity\Pathfinding\Heuristics\EuclideanDistanceHeuristic.cs" />
     <Compile Include="Assets\Scripts\IAJ.Unity\Pathfinding\Heuristics\GatewayHeuristic.cs" />

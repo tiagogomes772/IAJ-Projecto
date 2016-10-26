@@ -66,6 +66,28 @@ public class IAJMenuItems  {
 
         //TODO implement the rest of the algorithm here, i.e. build the GatewayDistanceTable
 
+        foreach(Gateway gateway1 in clusterGraph.gateways)
+        {
+            foreach (Gateway gateway2 in clusterGraph.gateways)
+            {
+                float? distance = clusterGraph.getDistance(gateway2.id, gateway1.id);
+                if (distance != null)
+                {
+                    clusterGraph.gatewayDistanceTable[gateway1.id].entries[gateway2.id].shortestDistance = distance;
+                    clusterGraph.gatewayDistanceTable[gateway1.id].entries[gateway2.id].startGatewayPosition = gateway1.center;
+                    clusterGraph.gatewayDistanceTable[gateway1.id].entries[gateway2.id].endGatewayPosition = gateway2.center;
+                }
+                else{ 
+                    pathfindingAlgorithm.InitializePathfindingSearch(gateway1.center, gateway2.center);
+                    pathfindingAlgorithm.Search(out solution,out cost);
+                    clusterGraph.gatewayDistanceTable[gateway1.id].entries[gateway2.id].shortestDistance = cost;
+                    clusterGraph.gatewayDistanceTable[gateway1.id].entries[gateway2.id].startGatewayPosition = gateway1.center;
+                    clusterGraph.gatewayDistanceTable[gateway1.id].entries[gateway2.id].endGatewayPosition = gateway2.center;
+                }
+            }
+        }
+
+
         //create a new asset that will contain the ClusterGraph and save it to disk (DO NOT REMOVE THIS LINE)
         clusterGraph.SaveToAssetDatabase();
     }

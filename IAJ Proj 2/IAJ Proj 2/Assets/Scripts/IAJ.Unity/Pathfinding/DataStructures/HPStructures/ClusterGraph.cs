@@ -18,10 +18,29 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures.HPStructures
             this.gateways = new List<Gateway>();
         }
 
+        public float? getDistance(int gatewayID1, int gatewayID2)
+        {
+            return this.gatewayDistanceTable[gatewayID1].entries[gatewayID2].shortestDistance;
+        }
+
+        /// <summary>
+        /// Returns null if no cluster is found
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
         public Cluster Quantize(NavigationGraphNode node)
         {
+            Vector3 nodePosition = node.LocalPosition;
             //TODO implement this
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+            foreach(Cluster c in clusters)
+            {
+                if((c.min.x <= node.LocalPosition.x) && (node.LocalPosition.x <= c.max.x) && (c.min.z <= node.LocalPosition.z) && (node.LocalPosition.z <= c.max.z))
+                {
+                    return c;
+                }
+            }
+            return null;
         }
 
         public void SaveToAssetDatabase()

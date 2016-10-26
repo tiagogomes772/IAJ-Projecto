@@ -139,6 +139,24 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
 
         }
 
+        public bool Search(out GlobalPath solution,out float cost, bool returnPartialSolution = false)
+        {
+            bool retValue = Search(out solution);
+
+            cost = 0;
+
+            NavigationGraphNode prevNode =solution.PathNodes[0];
+            NavigationGraphNode nextNode=null;
+
+            for (int i =1 ; i < solution.PathNodes.Count; i++)
+            {
+                nextNode = solution.PathNodes[i];
+                cost += Vector3.Distance(prevNode.LocalPosition, nextNode.LocalPosition);
+                prevNode = nextNode;
+            }
+            return retValue;
+        }
+
         protected NavigationGraphNode Quantize(Vector3 position)
         {
             return this.NavMeshGraph.QuantizeToNode(position, 1.0f);
