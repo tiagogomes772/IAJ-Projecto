@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
 {
-    class DynamicArrive : DynamicVelocityMatch
+    public class DynamicArrive : DynamicVelocityMatch
     {
         public float maxSpeed;
         public float stopRadius;
