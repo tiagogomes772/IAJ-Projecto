@@ -2,6 +2,7 @@
 using Assets.Scripts.IAJ.Unity.Utils;
 using RAIN.Navigation.Graph;
 using UnityEngine;
+using System;
 
 namespace Assets.Scripts.IAJ.Unity.Pathfinding.Path
 {
@@ -12,6 +13,7 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.Path
         public bool IsPartial { get; set; }
         public float Length { get; set; }
         public List<LocalPath> LocalPaths { get; protected set; } 
+
 
 
         public GlobalPath()
@@ -37,20 +39,28 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.Path
 
         public override float GetParam(Vector3 position, float previousParam)
         {
-            //TODO implement
-            throw new System.NotImplementedException();
+            int previousLocalPathIndex = (int)Math.Floor(previousParam);
+            float param = this.LocalPaths[previousLocalPathIndex].GetParam(position, previousParam) + previousLocalPathIndex;
+            return param;
         }
 
         public override Vector3 GetPosition(float param)
         {
-            //TODO implement
-            throw new System.NotImplementedException();
+            int previousLocalPathIndex = (int)Math.Floor(param);
+            Vector3 position = position = LocalPaths[previousLocalPathIndex].GetPosition(param - previousLocalPathIndex);
+            
+            return position;
         }
 
         public override bool PathEnd(float param)
         {
-            //TODO implement
-            throw new System.NotImplementedException();
+            float endParam = LocalPaths.Count - 0.1f;
+            if (param > endParam)
+            {
+                return true;
+            }
+            else
+                return false;
         }
     }
 }
