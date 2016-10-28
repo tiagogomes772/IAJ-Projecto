@@ -1,9 +1,6 @@
 ﻿using System.Collections.Generic;
-using Assets.Scripts.IAJ.Unity.Utils;
 using RAIN.Navigation.Graph;
 using UnityEngine;
-using System;
-using Assets.Scripts.IAJ.Unity.Exceptions;
 
 namespace Assets.Scripts.IAJ.Unity.Pathfinding.Path
 {
@@ -55,11 +52,13 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.Path
 
         public override Vector3 GetPosition(float param)
         {
-            if(param + 1 > LocalPaths.Count)
-            {
-                throw new ParamOutOfRangeException();
-            }
             Vector3 toRetVector = Vector3.zero;
+            if (param + 1 > LocalPaths.Count)
+            {
+                toRetVector = LocalPaths[LocalPaths.Count-1].GetPosition(1);
+                return toRetVector;
+            }
+            
             for (int i = 0; i < LocalPaths.Count + 1; i++)
             {
                 if (i > param)

@@ -1,6 +1,4 @@
-﻿using Assets.Scripts.IAJ.Unity.Exceptions;
-using Assets.Scripts.IAJ.Unity.Pathfinding.Path;
-using System;
+﻿using Assets.Scripts.IAJ.Unity.Pathfinding.Path;
 
 namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
 {
@@ -24,7 +22,7 @@ namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
             //arrive properties
             this.stopRadius = 3f;
             this.maxSpeed = 20;
-            this.MaxAcceleration = 20;
+            this.MaxAcceleration = 10;
             this.CurrentParam = 0;
             this.PathOffset = 0.1f;
         }
@@ -45,14 +43,7 @@ namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
                 float targetParam;
                 this.CurrentParam = this.Path.GetParam(this.Character.position, this.CurrentParam);
                 targetParam = this.CurrentParam + this.PathOffset;
-                try
-                {
-                    this.Target.position = this.Path.GetPosition(targetParam);
-                }
-                catch(ParamOutOfRangeException e)
-                {
-                    return base.GetMovement();
-                }
+                this.Target.position = this.Path.GetPosition(targetParam);
                 return base.GetMovement();
             }
             
