@@ -13,11 +13,13 @@
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Unity Subset v3.5</TargetFrameworkProfile>
-    <CompilerResponseFile></CompilerResponseFile>
+    <CompilerResponseFile>
+    </CompilerResponseFile>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows:5</UnityBuildTarget>
     <UnityVersion>5.4.1f1</UnityVersion>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <LangVersion Condition=" '$(VisualStudioVersion)' != '10.0' ">4</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -87,6 +89,7 @@
     <Compile Include="Assets\Scripts\IAJ.Unity\Movement\MovementOutput.cs" />
     <Compile Include="Assets\Scripts\IAJ.Unity\Movement\StaticData.cs" />
     <Compile Include="Assets\Scripts\IAJ.Unity\Pathfinding\AStartPathfinding.cs" />
+    <Compile Include="Assets\Scripts\IAJ.Unity\Pathfinding\DataStructures\HashNodeMap.cs" />
     <Compile Include="Assets\Scripts\IAJ.Unity\Pathfinding\DataStructures\HPStructures\Cluster.cs" />
     <Compile Include="Assets\Scripts\IAJ.Unity\Pathfinding\DataStructures\HPStructures\ClusterGraph.cs" />
     <Compile Include="Assets\Scripts\IAJ.Unity\Pathfinding\DataStructures\HPStructures\Gateway.cs" />
@@ -94,8 +97,11 @@
     <Compile Include="Assets\Scripts\IAJ.Unity\Pathfinding\DataStructures\HPStructures\GatewayDistanceTableRow.cs" />
     <Compile Include="Assets\Scripts\IAJ.Unity\Pathfinding\DataStructures\IClosedSet.cs" />
     <Compile Include="Assets\Scripts\IAJ.Unity\Pathfinding\DataStructures\IOpenSet.cs" />
+    <Compile Include="Assets\Scripts\IAJ.Unity\Pathfinding\DataStructures\LeftPriorityList.cs" />
     <Compile Include="Assets\Scripts\IAJ.Unity\Pathfinding\DataStructures\NodePriorityHeap.cs" />
+    <Compile Include="Assets\Scripts\IAJ.Unity\Pathfinding\DataStructures\RightPriorityList.cs" />
     <Compile Include="Assets\Scripts\IAJ.Unity\Pathfinding\DataStructures\SimpleUnorderedNodeList.cs" />
+    <Compile Include="Assets\Scripts\IAJ.Unity\Pathfinding\DataStructures\DictionaryNodeList.cs" />
     <Compile Include="Assets\Scripts\IAJ.Unity\Pathfinding\Heuristics\EuclideanDistanceHeuristic.cs" />
     <Compile Include="Assets\Scripts\IAJ.Unity\Pathfinding\Heuristics\GatewayHeuristic.cs" />
     <Compile Include="Assets\Scripts\IAJ.Unity\Pathfinding\Heuristics\IHeuristic.cs" />

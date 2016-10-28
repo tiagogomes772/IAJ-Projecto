@@ -13,9 +13,10 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
         //how many nodes do we process on each call to the search method
         public uint NodesPerSearch { get; set; }
 
-        public uint TotalProcessedNodes { get; protected set; }
-        public int MaxOpenNodes { get; protected set; }
-        public float TotalProcessingTime { get; protected set; }
+        public uint TotalProcessedNodes { get; set; }
+        public int MaxOpenNodes { get; set; }
+
+        public float TotalProcessingTime { get; set; }
         public bool InProgress { get; protected set; }
 
         public IOpenSet Open { get; protected set; }
@@ -71,6 +72,10 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
 
             this.Open.Initialize(); 
             this.Open.AddToOpen(initialNode);
+            if (Open.CountOpen() > this.MaxOpenNodes)
+            {
+                this.MaxOpenNodes = Open.CountOpen();
+            }
             this.Closed.Initialize();
         }
 
@@ -85,15 +90,27 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
             if (node == null && closedNode == null)
             {
                 Open.AddToOpen(childNode);
+                if (Open.CountOpen() > this.MaxOpenNodes)
+                {
+                    this.MaxOpenNodes = Open.CountOpen();
+                }
             }
             else if (node != null && node.fValue > childNode.fValue)
             {
                 Open.Replace(node, childNode);
+                if (Open.CountOpen() > this.MaxOpenNodes)
+                {
+                    this.MaxOpenNodes = Open.CountOpen();
+                }
             }
             else if (closedNode != null && closedNode.fValue > childNode.fValue)
             {
                 Closed.RemoveFromClosed(closedNode);
                 Open.AddToOpen(childNode);
+                if (Open.CountOpen() > this.MaxOpenNodes)
+                {
+                    this.MaxOpenNodes = Open.CountOpen();
+                }
             }
         }
 
@@ -144,18 +161,8 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
             bool retValue = Search(out solution);
 
             cost = 0;
-
-            //NavigationGraphNode prevNode =solution.PathNodes[0];
-            //NavigationGraphNode nextNode=null;
-
             cost=this.Open.PeekBest().gValue;
-
-            //for (int i =1 ; i < solution.PathNodes.Count; i++)
-            //{
-            //    nextNode = solution.PathNodes[i];
-            //    cost += Vector3.Distance(prevNode.LocalPosition, nextNode.LocalPosition);
-            //    prevNode = nextNode;
-            //}
+            
             return retValue;
         }
 

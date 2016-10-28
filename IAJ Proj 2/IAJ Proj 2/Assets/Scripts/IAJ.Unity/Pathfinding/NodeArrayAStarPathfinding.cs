@@ -49,6 +49,12 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
                 childNodeRecord.fValue = f;
                 childNodeRecord.parent = bestNode;
                 Open.AddToOpen(childNodeRecord);
+                #region Debug
+                if (Open.CountOpen() > this.MaxOpenNodes)
+                {
+                    this.MaxOpenNodes = Open.CountOpen();
+                }
+                #endregion
             }
             else if (childNodeRecord.status == NodeStatus.Open && childNodeRecord.fValue > f)
             {
@@ -56,6 +62,12 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
                 childNodeRecord.hValue = h;
                 childNodeRecord.fValue = f;
                 Open.Replace(childNodeRecord, childNodeRecord);
+                #region Debug
+                if (Open.CountOpen() > this.MaxOpenNodes)
+                {
+                    this.MaxOpenNodes = Open.CountOpen();
+                }
+                #endregion
             }
             else if (childNodeRecord.status == NodeStatus.Closed && childNodeRecord.fValue > f)
             {
@@ -63,6 +75,12 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
                 childNodeRecord.hValue = h;
                 childNodeRecord.fValue = f;
                 Open.Replace(childNodeRecord, childNodeRecord);
+                #region Debug
+                if (Open.CountOpen() > this.MaxOpenNodes)
+                {
+                    this.MaxOpenNodes = Open.CountOpen();
+                }
+                #endregion
             }
         }
 

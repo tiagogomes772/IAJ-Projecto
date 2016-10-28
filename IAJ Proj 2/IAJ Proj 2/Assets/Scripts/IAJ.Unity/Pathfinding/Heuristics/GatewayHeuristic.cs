@@ -34,12 +34,16 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.Heuristics
                 float currentDist = 0f;
 
                 foreach (Gateway startGateway in startCluster.gateways)
+                //for (int j = 0; j < startCluster.gateways.Count; j++)
                 {
+                    //Gateway startGateway = startCluster.gateways[j];
                     currentDist = 0f;
                     currentDist += EuclideanDistance(node.LocalPosition, startGateway.center);
 
                     foreach (Gateway endGateway in goalCluster.gateways)
+                    //for (int i = 0; i < goalCluster.gateways.Count; i++)
                     {
+                        //Gateway endGateway = goalCluster.gateways[i];
                         float? shortestDistance = ClusterGraph.gatewayDistanceTable[startGateway.id].entries[endGateway.id].shortestDistance;
                         currentDist += (shortestDistance == null) ? 0 : (float) shortestDistance ;
                         currentDist += EuclideanDistance(node.LocalPosition, endGateway.center);
