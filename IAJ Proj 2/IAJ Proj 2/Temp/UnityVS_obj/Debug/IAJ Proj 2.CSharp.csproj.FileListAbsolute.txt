@@ -1,0 +1,15 @@
+C:\Users\gonca\Documents\IAJ\IAJ-Projecto-1\IAJ Proj 2\IAJ Proj 2\Temp\UnityVS_bin\Debug\Assembly-CSharp.dll
+C:\Users\gonca\Documents\IAJ\IAJ-Projecto-1\IAJ Proj 2\IAJ Proj 2\Temp\UnityVS_bin\Debug\Assembly-CSharp.pdb
+C:\Users\gonca\Documents\IAJ\IAJ-Projecto-1\IAJ Proj 2\IAJ Proj 2\Temp\UnityVS_bin\Debug\RAIN.dll
+C:\Users\gonca\Documents\IAJ\IAJ-Projecto-1\IAJ Proj 2\IAJ Proj 2\Temp\UnityVS_bin\Debug\RAINMetaform.dll
+C:\Users\gonca\Documents\IAJ\IAJ-Projecto-1\IAJ Proj 2\IAJ Proj 2\Temp\UnityVS_bin\Debug\UnityEditor.dll
+C:\Users\gonca\Documents\IAJ\IAJ-Projecto-1\IAJ Proj 2\IAJ Proj 2\Temp\UnityVS_bin\Debug\UnityEngine.dll
+C:\Users\gonca\Documents\IAJ\IAJ-Projecto-1\IAJ Proj 2\IAJ Proj 2\Temp\UnityVS_bin\Debug\UnityEngine.Networking.dll
+C:\Users\gonca\Documents\IAJ\IAJ-Projecto-1\IAJ Proj 2\IAJ Proj 2\Temp\UnityVS_bin\Debug\UnityEngine.UI.dll
+C:\Users\gonca\Documents\IAJ\IAJ-Projecto-1\IAJ Proj 2\IAJ Proj 2\Temp\UnityVS_bin\Debug\UnityEngine.xml
+C:\Users\gonca\Documents\IAJ\IAJ-Projecto-1\IAJ Proj 2\IAJ Proj 2\Temp\UnityVS_bin\Debug\UnityEngine.UI.xml
+C:\Users\gonca\Documents\IAJ\IAJ-Projecto-1\IAJ Proj 2\IAJ Proj 2\Temp\UnityVS_bin\Debug\UnityEngine.Networking.xml
+C:\Users\gonca\Documents\IAJ\IAJ-Projecto-1\IAJ Proj 2\IAJ Proj 2\Temp\UnityVS_bin\Debug\UnityEditor.xml
+C:\Users\gonca\Documents\IAJ\IAJ-Projecto-1\IAJ Proj 2\IAJ Proj 2\Temp\UnityVS_obj\Debug\IAJ Proj 2.CSharp.csprojResolveAssemblyReference.cache
+C:\Users\gonca\Documents\IAJ\IAJ-Projecto-1\IAJ Proj 2\IAJ Proj 2\Temp\UnityVS_obj\Debug\Assembly-CSharp.dll
+C:\Users\gonca\Documents\IAJ\IAJ-Projecto-1\IAJ Proj 2\IAJ Proj 2\Temp\UnityVS_obj\Debug\Assembly-CSharp.pdb

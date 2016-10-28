@@ -3,6 +3,7 @@ using Assets.Scripts.IAJ.Unity.Utils;
 using RAIN.Navigation.Graph;
 using UnityEngine;
 using System;
+using Assets.Scripts.IAJ.Unity.Exceptions;
 
 namespace Assets.Scripts.IAJ.Unity.Pathfinding.Path
 {
@@ -39,33 +40,40 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.Path
 
         public override float GetParam(Vector3 position, float previousParam)
         {
-            int previousLocalPathIndex = (int)Math.Floor(previousParam);
-            float param = this.LocalPaths[previousLocalPathIndex].GetParam(position, previousParam) + previousLocalPathIndex;
-            return param;
+            float toRetParam = 0.0f;
+            for (int i = 0; i < LocalPaths.Count + 1; i++)
+            {
+                if (i > previousParam)
+                {
+                    toRetParam = LocalPaths[i - 1].GetParam(position, previousParam);
+                    toRetParam += i - 1;
+                    break;
+                }
+            }
+            return toRetParam;
         }
 
         public override Vector3 GetPosition(float param)
         {
-            Vector3 position;
-            int previousLocalPathIndex = (int)Math.Floor(param);
-            try
+            if(param + 1 > LocalPaths.Count)
             {
-                position = LocalPaths[previousLocalPathIndex].GetPosition(param - previousLocalPathIndex);
-
+                throw new ParamOutOfRangeException();
             }
-            catch(Exception e)
+            Vector3 toRetVector = Vector3.zero;
+            for (int i = 0; i < LocalPaths.Count + 1; i++)
             {
-                position = LocalPaths[previousLocalPathIndex].GetPosition(param - previousLocalPathIndex);
-
+                if (i > param)
+                {
+                    toRetVector = LocalPaths[i - 1].GetPosition(param - (i - 1));
+                    break;
+                }
             }
-            
-            
-            return position;
+            return toRetVector;
         }
 
         public override bool PathEnd(float param)
         {
-            float endParam = LocalPaths.Count - 0.2f;
+            float endParam = LocalPaths.Count - 0.1f;
             if (param >= endParam)
             {
                 return true;

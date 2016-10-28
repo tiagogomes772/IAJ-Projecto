@@ -71,6 +71,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\IAJ.Unity\Exceptions\ParamOutOfRangeException.cs" />
     <Compile Include="Assets\Scripts\IAJ.Unity\Movement\DynamicMovement\DynamicArrive.cs" />
     <Compile Include="Assets\Scripts\IAJ.Unity\Movement\DynamicMovement\DynamicCharacter.cs" />
     <Compile Include="Assets\Scripts\IAJ.Unity\Movement\DynamicMovement\DynamicFollowPath.cs" />

@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.IAJ.Unity.Pathfinding.Path;
+﻿using Assets.Scripts.IAJ.Unity.Exceptions;
+using Assets.Scripts.IAJ.Unity.Pathfinding.Path;
 using System;
 
 namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
@@ -21,27 +22,37 @@ namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
             this.EmptyMovementOutput = new MovementOutput();
             //don't forget to set all properties
             //arrive properties
-            this.slowRadius = 5;
-            this.stopRadius = 1;
+            this.stopRadius = 3f;
             this.maxSpeed = 20;
             this.MaxAcceleration = 20;
             this.CurrentParam = 0;
-            this.PathOffset = 0.2f;
+            this.PathOffset = 0.1f;
         }
 
         public override MovementOutput GetMovement()
         {
-            float targetParam;
-            this.CurrentParam = this.Path.GetParam(this.Character.position, this.CurrentParam);
-            targetParam = this.CurrentParam + this.PathOffset;
-            if (this.Path.PathEnd(targetParam))
+            if(this.Path.PathEnd(this.CurrentParam + 0.4f))
             {
-                return EmptyMovementOutput;
+                this.slowRadius = 20f;
+            }
+            
+            if (this.Path.PathEnd(this.CurrentParam))
+            {
+                return base.GetMovement();
             }
             else
             {
-                
-                this.Target.position = this.Path.GetPosition(targetParam);
+                float targetParam;
+                this.CurrentParam = this.Path.GetParam(this.Character.position, this.CurrentParam);
+                targetParam = this.CurrentParam + this.PathOffset;
+                try
+                {
+                    this.Target.position = this.Path.GetPosition(targetParam);
+                }
+                catch(ParamOutOfRangeException e)
+                {
+                    return base.GetMovement();
+                }
                 return base.GetMovement();
             }
             
