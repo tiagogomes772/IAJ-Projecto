@@ -21,23 +21,27 @@ namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
             this.EmptyMovementOutput = new MovementOutput();
             //don't forget to set all properties
             //arrive properties
-            this.slowRadius = 1;
-            this.stopRadius = 0;
+            this.slowRadius = 5;
+            this.stopRadius = 1;
             this.maxSpeed = 20;
             this.MaxAcceleration = 20;
             this.CurrentParam = 0;
+            this.PathOffset = 0.2f;
         }
 
         public override MovementOutput GetMovement()
         {
-            if (this.Path.PathEnd(CurrentParam))
+            float targetParam;
+            this.CurrentParam = this.Path.GetParam(this.Character.position, this.CurrentParam);
+            targetParam = this.CurrentParam + this.PathOffset;
+            if (this.Path.PathEnd(targetParam))
             {
                 return EmptyMovementOutput;
             }
             else
             {
-                this.CurrentParam = this.Path.GetParam(this.Character.position, this.CurrentParam);
-                this.Target.position = this.Path.GetPosition(CurrentParam);
+                
+                this.Target.position = this.Path.GetPosition(targetParam);
                 return base.GetMovement();
             }
             

@@ -6,7 +6,7 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.Path
     public class LineSegmentPath : LocalPath
     {
         protected Vector3 LineVector;
-        private float EndParam = 0.9f;
+        private float EndParam = 0.8f;
 
         public LineSegmentPath(Vector3 start, Vector3 end)
         {

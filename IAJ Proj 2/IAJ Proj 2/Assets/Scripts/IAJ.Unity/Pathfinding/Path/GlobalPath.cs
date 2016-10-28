@@ -46,16 +46,27 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.Path
 
         public override Vector3 GetPosition(float param)
         {
+            Vector3 position;
             int previousLocalPathIndex = (int)Math.Floor(param);
-            Vector3 position = position = LocalPaths[previousLocalPathIndex].GetPosition(param - previousLocalPathIndex);
+            try
+            {
+                position = LocalPaths[previousLocalPathIndex].GetPosition(param - previousLocalPathIndex);
+
+            }
+            catch(Exception e)
+            {
+                position = LocalPaths[previousLocalPathIndex].GetPosition(param - previousLocalPathIndex);
+
+            }
+            
             
             return position;
         }
 
         public override bool PathEnd(float param)
         {
-            float endParam = LocalPaths.Count - 0.1f;
-            if (param > endParam)
+            float endParam = LocalPaths.Count - 0.2f;
+            if (param >= endParam)
             {
                 return true;
             }
