@@ -13,7 +13,18 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
         {
             //do not change this
             var nodes = this.GetNodesHack(graph);
-            this.NodeRecordArray = new NodeRecordArray(nodes);
+
+            NodeRecord[] NodeRecords = new NodeRecord[nodes.Count];
+
+            for (int i = 0; i < nodes.Count; i++)
+            {
+                var node = nodes[i];
+                node.NodeIndex = i; //we're setting the node Index because RAIN does not do this automatically
+                NodeRecords[i] = new NodeRecord { node = node, status = NodeStatus.Unvisited };
+                ((GatewayHeuristic)heuristic).ClusterGraph.AddNodeToDict(node);
+            }
+
+            this.NodeRecordArray = new NodeRecordArray(NodeRecords);
             this.Open = this.NodeRecordArray;
             this.Closed = this.NodeRecordArray;
         }

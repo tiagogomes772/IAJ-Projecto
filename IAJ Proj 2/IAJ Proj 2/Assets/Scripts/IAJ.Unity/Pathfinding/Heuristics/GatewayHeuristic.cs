@@ -7,7 +7,7 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.Heuristics
 {
     public class GatewayHeuristic : IHeuristic
     {
-        private ClusterGraph ClusterGraph { get; set; }
+        public ClusterGraph ClusterGraph { get; set; }
 
         public GatewayHeuristic(ClusterGraph clusterGraph)
         {

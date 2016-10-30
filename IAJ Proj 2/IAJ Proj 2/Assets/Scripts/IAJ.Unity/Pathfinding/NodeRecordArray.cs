@@ -11,17 +11,18 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
         private List<NodeRecord> SpecialCaseNodes { get; set; }
         private NodePriorityHeap Open { get; set; }
 
-        public NodeRecordArray(List<NavigationGraphNode> nodes)
+        public NodeRecordArray(NodeRecord[] NodeRecords)
         {
             //this method creates and initializes the NodeRecordArray for all nodes in the Navigation Graph
-            this.NodeRecords = new NodeRecord[nodes.Count];
+            /*this.NodeRecords = new NodeRecord[nodes.Count];
 
             for (int i = 0; i < nodes.Count; i++)
             {
                 var node = nodes[i];
                 node.NodeIndex = i; //we're setting the node Index because RAIN does not do this automatically
                 this.NodeRecords[i] = new NodeRecord { node = node, status = NodeStatus.Unvisited };
-            }
+            }*/
+            this.NodeRecords = NodeRecords;
 
             this.SpecialCaseNodes = new List<NodeRecord>();
 
