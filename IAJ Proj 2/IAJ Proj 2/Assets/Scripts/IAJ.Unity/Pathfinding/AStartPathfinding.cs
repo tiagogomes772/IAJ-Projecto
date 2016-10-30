@@ -119,7 +119,8 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
             solution = null;
             NodeRecord best = null;
 
-            for (TotalProcessedNodes = 0; TotalProcessedNodes < NodesPerSearch; TotalProcessedNodes++)
+            uint j;
+            for (j = 0; j < NodesPerSearch; j++)
             {
                 if (Open.CountOpen() <= 0)
                 {
@@ -134,6 +135,7 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
                     solution = CalculateSolution(best, false);
                     this.InProgress = false;
                     this.CleanUp();
+                    TotalProcessedNodes += j;
                     return true;
                 }
 
@@ -147,6 +149,7 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
                 }
             }
 
+            TotalProcessedNodes += j;
             if (returnPartialSolution)
                 solution = CalculateSolution(best, true);
 
