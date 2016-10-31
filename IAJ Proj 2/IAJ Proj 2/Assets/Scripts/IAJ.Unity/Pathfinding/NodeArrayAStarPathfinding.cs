@@ -9,7 +9,7 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
     public class NodeArrayAStarPathFinding : AStarPathfinding
     {
         protected NodeRecordArray NodeRecordArray { get; set; }
-        public NodeArrayAStarPathFinding(NavMeshPathGraph graph, IHeuristic heuristic) : base(graph, null, null, heuristic)
+        public NodeArrayAStarPathFinding(NavMeshPathGraph graph, IHeuristic heuristic) : base(graph,null,null,heuristic)
         {
             //do not change this
             var nodes = this.GetNodesHack(graph);
@@ -21,7 +21,7 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
                 var node = nodes[i];
                 node.NodeIndex = i; //we're setting the node Index because RAIN does not do this automatically
                 NodeRecords[i] = new NodeRecord { node = node, status = NodeStatus.Unvisited };
-                ((GatewayHeuristic)heuristic).ClusterGraph.AddNodeToDict(node);
+                //((GatewayHeuristic)heuristic).ClusterGraph.AddNodeToDict(node); //FIXME
             }
 
             this.NodeRecordArray = new NodeRecordArray(NodeRecords);
@@ -94,6 +94,8 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
                 }
                 #endregion
             }
+
+
         }
 
         private List<NavigationGraphNode> GetNodesHack(NavMeshPathGraph graph)
@@ -104,7 +106,7 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
             //using reflection is not very efficient, but it is ok because this is only called once in the creation of the class
             //by the way, NavMeshPathGraph is a derived class from RAINNavigationGraph class and the _pathNodes field is defined in the base class,
             //that's why we're using the type of the base class in the reflection call
-            return (List<NavigationGraphNode>)Utils.Reflection.GetInstanceField(typeof(RAINNavigationGraph), graph, "_pathNodes");
+            return (List<NavigationGraphNode>) Utils.Reflection.GetInstanceField(typeof(RAINNavigationGraph), graph, "_pathNodes");
         }
     }
 }

@@ -1,7 +1,8 @@
-﻿using System;
-using Assets.Scripts.IAJ.Unity.Pathfinding.Heuristics;
-using RAIN.Navigation.Graph;
-
+﻿using RAIN.Navigation.Graph;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 namespace Assets.Scripts.IAJ.Unity.Pathfinding.Heuristics
 {

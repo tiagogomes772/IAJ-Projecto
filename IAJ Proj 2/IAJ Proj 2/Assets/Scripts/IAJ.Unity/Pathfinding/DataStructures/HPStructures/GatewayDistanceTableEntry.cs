@@ -6,6 +6,6 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures.HPStructures
     {
         public Vector3 startGatewayPosition;
         public Vector3 endGatewayPosition;
-        public float? shortestDistance;
+        public float shortestDistance;
     }
 }

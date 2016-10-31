@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.IAJ.Unity.Pathfinding.Path;
+using System;
 
 namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
 {
@@ -18,35 +19,30 @@ namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
             this.Character = character;
             this.Path = path;
             this.EmptyMovementOutput = new MovementOutput();
+            PathOffset = 1.0f;
+            CurrentParam = 0.0f;
             //don't forget to set all properties
             //arrive properties
-            this.stopRadius = 3f;
-            this.maxSpeed = 20;
-            this.MaxAcceleration = 10;
-            this.CurrentParam = 0;
-            this.PathOffset = 0.1f;
-        }
+            maxSpeed = 20.0f;
+            this.MaxAcceleration = 10.0f;
+            stopRadius = 2.0f;
+            slowRadius = 4.0f;
+    }
 
+        float targetParam;
         public override MovementOutput GetMovement()
         {
-            if(this.Path.PathEnd(this.CurrentParam + 0.4f))
+            if (Path.PathEnd(CurrentParam))
             {
-                this.slowRadius = 20f;
-            }
-            
-            if (this.Path.PathEnd(this.CurrentParam))
-            {
-                return base.GetMovement();
+                return EmptyMovementOutput;
             }
             else
             {
-                float targetParam;
-                this.CurrentParam = this.Path.GetParam(this.Character.position, this.CurrentParam);
-                targetParam = this.CurrentParam + this.PathOffset;
-                this.Target.position = this.Path.GetPosition(targetParam);
+                CurrentParam = Path.GetParam(base.Character.position, CurrentParam);
+                targetParam = CurrentParam + PathOffset;
+                Target.position = Path.GetPosition(targetParam);
                 return base.GetMovement();
             }
-            
         }
     }
 }

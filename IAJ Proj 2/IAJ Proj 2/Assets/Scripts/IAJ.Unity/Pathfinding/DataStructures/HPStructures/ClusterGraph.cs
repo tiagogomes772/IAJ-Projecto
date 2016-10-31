@@ -10,59 +10,25 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures.HPStructures
     {
         public List<Cluster> clusters;
         public List<Gateway> gateways;
-        public Dictionary<NavigationGraphNode, Cluster> dict;
         public GatewayDistanceTableRow[] gatewayDistanceTable;
 
         public ClusterGraph()
         {
             this.clusters = new List<Cluster>();
             this.gateways = new List<Gateway>();
-            this.dict = new Dictionary<NavigationGraphNode, Cluster>();
-            
         }
 
-        public float? getDistance(int gatewayID1, int gatewayID2)
-        {
-            return this.gatewayDistanceTable[gatewayID1].entries[gatewayID2].shortestDistance;
-        }
-
-        /// <summary>
-        /// Returns null if no cluster is found
-        /// </summary>
-        /// <param name="node"></param>
-        /// <returns></returns>
         public Cluster Quantize(NavigationGraphNode node)
         {
-            /*Vector3 nodePosition = node.LocalPosition;
-
-            foreach(Cluster c in clusters)
-            {
-                if((c.min.x <= node.LocalPosition.x) && (node.LocalPosition.x <= c.max.x) && (c.min.z <= node.LocalPosition.z) && (node.LocalPosition.z <= c.max.z))
-                {
-                    return c;
-                }
-            }
-            return null;*/
-            Cluster c = null;
-            if(dict.TryGetValue(node, out c))
-            {
-                return c;
-            }
-            return null;
-        }
-
-        public void AddNodeToDict(NavigationGraphNode node)
-        {
             Vector3 nodePosition = node.LocalPosition;
-            
             foreach (Cluster c in clusters)
             {
                 if ((c.min.x <= node.LocalPosition.x) && (node.LocalPosition.x <= c.max.x) && (c.min.z <= node.LocalPosition.z) && (node.LocalPosition.z <= c.max.z))
                 {
-                    dict.Add(node, c);
-                    break;
+                    return c;
                 }
             }
+            return null;
         }
 
         public void SaveToAssetDatabase()

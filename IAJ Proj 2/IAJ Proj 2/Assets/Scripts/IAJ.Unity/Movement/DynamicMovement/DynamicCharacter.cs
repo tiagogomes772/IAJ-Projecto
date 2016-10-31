@@ -20,12 +20,15 @@ namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
         public float Drag { get; set; }
         public float MaxSpeed { get; set; }
 
+        private MovementOutput emptyMovement;
+
         public DynamicCharacter(GameObject gameObject)
         {
             this.KinematicData = new KinematicData(new StaticData(gameObject.transform.position));
             this.GameObject = gameObject;
-            this.Drag = 1;
+            this.Drag = 1.0f;
             this.MaxSpeed = 20.0f;
+            this.emptyMovement = new MovementOutput();
         }
 	
         // Update is called once per frame
@@ -34,13 +37,14 @@ namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
             if (this.Movement != null) 
             {
                 MovementOutput steering = this.Movement.GetMovement();
+                if (steering != emptyMovement) {
+                    this.KinematicData.Integrate(steering, this.Drag, Time.deltaTime);
+                    this.KinematicData.SetOrientationFromVelocity();
+                    this.KinematicData.TrimMaxSpeed(this.MaxSpeed);
 
-                this.KinematicData.Integrate(steering,this.Drag,Time.deltaTime);
-                this.KinematicData.SetOrientationFromVelocity();
-                this.KinematicData.TrimMaxSpeed(this.MaxSpeed);
-
-                this.GameObject.transform.position = this.KinematicData.position;
-                this.GameObject.transform.rotation = Quaternion.AngleAxis(this.KinematicData.orientation * MathConstants.MATH_180_PI, Vector3.up);
+                    this.GameObject.transform.position = this.KinematicData.position;
+                    this.GameObject.transform.rotation = Quaternion.AngleAxis(this.KinematicData.orientation * MathConstants.MATH_180_PI, Vector3.up);
+                }
             }
         }
     }

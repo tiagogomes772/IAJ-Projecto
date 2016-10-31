@@ -13,10 +13,9 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
         //how many nodes do we process on each call to the search method
         public uint NodesPerSearch { get; set; }
 
-        public uint TotalProcessedNodes { get; set; }
-        public int MaxOpenNodes { get; set; }
-
-        public float TotalProcessingTime { get; set; }
+        public uint TotalProcessedNodes { get; protected set; }
+        public int MaxOpenNodes { get; protected set; }
+        public float TotalProcessingTime { get; protected set; }
         public bool InProgress { get; protected set; }
 
         public IOpenSet Open { get; protected set; }
@@ -72,10 +71,6 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
 
             this.Open.Initialize(); 
             this.Open.AddToOpen(initialNode);
-            if (Open.CountOpen() > this.MaxOpenNodes)
-            {
-                this.MaxOpenNodes = Open.CountOpen();
-            }
             this.Closed.Initialize();
         }
 
@@ -111,21 +106,25 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
                 {
                     this.MaxOpenNodes = Open.CountOpen();
                 }
-            }
+            }   
         }
 
         public bool Search(out GlobalPath solution, bool returnPartialSolution = false)
         {
-            solution = null;
+            var startTime = Time.realtimeSinceStartup;
+            var processedNodes = 0;
+            int count;
+
             NodeRecord best = null;
 
             uint j;
             for (j = 0; j < NodesPerSearch; j++)
             {
-                if (Open.CountOpen() <= 0)
+                if (Open.CountOpen() == 0)
                 {
                     solution = null;
                     this.InProgress = false;
+                    this.CleanUp();
                     return true;
                 }
                 best = Open.GetBestAndRemove();
@@ -152,21 +151,11 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
             TotalProcessedNodes += j;
             if (returnPartialSolution)
                 solution = CalculateSolution(best, true);
-
             else
                 solution = null;
+
             return false;
-
-        }
-
-        public bool Search(out GlobalPath solution,out float cost, bool returnPartialSolution = false)
-        {
-            bool retValue = Search(out solution);
-
-            cost = 0;
-            cost=this.Open.PeekBest().gValue;
-            
-            return retValue;
+           
         }
 
         protected NavigationGraphNode Quantize(Vector3 position)

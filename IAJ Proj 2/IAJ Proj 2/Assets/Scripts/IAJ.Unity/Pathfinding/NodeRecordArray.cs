@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using RAIN.Navigation.Graph;
 using Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures;
+using RAIN.Navigation.Graph;
 
 namespace Assets.Scripts.IAJ.Unity.Pathfinding
 {
@@ -9,7 +9,7 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
     {
         private NodeRecord[] NodeRecords { get; set; }
         private List<NodeRecord> SpecialCaseNodes { get; set; }
-        private NodePriorityHeap Open { get; set; }
+        private NodePriorityHeap Open { get; set; } //FIXME
 
         public NodeRecordArray(NodeRecord[] NodeRecords)
         {
@@ -138,7 +138,7 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
 
         public void RemoveFromClosed(NodeRecord nodeRecord) //FIXME
         {
-            //HEHEHEHE
+            NodeRecords[nodeRecord.node.NodeIndex].status = NodeStatus.Unvisited;
         }
 
         ICollection<NodeRecord> IOpenSet.All()

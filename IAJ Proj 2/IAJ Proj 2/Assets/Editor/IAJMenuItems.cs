@@ -27,9 +27,9 @@ public class IAJMenuItems  {
 
         ClusterGraph clusterGraph = ScriptableObject.CreateInstance<ClusterGraph>();
         clusterGraph.gatewayDistanceTable = new GatewayDistanceTableRow[gateways.Length];
-        
+
         //create gateway instances for each gateway game object
-        for(int i = 0; i < gateways.Length; i++)
+        for (int i = 0; i < gateways.Length; i++)
         {
             var gatewayGO = gateways[i];
             gateway = ScriptableObject.CreateInstance<Gateway>();
@@ -59,36 +59,27 @@ public class IAJMenuItems  {
         // Second stage of the algorithm, calculation of the Gateway table
 
         GlobalPath solution = null;
-        float cost;
-        Gateway startGate;
-        Gateway endGate;
 
         var pathfindingAlgorithm = new NodeArrayAStarPathFinding(navMesh, new EuclideanDistanceHeuristic());
 
         //TODO implement the rest of the algorithm here, i.e. build the GatewayDistanceTable
         int iterator = 0;
-        foreach(Gateway gateway1 in clusterGraph.gateways)
+        foreach (Gateway gateway1 in clusterGraph.gateways)
         {
             clusterGraph.gatewayDistanceTable[iterator] = new GatewayDistanceTableRow(gateways.Length);
             foreach (Gateway gateway2 in clusterGraph.gateways)
             {
-                //float? distance = clusterGraph.getDistance(gateway2.id, gateway1.id);
                 if (gateway1.Equals(gateway2))
                 {
                     clusterGraph.gatewayDistanceTable[gateway1.id].entries[gateway2.id].shortestDistance = 0;
                     clusterGraph.gatewayDistanceTable[gateway1.id].entries[gateway2.id].startGatewayPosition = gateway1.center;
                     clusterGraph.gatewayDistanceTable[gateway1.id].entries[gateway2.id].endGatewayPosition = gateway2.center;
                 }
-                //else if (distance != null)
-                //{
-                //    clusterGraph.gatewayDistanceTable[gateway1.id].entries[gateway2.id].shortestDistance = distance;
-                //    clusterGraph.gatewayDistanceTable[gateway1.id].entries[gateway2.id].startGatewayPosition = gateway1.center;
-                //    clusterGraph.gatewayDistanceTable[gateway1.id].entries[gateway2.id].endGatewayPosition = gateway2.center;
-                //}
-                else{ 
+                else
+                {
                     pathfindingAlgorithm.InitializePathfindingSearch(gateway1.center, gateway2.center);
-                    pathfindingAlgorithm.Search(out solution,out cost);
-                    clusterGraph.gatewayDistanceTable[gateway1.id].entries[gateway2.id].shortestDistance = cost;
+                    pathfindingAlgorithm.Search(out solution);
+                    clusterGraph.gatewayDistanceTable[gateway1.id].entries[gateway2.id].shortestDistance = solution.Length;
                     clusterGraph.gatewayDistanceTable[gateway1.id].entries[gateway2.id].startGatewayPosition = gateway1.center;
                     clusterGraph.gatewayDistanceTable[gateway1.id].entries[gateway2.id].endGatewayPosition = gateway2.center;
                 }

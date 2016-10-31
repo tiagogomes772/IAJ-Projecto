@@ -1,7 +1,6 @@
 ﻿using RAIN.Navigation.Graph;
 using Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures.HPStructures;
 using UnityEngine;
-using System.Collections.Generic;
 
 namespace Assets.Scripts.IAJ.Unity.Pathfinding.Heuristics
 {
@@ -18,7 +17,7 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.Heuristics
         {
             //for now just returns the euclidean distance
             Cluster startCluster = ClusterGraph.Quantize(node);
-            Cluster goalCluster= ClusterGraph.Quantize(goalNode);
+            Cluster goalCluster = ClusterGraph.Quantize(goalNode);
 
             if (startCluster == null)
             {
@@ -45,8 +44,9 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.Heuristics
                     {
                         //Gateway endGateway = goalCluster.gateways[i];
                         float? shortestDistance = ClusterGraph.gatewayDistanceTable[startGateway.id].entries[endGateway.id].shortestDistance;
-                        currentDist += (shortestDistance == null) ? 0 : (float) shortestDistance ;
-                        currentDist += EuclideanDistance(node.LocalPosition, endGateway.center);
+                        currentDist += (shortestDistance == null) ? 0 : (float)shortestDistance;
+                        //currentDist += EuclideanDistance(node.LocalPosition, endGateway.center);
+                        currentDist += EuclideanDistance(endGateway.center, goalNode.LocalPosition);
                         if (minDist > currentDist)
                         {
                             minDist = currentDist;
@@ -55,7 +55,6 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.Heuristics
                 }
                 return minDist;
             }
-
         }
 
         public float EuclideanDistance(Vector3 startPosition, Vector3 endPosition)

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Assets.Scripts.IAJ.Unity.Utils;
 using RAIN.Navigation.Graph;
 using UnityEngine;
 
@@ -11,7 +12,6 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.Path
         public bool IsPartial { get; set; }
         public float Length { get; set; }
         public List<LocalPath> LocalPaths { get; protected set; } 
-
 
 
         public GlobalPath()
@@ -55,10 +55,10 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.Path
             Vector3 toRetVector = Vector3.zero;
             if (param + 1 > LocalPaths.Count)
             {
-                toRetVector = LocalPaths[LocalPaths.Count-1].GetPosition(1);
+                toRetVector = LocalPaths[LocalPaths.Count - 1].GetPosition(1);
                 return toRetVector;
             }
-            
+
             for (int i = 0; i < LocalPaths.Count + 1; i++)
             {
                 if (i > param)
@@ -72,7 +72,7 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.Path
 
         public override bool PathEnd(float param)
         {
-            float endParam = LocalPaths.Count - 0.1f;
+            float endParam = LocalPaths.Count - 0.2f;
             if (param >= endParam)
             {
                 return true;

@@ -105,6 +105,7 @@
     <Compile Include="Assets\Scripts\IAJ.Unity\Pathfinding\Heuristics\IHeuristic.cs" />
     <Compile Include="Assets\Scripts\IAJ.Unity\Pathfinding\Heuristics\ZeroHeuristic.cs" />
     <Compile Include="Assets\Scripts\IAJ.Unity\Pathfinding\NodeArrayAStarPathfinding.cs" />
+    <Compile Include="Assets\Scripts\IAJ.Unity\Pathfinding\NodePriorityHeap.cs" />
     <Compile Include="Assets\Scripts\IAJ.Unity\Pathfinding\NodeRecord.cs" />
     <Compile Include="Assets\Scripts\IAJ.Unity\Pathfinding\NodeRecordArray.cs" />
     <Compile Include="Assets\Scripts\IAJ.Unity\Pathfinding\Path\GlobalPath.cs" />

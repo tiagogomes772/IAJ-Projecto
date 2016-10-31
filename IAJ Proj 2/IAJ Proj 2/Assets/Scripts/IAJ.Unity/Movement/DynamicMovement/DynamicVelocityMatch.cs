@@ -20,11 +20,11 @@
         public override MovementOutput GetMovement()
         {
             var output = new MovementOutput();
-            output.linear = (this.MovingTarget.velocity - this.Character.velocity)/this.TimeToTargetSpeed;
+            output.linear = (this.MovingTarget.velocity - this.Character.velocity) / this.TimeToTargetSpeed;
 
-            if (output.linear.sqrMagnitude > this.MaxAcceleration*this.MaxAcceleration)
+            if (output.linear.sqrMagnitude > this.MaxAcceleration * this.MaxAcceleration)
             {
-                output.linear = output.linear.normalized*this.MaxAcceleration;
+                output.linear = output.linear.normalized * this.MaxAcceleration;
             }
             output.angular = 0;
             return output;

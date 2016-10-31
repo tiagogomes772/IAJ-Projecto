@@ -1,23 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using UnityEngine;
 
 namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
 {
     public class DynamicArrive : DynamicVelocityMatch
     {
+        public override string Name
+        {
+            get
+            {
+                return "DynamicArrive";
+            }
+        }
+
         public float maxSpeed;
         public float stopRadius;
         public float slowRadius;
-        public string name = "Arrive";
 
         public override MovementOutput GetMovement()
         {
             float targetSpeed;
             Vector3 direction = Target.position - Character.position;
-            float distance = direction.magnitude;
+            float distance = direction.sqrMagnitude;
 
             if (distance < stopRadius)
             {
@@ -30,7 +34,7 @@ namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
             }
             else
             {
-                targetSpeed = maxSpeed * (distance / slowRadius);
+                targetSpeed = maxSpeed * (direction.magnitude / slowRadius);
             }
 
             Target.velocity = direction.normalized * targetSpeed;
