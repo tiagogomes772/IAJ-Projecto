@@ -11,7 +11,7 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures
         {
             this.OpenHeap = new PriorityHeap<NodeRecord>();
         }
- 
+
         public void Initialize()
         {
             this.OpenHeap.Clear();

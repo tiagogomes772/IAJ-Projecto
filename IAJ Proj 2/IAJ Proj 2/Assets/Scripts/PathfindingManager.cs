@@ -7,6 +7,7 @@ using RAIN.Navigation;
 using RAIN.Navigation.NavMesh;
 using RAIN.Navigation.Graph;
 using Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures.HPStructures;
+using Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures;
 
 public class PathfindingManager : MonoBehaviour {
 
@@ -14,9 +15,10 @@ public class PathfindingManager : MonoBehaviour {
 	public GameObject endDebugSphere;
 	public Camera camera;
     public GameObject characterAvatar;
+    public bool DebugMode = true;
 
-	//private fields for internal use only
-	private Vector3 startPosition;
+    //private fields for internal use only
+    private Vector3 startPosition;
 	private Vector3 endPosition;
 	private NavMeshPathGraph navMesh;
     
@@ -25,6 +27,8 @@ public class PathfindingManager : MonoBehaviour {
 
     private DynamicCharacter character;
     private bool draw;
+
+    private System.Diagnostics.Stopwatch stopwatch = null;
 
     //properties
     private AStarPathfinding AStarPathFinding { get;  set; }
@@ -37,6 +41,11 @@ public class PathfindingManager : MonoBehaviour {
         this.draw = false;
         this.navMesh = NavigationManager.Instance.NavMeshGraphs[0];
         this.AStarPathFinding = new NodeArrayAStarPathFinding(NavigationManager.Instance.NavMeshGraphs[0], new GatewayHeuristic(clusterGraph));
+        //this.AStarPathFinding = new NodeArrayAStarPathFinding(NavigationManager.Instance.NavMeshGraphs[0], new EuclideanDistanceHeuristic());
+        /*this.AStarPathFinding = new AStarPathfinding(this.navMesh, new LeftPriorityList(), new DictionaryNodeList(), new EuclideanDistanceHeuristic())
+        {
+            NodesPerSearch = uint.MaxValue
+        };*/
         this.AStarPathFinding.NodesPerSearch = 100;
 	}
 	
@@ -44,7 +53,6 @@ public class PathfindingManager : MonoBehaviour {
 	void Update () 
     {
 		Vector3 position;
-		NavigationGraphNode node;
 
 		if (Input.GetMouseButtonDown(0)) 
 		{
@@ -59,6 +67,12 @@ public class PathfindingManager : MonoBehaviour {
 				this.endPosition = position;
 				this.draw = true;
                 //initialize the search algorithm
+                #region Debug
+                
+                if (DebugMode/*ON*/)
+                stopwatch = System.Diagnostics.Stopwatch.StartNew();
+                
+                #endregion
                 this.AStarPathFinding.InitializePathfindingSearch(this.character.KinematicData.position,this.endPosition);
 			}
 		}
@@ -69,8 +83,15 @@ public class PathfindingManager : MonoBehaviour {
 	        var finished = this.AStarPathFinding.Search(out this.currentSolution);
 	        if (finished && this.currentSolution != null)
 	        {
-                //lets smooth out the Path
-	            this.startPosition = this.character.KinematicData.position;
+                #region Debug
+                if (DebugMode/*ON*/)
+                {
+                    stopwatch.Stop();
+                    this.AStarPathFinding.TotalProcessingTime = stopwatch.ElapsedMilliseconds;
+                }
+                #endregion
+                                //lets smooth out the Path
+                                this.startPosition = this.character.KinematicData.position;
 	            this.currentSmoothedSolution = StringPullingPathSmoothing.SmoothPath(this.character.KinematicData,this.currentSolution);
                 this.currentSmoothedSolution.CalculateLocalPathsFromPathPositions(this.character.KinematicData.position);
                 this.character.Movement = new DynamicFollowPath(this.character.KinematicData, this.currentSmoothedSolution);
@@ -85,7 +106,7 @@ public class PathfindingManager : MonoBehaviour {
     {
         if (this.currentSolution != null)
         {
-            var time = this.AStarPathFinding.TotalProcessingTime*1000;
+            var time = this.AStarPathFinding.TotalProcessingTime;
             float timePerNode;
             if (this.AStarPathFinding.TotalProcessedNodes > 0)
             {

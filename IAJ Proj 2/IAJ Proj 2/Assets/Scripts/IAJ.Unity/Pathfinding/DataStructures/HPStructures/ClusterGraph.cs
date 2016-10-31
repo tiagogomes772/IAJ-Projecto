@@ -11,24 +11,37 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures.HPStructures
         public List<Cluster> clusters;
         public List<Gateway> gateways;
         public GatewayDistanceTableRow[] gatewayDistanceTable;
+        public Dictionary<NavigationGraphNode, Cluster> dict;
 
         public ClusterGraph()
         {
             this.clusters = new List<Cluster>();
             this.gateways = new List<Gateway>();
+            this.dict = new Dictionary<NavigationGraphNode, Cluster>();
         }
 
         public Cluster Quantize(NavigationGraphNode node)
         {
+            Cluster c = null;
+            if (dict.TryGetValue(node, out c))
+            {
+                return c;
+            }
+            return null;
+        }
+
+        public void AddNodeToDict(NavigationGraphNode node)
+        {
             Vector3 nodePosition = node.LocalPosition;
+
             foreach (Cluster c in clusters)
             {
                 if ((c.min.x <= node.LocalPosition.x) && (node.LocalPosition.x <= c.max.x) && (c.min.z <= node.LocalPosition.z) && (node.LocalPosition.z <= c.max.z))
                 {
-                    return c;
+                    dict.Add(node, c);
+                    break;
                 }
             }
-            return null;
         }
 
         public void SaveToAssetDatabase()

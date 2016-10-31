@@ -15,7 +15,7 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
 
         public uint TotalProcessedNodes { get; protected set; }
         public int MaxOpenNodes { get; protected set; }
-        public float TotalProcessingTime { get; protected set; }
+        public float TotalProcessingTime { get; set; }
         public bool InProgress { get; protected set; }
 
         public IOpenSet Open { get; protected set; }
@@ -71,6 +71,7 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
 
             this.Open.Initialize(); 
             this.Open.AddToOpen(initialNode);
+            if (Open.CountOpen() > this.MaxOpenNodes) this.MaxOpenNodes = Open.CountOpen();
             this.Closed.Initialize();
         }
 
@@ -112,13 +113,12 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
         public bool Search(out GlobalPath solution, bool returnPartialSolution = false)
         {
             var startTime = Time.realtimeSinceStartup;
-            var processedNodes = 0;
+            uint processedNodes = 0;
             int count;
 
             NodeRecord best = null;
 
-            uint j;
-            for (j = 0; j < NodesPerSearch; j++)
+            for (count = 0; count < NodesPerSearch; count++, processedNodes++)
             {
                 if (Open.CountOpen() == 0)
                 {
@@ -134,7 +134,7 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
                     solution = CalculateSolution(best, false);
                     this.InProgress = false;
                     this.CleanUp();
-                    TotalProcessedNodes += j;
+                    TotalProcessedNodes += processedNodes;
                     return true;
                 }
 
@@ -148,7 +148,7 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
                 }
             }
 
-            TotalProcessedNodes += j;
+            TotalProcessedNodes += processedNodes;
             if (returnPartialSolution)
                 solution = CalculateSolution(best, true);
             else
