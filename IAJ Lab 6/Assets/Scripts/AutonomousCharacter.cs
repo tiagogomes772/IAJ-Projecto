@@ -235,7 +235,7 @@ namespace Assets.Scripts
                     this.Character.Movement = new DynamicFollowPath(this.Character.KinematicData, this.currentSmoothedSolution)
                     {
                         MaxAcceleration = 40.0f,
-                        MaxSpeed = 40.0f
+                        maxSpeed = 40.0f
                     };
                 }
             }
