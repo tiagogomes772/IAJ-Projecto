@@ -125,6 +125,7 @@
   <ItemGroup>
     <Compile Include="Assets\Editor\CreateCone.cs" />
     <Compile Include="Assets\Editor\CrossPlatformInput\CrossPlatformInputInitialize.cs" />
+    <Compile Include="Assets\Editor\IAJMenuItems.cs" />
     <Compile Include="Assets\RAIN\Editor\ScriptTemplates\ActionTemplate_CS.cs" />
     <Compile Include="Assets\RAIN\Editor\ScriptTemplates\DecisionTemplate_CS.cs" />
   </ItemGroup>

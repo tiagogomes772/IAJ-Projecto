@@ -21,7 +21,7 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
                 var node = nodes[i];
                 node.NodeIndex = i; //we're setting the node Index because RAIN does not do this automatically
                 NodeRecords[i] = new NodeRecord { node = node, status = NodeStatus.Unvisited };
-                ((GatewayHeuristic)heuristic).ClusterGraph.AddNodeToDict(node); //FIXME: Só funciona com a gateway heuristic
+                //((GatewayHeuristic)heuristic).ClusterGraph.AddNodeToDict(node); //FIXME: Só funciona com a gateway heuristic
             }
 
             this.NodeRecordArray = new NodeRecordArray(NodeRecords);

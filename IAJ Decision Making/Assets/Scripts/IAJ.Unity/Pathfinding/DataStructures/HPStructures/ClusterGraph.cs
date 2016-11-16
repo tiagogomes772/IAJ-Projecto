@@ -22,12 +22,20 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures.HPStructures
 
         public Cluster Quantize(NavigationGraphNode node)
         {
-            Cluster c = null;
+            foreach (Cluster c in clusters)
+            {
+                if ((c.min.x <= node.LocalPosition.x) && (node.LocalPosition.x <= c.max.x) && (c.min.z <= node.LocalPosition.z) && (node.LocalPosition.z <= c.max.z))
+                {
+                    return c;
+                }
+            }
+            return null;
+            /*Cluster c = null;
             if (dict.TryGetValue(node, out c))
             {
                 return c;
             }
-            return null;
+            return null;*/
         }
 
         public void AddNodeToDict(NavigationGraphNode node)

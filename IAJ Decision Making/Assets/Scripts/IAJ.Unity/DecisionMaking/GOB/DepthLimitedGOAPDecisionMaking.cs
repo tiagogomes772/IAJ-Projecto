@@ -53,6 +53,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.GOB
             #endregion
             float currentValue = 0f;
             Action nextAction;
+            Action[] copyActionPerLevel=new Action[MAX_DEPTH];
             while(this.CurrentDepth >= 0)
             {
                 if(this.CurrentDepth >= MAX_DEPTH)
@@ -63,6 +64,8 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.GOB
                     {
                         this.BestDiscontentmentValue = currentValue;
                         this.BestAction = this.ActionPerLevel[0];
+                        this.ActionPerLevel.CopyTo(copyActionPerLevel, 0);
+                        this.BestActionSequence = copyActionPerLevel;
                     }
                     this.CurrentDepth -= 1;
                     continue;
