@@ -26,7 +26,7 @@ namespace Assets.Scripts.GameManager
             float time = (float)this.GetProperty(Properties.TIME);
             int money = (int)this.GetProperty(Properties.MONEY);
 
-            return HP == 0 ||  time >= 100 || money == 25;
+            return HP <= 0 ||  time >= 100 || money == 25;
         }
 
         public override float GetScore()

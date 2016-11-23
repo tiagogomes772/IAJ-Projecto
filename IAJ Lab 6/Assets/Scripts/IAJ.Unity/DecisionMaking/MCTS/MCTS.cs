@@ -65,9 +65,8 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
 
             var startTime = Time.realtimeSinceStartup;
             this.CurrentIterationsInFrame = 0;
-            int Ntimes = 1000; //TODO Dont know where to get this number
             int counter = 0;
-            while(counter < Ntimes)
+            while(counter < this.MaxIterations)
             {
                 selectedNode = Selection(this.InitialNode);
                 reward = Playout(selectedNode.State);
@@ -85,14 +84,12 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             MCTSNode bestChild;
 
 
-            while(currentNode.State.GetExecutableActions().Length > 0)
-            { 
-                GOB.Action[] allActionAvailable = currentNode.State.GetExecutableActions();
-
-                int childNodesNumber = currentNode.ChildNodes.Count;
-                if (allActionAvailable.Length > childNodesNumber)
+            while(!currentNode.State.IsTerminal())
+            {
+                var action = currentNode.State.GetNextAction();
+                if (action != null)
                 {
-                    currentNode.ChildNodes.Add(Expand(currentNode, allActionAvailable[childNodesNumber]));
+                    return Expand(currentNode, action);
                 }
                 else
                 {
@@ -105,22 +102,25 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
         private Reward Playout(WorldModel initialPlayoutState)
         {
             GOB.Action action;
-            while (initialPlayoutState.IsTerminal())
+            var currentState = initialPlayoutState.GenerateChildWorldModel();
+
+            while (!currentState.IsTerminal())
             {
-                int index = RandomGenerator.Next(initialPlayoutState.GetExecutableActions().Length);
-                action = initialPlayoutState.GetExecutableActions()[index];
-                //TODO Dont know how to get a new State from a given state and an action
-                initialPlayoutState = new WorldModel(initialPlayoutState);
+                var actions = currentState.GetExecutableActions();
+
+                int index = RandomGenerator.Next(actions.Length);
+                action = actions[index];
+                action.ApplyActionEffects(currentState);
             }
             Reward r = new Reward();
             //TODO Verify if reward is this score
-            r.Value = initialPlayoutState.GetScore();
+            r.Value = currentState.GetScore();
             return r;
         }
 
         private void Backpropagate(MCTSNode node, Reward reward)
         {
-            while(!node.Equals(null))
+            while(node!=null)
             {
                 node.N++;
                 //TODO VERIFY this
@@ -131,28 +131,37 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
 
         private MCTSNode Expand(MCTSNode parent, GOB.Action action)
         {
-            //TODO Compare with professor implementation
-            MCTSNode new_child = new MCTSNode(parent.State);
+            MCTSNode new_child = new MCTSNode(parent.State.GenerateChildWorldModel());
+            action.ApplyActionEffects(new_child.State);
             new_child.Action = action;
+            new_child.Parent = parent;
+
+            parent.ChildNodes.Add(new_child);
             return new_child;
         }
 
         //gets the best child of a node, using the UCT formula
         private MCTSNode BestUCTChild(MCTSNode node)
         {
-           
-            MCTSNode bestChild = node.ChildNodes[0];
-            int bestNodeValue = (int)bestChild.Q + ((int)Math.Sqrt(2) * (int)Math.Sqrt(Math.Log(node.N) / bestChild.N));
-            MCTSNode auxChild;
-            int auxNodeValue;
-            for (int i=1; i < node.ChildNodes.Count; i++)
+            try
             {
-                auxChild = node.ChildNodes[i];
-                auxNodeValue = (int)auxChild.Q + ((int)Math.Sqrt(2) * (int)Math.Sqrt(Math.Log(node.N) / auxChild.N));
-                if (auxNodeValue > bestNodeValue)
-                    bestChild = auxChild;  
+                MCTSNode bestChild = node.ChildNodes[0];
+                int bestNodeValue = (int)bestChild.Q + ((int)Math.Sqrt(2) * (int)Math.Sqrt(Math.Log(node.N) / bestChild.N));
+                MCTSNode auxChild;
+                int auxNodeValue;
+                for (int i = 1; i < node.ChildNodes.Count; i++)
+                {
+                    auxChild = node.ChildNodes[i];
+                    auxNodeValue = (int)auxChild.Q + ((int)Math.Sqrt(2) * (int)Math.Sqrt(Math.Log(node.N) / auxChild.N));
+                    if (auxNodeValue > bestNodeValue)
+                        bestChild = auxChild;
+                }
+                return bestChild;
             }
-            return bestChild;
+            catch (ArgumentOutOfRangeException e)
+            {
+                return null;
+            }
         }
 
         //this method is very similar to the bestUCTChild, but it is used to return the final action of the MCTS search, and so we do not care about
@@ -171,6 +180,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                     bestChild = auxChild;
             }
             return bestChild;
+            
         }
     }
 }

@@ -159,22 +159,22 @@ namespace Assets.Scripts.GameManager
 
         public bool InMeleeRange(GameObject enemy)
         {
-            return this.CheckRange(enemy, 4.0f);
+            return this.CheckRange(enemy, 20.0f);
         }
 
         public bool InFireballRange(GameObject enemy)
         {
-            return this.CheckRange(enemy, 25.0f);
+            return this.CheckRange(enemy, 50.0f);
         }
 
         public bool InChestRange(GameObject chest)
         {
-            return this.CheckRange(chest, 4.0f);
+            return this.CheckRange(chest, 20.0f);
         }
 
         public bool InPotionRange(GameObject potion)
         {
-            return this.CheckRange(potion, 4.0f);
+            return this.CheckRange(potion, 20.0f);
         }
     }
 }
