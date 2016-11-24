@@ -63,7 +63,10 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             MCTSNode selectedNode;
             Reward reward;
 
+            #region DEBUG
             var startTime = Time.realtimeSinceStartup;
+            #endregion
+
             this.CurrentIterationsInFrame = 0;
             int counter = 0;
             while(counter < this.MaxIterations)
@@ -73,7 +76,22 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                 Backpropagate(selectedNode, reward);
                 counter++;
             }
+            this.BestFirstChild = BestChild(this.InitialNode);
 
+            MCTSNode BestChildNode = this.BestFirstChild;
+
+            while (BestChildNode != null)
+            {
+                this.BestActionSequence.Add(BestChildNode.Action);
+                if (BestChildNode.ChildNodes.Count == 0)
+                    BestChildNode = null;
+                else
+                    BestChildNode = BestChild(BestChildNode);
+            }
+
+            #region DEBUG
+            this.TotalProcessingTime += Time.realtimeSinceStartup - startTime;
+            #endregion
             return BestChild(this.InitialNode).Action;
         }
 
@@ -102,8 +120,10 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
         private Reward Playout(WorldModel initialPlayoutState)
         {
             GOB.Action action;
+
             var currentState = initialPlayoutState.GenerateChildWorldModel();
 
+            CurrentDepth = 0;
             while (!currentState.IsTerminal())
             {
                 var actions = currentState.GetExecutableActions();
@@ -111,7 +131,11 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                 int index = RandomGenerator.Next(actions.Length);
                 action = actions[index];
                 action.ApplyActionEffects(currentState);
+                CurrentDepth++;
             }
+            if (CurrentDepth > MaxPlayoutDepthReached)
+                MaxPlayoutDepthReached = CurrentDepth;
+
             Reward r = new Reward();
             //TODO Verify if reward is this score
             r.Value = currentState.GetScore();

@@ -30,7 +30,7 @@ namespace Assets.Scripts.DecisionMakingActions
         {
             //assume a velocity of 20.0f/s to get to the target
             //Gateway             
-            return Heuristic.H(navMesh.QuantizeToNode(this.Target.transform.position, 1.0f), navMesh.QuantizeToNode(this.Character.transform.position, 1.0f));
+            return Heuristic.H(navMesh.QuantizeToNode(this.Target.transform.position, 1.0f), navMesh.QuantizeToNode(this.Character.transform.position, 1.0f)) / Character.Character.MaxSpeed;
             //Euclidean Distance
             //return (this.Target.transform.position - this.Character.Character.KinematicData.position).magnitude / 20.0f;
         }
@@ -40,7 +40,7 @@ namespace Assets.Scripts.DecisionMakingActions
             //assume a velocity of 20.0f/s to get to the target
             var position = (Vector3)worldModel.GetProperty(Properties.POSITION);
             //Gateway        
-            return Heuristic.H(navMesh.QuantizeToNode(this.Target.transform.position, 1.0f), navMesh.QuantizeToNode(position, 1.0f));
+            return Heuristic.H(navMesh.QuantizeToNode(this.Target.transform.position, 1.0f), navMesh.QuantizeToNode(position, 1.0f)) / Character.Character.MaxSpeed;
             //Euclidean Distance
             //return (this.Target.transform.position - position).magnitude / 20.0f;
         }

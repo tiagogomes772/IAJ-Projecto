@@ -205,7 +205,7 @@ namespace Assets.Scripts
                 }
             }
 
-            if(this.MCTSActive)
+            if (this.MCTSActive)
             {
                 this.UpdateMCTS();
             }
@@ -264,9 +264,13 @@ namespace Assets.Scripts
                 var q = this.MCTSDecisionMaking.BestFirstChild.Q / this.MCTSDecisionMaking.BestFirstChild.N;
                 this.BestDiscontentmentText.text = "Best Q value: " + q.ToString("F");
                 var actionText = "";
+                int count = 0;
                 foreach (var action in this.MCTSDecisionMaking.BestActionSequence)
                 {
                     actionText += "\n" + action.Name;
+                    if (count >= 5)
+                        break;
+                    count++;
                 }
                 this.BestActionText.text = "Best Action Sequence: " + actionText;
             }
