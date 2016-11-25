@@ -77,5 +77,26 @@ namespace Assets.Scripts.DecisionMakingActions
         {
             return 0.0f;
         }
+
+        public override float f(int featureIndex, WorldModel state)
+        {
+            var hp = (int)state.GetProperty(Properties.HP);
+            var gainHP = (int)state.GetProperty(Properties.MAXHP) + 10;
+            var lvl = (int)state.GetProperty(Properties.LEVEL);
+            switch (featureIndex)
+            {
+                case 0:     //XP
+                    return 0f;
+                case 1:     //HP
+                    return (lvl == 3) ? 0 : gainHP - hp;
+                case 2:     //Money
+                    return 0f;
+                case 3:     //Time
+                    return 5f;
+                default:
+                    return 0f;
+            }
+        }
+
     }
 }

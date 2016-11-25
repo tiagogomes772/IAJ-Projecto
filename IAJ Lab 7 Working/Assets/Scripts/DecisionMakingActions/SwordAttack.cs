@@ -71,5 +71,51 @@ namespace Assets.Scripts.DecisionMakingActions
             //disables the target object so that it can't be reused again
             worldModel.SetProperty(this.Target.name,false);
         }
+
+        public override float f(int featureIndex, WorldModel state)
+        {
+            var hp = (int)state.GetProperty(Properties.HP);
+            var maxHP = (int)state.GetProperty(Properties.MAXHP);
+            var lvl = (int)state.GetProperty(Properties.LEVEL);
+
+            switch (featureIndex)
+            {
+                case 0:     //XP
+                    if (this.Target.tag.Equals("Skeleton"))
+                    {
+                        return lvl == 3 ? 0 : 5;
+                    }
+                    else if (this.Target.tag.Equals("Orc"))
+                    {
+                        return lvl == 3 ? 0 : 10;
+                    }
+                    else if (this.Target.tag.Equals("Dragon"))
+                    {
+                        return lvl == 3 ? 0 : 20;
+                    }
+                    return 10f;
+                case 1:     //HP
+                    if (this.Target.tag.Equals("Skeleton"))
+                    {
+                        return -5;
+                    }
+                    else if (this.Target.tag.Equals("Orc"))
+                    {
+                        return -10;
+                    }
+                    else if (this.Target.tag.Equals("Dragon"))
+                    {
+                        return -20;
+                    }
+                    return -10f;
+                case 2:     //Money
+                    return 0f;
+                case 3:     //Time
+                    return 0.1f;
+                default:
+                    return 0f;
+            }
+        }
+
     }
 }

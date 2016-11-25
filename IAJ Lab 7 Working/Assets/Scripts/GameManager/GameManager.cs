@@ -25,6 +25,12 @@ namespace Assets.Scripts.GameManager
         public int MAX_ITERATIONS_PER_FRAME = 5000;
         public int MAX_ITERATIONS_PER_SEARCH = 25;
 
+        /// <summary>
+        /// Possible values are: MCTSRAVE , MCTSBiasedPlayout and MCTS 
+        /// By default its the MCTSRAVE
+        /// </summary>
+        public string AlgorithmChosen = "MCTSRAVE";
+
         //private fields
         public List<GameObject> chests;
         public List<GameObject> skeletons;
@@ -39,6 +45,7 @@ namespace Assets.Scripts.GameManager
  
         private float nextUpdateTime = 0.0f;
         private Vector3 previousPosition;
+
 
         public void Start()
         {

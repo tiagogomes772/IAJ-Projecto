@@ -73,5 +73,39 @@ namespace Assets.Scripts.DecisionMakingActions
             //disables the target object so that it can't be reused again
             worldModel.SetProperty(this.Target.name, false);
         }
+
+
+
+        public override float f(int featureIndex, WorldModel state)
+        {
+            var lvl = (int)state.GetProperty(Properties.LEVEL);
+            switch (featureIndex)
+            {
+                case 0:     //XP
+                    if (this.Target.tag.Equals("Skeleton"))
+                    {
+                        return lvl == 3 ? 0 : 5;
+                    }
+                    else if (this.Target.tag.Equals("Orc"))
+                    {
+                        return lvl == 3 ? 0 : 10;
+                    }
+                    else if (this.Target.tag.Equals("Dragon"))
+                    {
+                        return 0;
+                    }
+                    return lvl == 3 ? 0 : (5f / lvl);
+                case 1:     //HP
+                    //If the target is a dragon we wont do any damage and we will most certainly be hit with a -20hp attack
+                    return (this.Target.tag.Equals("Dragon")) ? -20f : 10f;
+                case 2:     //Money
+                    return 0f;
+                case 3:     //Time
+                    return 0.1f;
+                default:
+                    return 0f;
+            }
+        }
+
     }
 }

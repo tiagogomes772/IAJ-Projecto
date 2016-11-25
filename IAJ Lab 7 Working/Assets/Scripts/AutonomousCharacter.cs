@@ -152,7 +152,23 @@ namespace Assets.Scripts
 
             var worldModel = new CurrentStateWorldModel(this.GameManager, this.Actions, this.Goals);
             this.GOAPDecisionMaking = new DepthLimitedGOAPDecisionMaking(worldModel,this.Actions,this.Goals);
-            this.MCTSDecisionMaking = new MCTSRAVE(worldModel);
+
+            switch (GameManager.AlgorithmChosen)
+            {
+                case "MCTSRAVE":
+                    this.MCTSDecisionMaking = new MCTSRAVE(worldModel);
+                    break;
+                case "MCTSBiasedPlayout":
+                    this.MCTSDecisionMaking = new MCTSBiasedPlayout(worldModel);
+                    break;
+                case "MCTS":
+                    this.MCTSDecisionMaking = new MCTS(worldModel);
+                    break;
+                default:
+                    this.MCTSDecisionMaking = new MCTSRAVE(worldModel);
+                    break;
+            }
+
             this.MCTSDecisionMaking.MaxIterations = GameManager.MAX_ITERATIONS_PER_SEARCH;
             this.MCTSDecisionMaking.MaxIterationsProcessedPerFrame = GameManager.MAX_ITERATIONS_PER_FRAME;
         }

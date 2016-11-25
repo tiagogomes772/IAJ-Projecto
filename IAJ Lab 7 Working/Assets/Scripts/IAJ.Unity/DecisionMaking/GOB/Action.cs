@@ -56,5 +56,10 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.GOB
         {
         }
 
+        public virtual float f(int featureIndex, WorldModel state)
+        {
+            return 0f;
+        }
+
     }
 }
