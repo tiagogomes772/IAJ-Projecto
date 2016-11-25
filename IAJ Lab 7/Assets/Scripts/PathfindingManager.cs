@@ -5,9 +5,7 @@ using Assets.Scripts.IAJ.Unity.Pathfinding.Path;
 using UnityEngine;
 using RAIN.Navigation;
 using RAIN.Navigation.NavMesh;
-using RAIN.Navigation.Graph;
 using Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures.HPStructures;
-using UnityEditor;
 
 public class PathfindingManager : MonoBehaviour {
 
@@ -88,7 +86,7 @@ public class PathfindingManager : MonoBehaviour {
 	            this.character.Movement = new DynamicFollowPath(this.character.KinematicData, this.currentSmoothedSolution)
 	            {
 	                MaxAcceleration = 40.0f,
-	                MaxSpeed = 20.0f
+                    maxSpeed = 20.0f
 	            };
 
 	        }

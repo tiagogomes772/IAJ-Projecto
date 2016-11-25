@@ -117,7 +117,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.GOB
             {
                 if (this.ActionEnumerator.MoveNext())
                 {
-                    action = this.ActionEnumerator.Current;    
+                    action = this.ActionEnumerator.Current;
                 }
                 else
                 {
@@ -143,7 +143,6 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.GOB
         {
             return 0.0f;
         }
-
         public virtual int GetNextPlayer()
         {
             return 0;

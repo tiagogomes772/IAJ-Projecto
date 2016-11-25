@@ -71,5 +71,27 @@ namespace Assets.Scripts.DecisionMakingActions
             //disables the target object so that it can't be reused again
             worldModel.SetProperty(this.Target.name,false);
         }
+
+
+        public float f(int featureIndex, WorldModel state)
+        {
+            var hp = (int)state.GetProperty(Properties.HP);
+            var maxHP = (int)state.GetProperty(Properties.MAXHP);
+
+            switch (featureIndex)
+            {
+                case 0:     //XP
+                    return 10f;
+                case 1:     //HP
+                    return -10f;
+                case 2:     //Money
+                    return 0f;
+                case 3:     //Time
+                    return 0.1f;
+                default:
+                    return 0f;
+            }
+        }
+
     }
 }

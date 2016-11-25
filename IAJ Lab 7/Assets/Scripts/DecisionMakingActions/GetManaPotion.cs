@@ -39,6 +39,23 @@ namespace Assets.Scripts.DecisionMakingActions
             worldModel.SetProperty(this.Target.name, false);
         }
 
+        public float f(int featureIndex, WorldModel state)
+        {
+            switch (featureIndex)
+            {
+                case 0:     //XP
+                    return 2.5f;
+                case 1:     //HP
+                    return 0f;
+                case 2:     //Money
+                    return 0f;
+                case 3:     //Time
+                    return 0.1f;
+                default:
+                    return 0f;
+            }
+        }
+
 
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Assets.Scripts.GameManager;
 using Assets.Scripts.IAJ.Unity.DecisionMaking.GOB;
+using RAIN.Navigation.Graph;
 using UnityEngine;
 using Action = Assets.Scripts.IAJ.Unity.DecisionMaking.GOB.Action;
 
@@ -30,7 +31,10 @@ namespace Assets.Scripts.DecisionMakingActions
 
         private float GetDuration(Vector3 currentPosition)
         {
-            var distance = this.Character.AStarPathFinding.Heuristic.H(currentPosition, this.Target.transform.position);
+            NavigationGraphNode currentPositionNode = this.Character.AStarPathFinding.NavMeshGraph.QuantizeToNode(currentPosition, 1.0f);
+            NavigationGraphNode targetPositionNode = this.Character.AStarPathFinding.NavMeshGraph.QuantizeToNode(this.Target.transform.position, 1.0f);
+
+            var distance = this.Character.AStarPathFinding.Heuristic.H(currentPositionNode, targetPositionNode);
             return distance / this.Character.Character.MaxSpeed;
         }
 
