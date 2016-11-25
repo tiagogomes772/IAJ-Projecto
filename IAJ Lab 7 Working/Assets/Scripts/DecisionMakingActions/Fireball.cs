@@ -22,7 +22,7 @@ namespace Assets.Scripts.DecisionMakingActions
             }
             else if (target.tag.Equals("Dragon"))
             {
-                //this.xpChange = 15;
+                this.xpChange = 0;
             }
         }
 
@@ -48,7 +48,7 @@ namespace Assets.Scripts.DecisionMakingActions
         {
             if (!base.CanExecute(worldModel)) return false;
             var mana = (int)worldModel.GetProperty(Properties.MANA);
-            return mana > 2;
+            return mana >= 5;
         }
 
         public override void Execute()
@@ -63,7 +63,7 @@ namespace Assets.Scripts.DecisionMakingActions
             base.ApplyActionEffects(worldModel);
 
             var xpValue = worldModel.GetGoalValue(AutonomousCharacter.GAIN_XP_GOAL);
-            worldModel.SetGoalValue(AutonomousCharacter.GAIN_XP_GOAL, xpValue - this.manaChange);
+            worldModel.SetGoalValue(AutonomousCharacter.GAIN_XP_GOAL, xpValue - this.xpChange);
 
             var xp = (int)worldModel.GetProperty(Properties.XP);
             worldModel.SetProperty(Properties.XP, xp + this.xpChange);

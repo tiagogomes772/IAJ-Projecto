@@ -30,6 +30,7 @@ namespace Assets.Scripts.DecisionMakingActions
 
         private float GetDuration(Vector3 currentPosition)
         {
+            //return (this.Target.transform.position - currentPosition).magnitude / 20.0f; 
             var characterNode = this.Character.AStarPathFinding.NavMeshGraph.QuantizeToNode(currentPosition, 1.0f);
             var targetNode = this.Character.AStarPathFinding.NavMeshGraph.QuantizeToNode(this.Target.transform.position, 1.0f);
 

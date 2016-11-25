@@ -152,7 +152,7 @@ namespace Assets.Scripts
 
             var worldModel = new CurrentStateWorldModel(this.GameManager, this.Actions, this.Goals);
             this.GOAPDecisionMaking = new DepthLimitedGOAPDecisionMaking(worldModel,this.Actions,this.Goals);
-            this.MCTSDecisionMaking = new MCTS(worldModel);
+            this.MCTSDecisionMaking = new MCTSRAVE(worldModel);
             this.MCTSDecisionMaking.MaxIterations = 5000;
             this.MCTSDecisionMaking.MaxIterationsProcessedPerFrame = 25;
         }
@@ -269,9 +269,12 @@ namespace Assets.Scripts
                 var q = this.MCTSDecisionMaking.BestFirstChild.Q / this.MCTSDecisionMaking.BestFirstChild.N;
                 this.BestDiscontentmentText.text = "Best Exp. Q value: " + q.ToString("F");
                 var actionText = "";
+                int count = 0;
                 foreach (var action in this.MCTSDecisionMaking.BestActionSequence)
                 {
                     actionText += "\n" + action.Name;
+                    count++;
+                    if (count > 4) break; //FIXME: Meter isto numa variavel
                 }
                 this.BestActionText.text = "Best Action Sequence: " + actionText;
             }

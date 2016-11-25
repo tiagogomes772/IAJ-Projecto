@@ -12,7 +12,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
         public bool InProgress { get; private set; }
         public int MaxIterations { get; set; }
         public int MaxIterationsProcessedPerFrame { get; set; }
-        public int MaxPlayoutDepthReached { get; private set; }
+        public int MaxPlayoutDepthReached { get; set; }
         public int MaxSelectionDepthReached { get; private set; }
         public float TotalProcessingTime { get; private set; }
         public MCTSNode BestFirstChild { get; set; }
@@ -27,8 +27,6 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
         protected MCTSNode InitialNode { get; set; }
         protected System.Random RandomGenerator { get; set; }
         
-        
-
         public MCTS(CurrentStateWorldModel currentStateWorldModel)
         {
             this.InProgress = false;
@@ -62,37 +60,46 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
         {
             MCTSNode selectedNode;
             Reward reward;
+            
 
             #region DEBUG
             var startTime = Time.realtimeSinceStartup;
+            BestActionSequence.Clear();
             #endregion
-
             this.CurrentIterationsInFrame = 0;
-            int counter = 0;
-            while (counter < this.MaxIterations)
+            while (this.CurrentIterations < this.MaxIterations && this.CurrentIterationsInFrame < this.MaxIterationsProcessedPerFrame)
             {
                 selectedNode = Selection(this.InitialNode);
                 reward = Playout(selectedNode.State);
                 Backpropagate(selectedNode, reward);
-                counter++;
+
+                CurrentIterations++;
+                CurrentIterationsInFrame++;
             }
-            this.BestFirstChild = BestChild(this.InitialNode);
+            this.BestFirstChild = BestUCTChild(this.InitialNode);
 
             MCTSNode BestChildNode = this.BestFirstChild;
 
             while (BestChildNode != null)
             {
+                #region DEBUG
                 this.BestActionSequence.Add(BestChildNode.Action);
+                #endregion
                 if (BestChildNode.ChildNodes.Count == 0)
                     BestChildNode = null;
                 else
-                    BestChildNode = BestChild(BestChildNode);
+                    BestChildNode = BestUCTChild(BestChildNode);
             }
 
+            if (this.CurrentIterations >= this.MaxIterations)
+            {
+                this.InProgress = false;
+            }
             #region DEBUG
             this.TotalProcessingTime += Time.realtimeSinceStartup - startTime;
             #endregion
-            return BestChild(this.InitialNode).Action;
+            
+            return BestUCTChild(this.InitialNode).Action;
         }
 
         private MCTSNode Selection(MCTSNode initialNode)
@@ -111,7 +118,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                 }
                 else
                 {
-                    currentNode = BestChild(currentNode);
+                    currentNode = BestUCTChild(currentNode);
                 }
             }
             return currentNode;
@@ -131,6 +138,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                 int index = RandomGenerator.Next(actions.Length);
                 action = actions[index];
                 action.ApplyActionEffects(currentState);
+                currentState.CalculateNextPlayer();
                 CurrentDepth++;
             }
             if (CurrentDepth > MaxPlayoutDepthReached)
@@ -148,7 +156,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             {
                 node.N++;
                 //TODO VERIFY this
-                node.Q = node.Q + reward.Value;
+                node.Q = node.Q + reward.GetRewardForNode(node);
                 node = node.Parent;
             }
         }
@@ -157,6 +165,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
         {
             MCTSNode new_child = new MCTSNode(parent.State.GenerateChildWorldModel());
             action.ApplyActionEffects(new_child.State);
+            new_child.State.CalculateNextPlayer();
             new_child.Action = action;
             new_child.Parent = parent;
 
@@ -167,25 +176,26 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
         //gets the best child of a node, using the UCT formula
         protected virtual MCTSNode BestUCTChild(MCTSNode node)
         {
-            try
-            {
+
+            //try
+            //{
                 MCTSNode bestChild = node.ChildNodes[0];
-                int bestNodeValue = (int)bestChild.Q + ((int)Math.Sqrt(2) * (int)Math.Sqrt(Math.Log(node.N) / bestChild.N));
+                float bestNodeValue = bestChild.Q / bestChild.N + (C * (float)Math.Sqrt(Math.Log(node.N) / bestChild.N));
                 MCTSNode auxChild;
-                int auxNodeValue;
+                float auxNodeValue;
                 for (int i = 1; i < node.ChildNodes.Count; i++)
                 {
                     auxChild = node.ChildNodes[i];
-                    auxNodeValue = (int)auxChild.Q + ((int)Math.Sqrt(2) * (int)Math.Sqrt(Math.Log(node.N) / auxChild.N));
+                    auxNodeValue = auxChild.Q / auxChild.N + (C * (float)Math.Sqrt(Math.Log(node.N) / auxChild.N));
                     if (auxNodeValue > bestNodeValue)
                         bestChild = auxChild;
                 }
                 return bestChild;
-            }
-            catch (ArgumentOutOfRangeException e)
-            {
-                return null;
-            }
+            //}
+            //catch (ArgumentOutOfRangeException e)
+            //{
+            //    return null;
+            //}
         }
 
         //this method is very similar to the bestUCTChild, but it is used to return the final action of the MCTS search, and so we do not care about
