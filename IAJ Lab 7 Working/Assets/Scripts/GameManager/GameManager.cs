@@ -22,6 +22,9 @@ namespace Assets.Scripts.GameManager
         public Text MoneyText;
         public GameObject GameEnd;
 
+        public int MAX_ITERATIONS_PER_FRAME = 5000;
+        public int MAX_ITERATIONS_PER_SEARCH = 25;
+
         //private fields
         public List<GameObject> chests;
         public List<GameObject> skeletons;
