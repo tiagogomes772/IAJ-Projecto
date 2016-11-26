@@ -53,9 +53,6 @@ namespace Assets.Scripts.DecisionMakingActions
 
         public override float f(int featureIndex, WorldModel state)
         {
-            var money = (int)state.GetProperty(Properties.MONEY);
-            var hp = (int)state.GetProperty(Properties.HP);
-
             switch (featureIndex)
             {
                 case 0:     //XP
@@ -63,9 +60,7 @@ namespace Assets.Scripts.DecisionMakingActions
                 case 1:     //HP
                     return 0f;
                 case 2:     //Money
-                    //Only one chest to win and no way to die! Go for it at all costs!!!!
-                    //return (money >= 20 && hp > 20) ? 10000f : 25f;     //FIXME: for some reason this crashes unity
-                    return 25f;
+                    return 5f;
                 case 3:     //Time
                     return 0.1f;
                 default:

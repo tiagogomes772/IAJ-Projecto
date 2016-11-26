@@ -68,7 +68,6 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                 }
 
                 action.ApplyActionEffects(currentState);
-                currentState.CalculateNextPlayer();
                 CurrentDepth++;
             }
             if (CurrentDepth > MaxPlayoutDepthReached)

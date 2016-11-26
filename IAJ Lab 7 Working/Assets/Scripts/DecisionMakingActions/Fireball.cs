@@ -96,21 +96,8 @@ namespace Assets.Scripts.DecisionMakingActions
                     }
                     return lvl == 3 ? 0 : (5f / lvl);
                 case 1:     //HP
-                    //If the target is a dragon we wont do any damage and we will most certainly be hit with a -20hp attack 
-                    //So avoid at all costs
-                    if (this.Target.tag.Equals("Skeleton"))
-                    {
-                        return 10f;
-                    }
-                    else if (this.Target.tag.Equals("Orc"))
-                    {
-                        return 20f;
-                    }
-                    else if (this.Target.tag.Equals("Dragon"))
-                    {
-                        return 0;
-                    }
-                    return 10f;
+                    //If the target is a dragon we wont do any damage and we will most certainly be hit with a -20hp attack
+                    return (this.Target.tag.Equals("Dragon")) ? -20f : 10f;
                 case 2:     //Money
                     return 0f;
                 case 3:     //Time

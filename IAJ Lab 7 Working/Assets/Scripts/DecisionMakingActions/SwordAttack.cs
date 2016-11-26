@@ -95,20 +95,19 @@ namespace Assets.Scripts.DecisionMakingActions
                     }
                     return 10f;
                 case 1:     //HP
-                    //Avoid death at all costs
                     if (this.Target.tag.Equals("Skeleton"))
                     {
-                        return hp-5 <= 0 ? 0 : hp - 5 ;
+                        return -5;
                     }
                     else if (this.Target.tag.Equals("Orc"))
                     {
-                        return hp-10 <= 0 ? 0 : hp - 10; ;
+                        return -10;
                     }
                     else if (this.Target.tag.Equals("Dragon"))
                     {
-                        return hp-20 <= 0 ? 0 : hp - 20; ;
+                        return -20;
                     }
-                    return 0;
+                    return -10f;
                 case 2:     //Money
                     return 0f;
                 case 3:     //Time
