@@ -198,6 +198,8 @@ namespace Assets.Scripts
                 {
                     this.GainXPGoal.InsistenceValue -= this.GameManager.characterData.XP - this.previousXP;
                     this.previousXP = this.GameManager.characterData.XP;
+                    if (this.GainXPGoal.InsistenceValue < 0)
+                        this.GainXPGoal.InsistenceValue = 0;
                 }
 
                 this.GetRichGoal.InsistenceValue += 0.1f; //increase in goal over time

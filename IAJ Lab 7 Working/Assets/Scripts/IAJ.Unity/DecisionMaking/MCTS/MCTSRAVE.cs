@@ -10,7 +10,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
 {
     public class MCTSRAVE : MCTS
     {
-        protected const float b = 1; //FIXME: verificar este valor 
+        protected const float b = 0.5f; //FIXME: verificar este valor 
         protected List<Pair<int,Action>> ActionHistory { get; set; }
         public MCTSRAVE(CurrentStateWorldModel worldModel) :base(worldModel)
         {
@@ -70,6 +70,11 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             Reward r = new Reward();
             //TODO Verify if reward is this score
             r.Value = currentState.GetScore();
+            if(r.Value == 1.0f)
+            {
+                r.Value = 1.0f;
+            }
+            r.PlayerID = currentState.GetNextPlayer();
             return r;
         }
 

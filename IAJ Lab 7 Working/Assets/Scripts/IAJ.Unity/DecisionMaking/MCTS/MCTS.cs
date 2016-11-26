@@ -76,7 +76,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                 CurrentIterations++;
                 CurrentIterationsInFrame++;
             }
-            this.BestFirstChild = BestUCTChild(this.InitialNode);
+            this.BestFirstChild = BestChild(this.InitialNode);
 
             MCTSNode BestChildNode = this.BestFirstChild;
 
@@ -99,7 +99,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             this.TotalProcessingTime += Time.realtimeSinceStartup - startTime;
             #endregion
             
-            return BestUCTChild(this.InitialNode).Action;
+            return BestChild(this.InitialNode).Action;
         }
 
         private MCTSNode Selection(MCTSNode initialNode)
@@ -111,10 +111,9 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
 
             while (!currentNode.State.IsTerminal())
             {
-                var action = currentNode.State.GetNextAction();
-                if (action != null)
+                if (currentNode.ChildNodes.Count < currentNode.State.GetExecutableActions().Length)
                 {
-                    return Expand(currentNode, action);
+                    return Expand(currentNode, currentNode.State.GetNextAction());
                 }
                 else
                 {
@@ -147,6 +146,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             Reward r = new Reward();
             //TODO Verify if reward is this score
             r.Value = currentState.GetScore();
+            r.PlayerID = currentState.GetNextPlayer();
             return r;
         }
 
@@ -157,6 +157,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                 node.N++;
                 //TODO VERIFY this
                 node.Q = node.Q + reward.GetRewardForNode(node);
+                //node.Q = node.Q + reward.Value;
                 node = node.Parent;
             }
         }
@@ -166,6 +167,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             MCTSNode new_child = new MCTSNode(parent.State.GenerateChildWorldModel());
             action.ApplyActionEffects(new_child.State);
             new_child.State.CalculateNextPlayer();
+            new_child.PlayerID = new_child.State.GetNextPlayer();
             new_child.Action = action;
             new_child.Parent = parent;
 
@@ -177,41 +179,37 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
         protected virtual MCTSNode BestUCTChild(MCTSNode node)
         {
 
-            //try
-            //{
-                MCTSNode bestChild = node.ChildNodes[0];
-                float bestNodeValue = bestChild.Q / bestChild.N + (C * (float)Math.Sqrt(Math.Log(node.N) / bestChild.N));
-                MCTSNode auxChild;
-                float auxNodeValue;
-                for (int i = 1; i < node.ChildNodes.Count; i++)
+            float bestNodeValue = float.MinValue;
+            MCTSNode bestChild = node.ChildNodes[0];
+
+            foreach (MCTSNode child in node.ChildNodes)
+            {
+                float value = child.Q + C * (float )Math.Sqrt(Math.Log(child.Parent.N) / node.N);
+
+                if (value > bestNodeValue)
                 {
-                    auxChild = node.ChildNodes[i];
-                    auxNodeValue = auxChild.Q / auxChild.N + (C * (float)Math.Sqrt(Math.Log(node.N) / auxChild.N));
-                    if (auxNodeValue > bestNodeValue)
-                        bestChild = auxChild;
+                    bestChild = child;
+                    bestNodeValue = value;
                 }
-                return bestChild;
-            //}
-            //catch (ArgumentOutOfRangeException e)
-            //{
-            //    return null;
-            //}
+            }
+            return bestChild;
         }
 
         //this method is very similar to the bestUCTChild, but it is used to return the final action of the MCTS search, and so we do not care about
         //the exploration factor
         private MCTSNode BestChild(MCTSNode node)
         {
+            float bestNodeValue = float.MinValue;
             MCTSNode bestChild = node.ChildNodes[0];
-            int bestNodeValue = (int)bestChild.Q + ((int)Math.Sqrt(2) * (int)Math.Sqrt(Math.Log(node.N) / bestChild.N));
-            MCTSNode auxChild;
-            int auxNodeValue;
-            for (int i = 1; i < node.ChildNodes.Count; i++)
+
+            foreach (MCTSNode child in node.ChildNodes)
             {
-                auxChild = node.ChildNodes[i];
-                auxNodeValue = (int)auxChild.Q + (int)Math.Sqrt(Math.Log(node.N) / auxChild.N);
-                if (auxNodeValue > bestNodeValue)
-                    bestChild = auxChild;
+                float value = child.Q + (float)Math.Sqrt(Math.Log(child.Parent.N) / node.N);
+                if (value > bestNodeValue)
+                {
+                    bestChild = child;
+                    bestNodeValue = value;
+                }
             }
             return bestChild;
 
