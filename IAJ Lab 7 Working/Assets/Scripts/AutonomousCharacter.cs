@@ -164,6 +164,9 @@ namespace Assets.Scripts
                 case "MCTS":
                     this.MCTSDecisionMaking = new MCTS(worldModel);
                     break;
+                case "MCTSHybrid":
+                    this.MCTSDecisionMaking = new MCTSHybridRAVEBiased(worldModel);
+                    break;
                 default:
                     this.MCTSDecisionMaking = new MCTSRAVE(worldModel);
                     break;
