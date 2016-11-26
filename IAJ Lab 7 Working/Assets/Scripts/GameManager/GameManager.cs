@@ -26,7 +26,7 @@ namespace Assets.Scripts.GameManager
         public int MAX_ITERATIONS_PER_SEARCH = 25;
 
         /// <summary>
-        /// Possible values are: MCTSRAVE , MCTSBiasedPlayout and MCTS 
+        /// Possible values are: MCTSRAVE , MCTSBiasedPlayout,  MCTS and MCTSHybrid 
         /// By default its the MCTSRAVE
         /// </summary>
         public string AlgorithmChosen = "MCTSRAVE";
