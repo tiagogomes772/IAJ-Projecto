@@ -9,6 +9,7 @@ namespace Assets.Scripts.DecisionMakingActions
     {
         private int xpChange;
         private int manaChange = 5;
+        private int hpChange = 0;
 
         public Fireball(AutonomousCharacter character, GameObject target) : base("Fireball", character, target)
         {
@@ -22,6 +23,7 @@ namespace Assets.Scripts.DecisionMakingActions
             }
             else if (target.tag.Equals("Dragon"))
             {
+                this.hpChange = -20;
                 this.xpChange = 0;
             }
         }
@@ -67,6 +69,8 @@ namespace Assets.Scripts.DecisionMakingActions
 
             var xp = (int)worldModel.GetProperty(Properties.XP);
             worldModel.SetProperty(Properties.XP, xp + this.xpChange);
+            var hp = (int)worldModel.GetProperty(Properties.HP);
+            worldModel.SetProperty(Properties.HP, hp + this.hpChange);
             var mana = (int)worldModel.GetProperty(Properties.MANA);
             worldModel.SetProperty(Properties.MANA, mana + this.manaChange);
 
@@ -108,7 +112,7 @@ namespace Assets.Scripts.DecisionMakingActions
                     }
                     else if (this.Target.tag.Equals("Dragon"))
                     {
-                        return 0;
+                        return 0.0f;
                     }
                     return 10f;
                 case 2:     //Money
