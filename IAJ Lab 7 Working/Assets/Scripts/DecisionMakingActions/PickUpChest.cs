@@ -73,5 +73,12 @@ namespace Assets.Scripts.DecisionMakingActions
             }
         }
 
+        public override float h(WorldModel state)
+        {
+            float distance = GetDuration(state);
+            var money = (int)state.GetProperty(Properties.MONEY);
+            return money / 25.0f + distance;
+        }
+
     }
 }

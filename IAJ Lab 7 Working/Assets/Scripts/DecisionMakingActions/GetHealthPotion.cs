@@ -59,6 +59,12 @@ namespace Assets.Scripts.DecisionMakingActions
             }
         }
 
+        public override float h(WorldModel state)
+        {
+            var hp = (int)state.GetProperty(Properties.HP);
+            return hp + GetDuration(state); ;
+        }
+
 
     }
 }

@@ -124,5 +124,23 @@ namespace Assets.Scripts.DecisionMakingActions
             }
         }
 
+        public override float h(WorldModel state)
+        {
+            float distance = GetDuration(state);
+            if (this.Target.tag.Equals("Skeleton"))
+            {
+                return 0.5f + distance;
+            }
+            else if (this.Target.tag.Equals("Orc"))
+            {
+                return 0.0f + distance;
+            }
+            else if (this.Target.tag.Equals("Dragon"))
+            {
+                return 10.0f + distance;
+            }
+            return 0.0f +distance;
+        }
+
     }
 }

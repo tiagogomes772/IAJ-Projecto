@@ -9,9 +9,9 @@ namespace Assets.Scripts.DecisionMakingActions
         private int hpChange;
         private int xpChange;
 
-        public SwordAttack(AutonomousCharacter character, GameObject target) : base("SwordAttack",character,target)
+        public SwordAttack(AutonomousCharacter character, GameObject target) : base("SwordAttack", character, target)
         {
-           
+
             if (target.tag.Equals("Skeleton"))
             {
                 this.hpChange = -5;
@@ -41,7 +41,7 @@ namespace Assets.Scripts.DecisionMakingActions
             {
                 change += -this.xpChange;
             }
-            
+
             return change;
         }
 
@@ -57,19 +57,19 @@ namespace Assets.Scripts.DecisionMakingActions
             base.ApplyActionEffects(worldModel);
 
             var xpValue = worldModel.GetGoalValue(AutonomousCharacter.GAIN_XP_GOAL);
-            worldModel.SetGoalValue(AutonomousCharacter.GAIN_XP_GOAL,xpValue-this.xpChange); 
+            worldModel.SetGoalValue(AutonomousCharacter.GAIN_XP_GOAL, xpValue - this.xpChange);
 
             var surviveValue = worldModel.GetGoalValue(AutonomousCharacter.SURVIVE_GOAL);
-            worldModel.SetGoalValue(AutonomousCharacter.SURVIVE_GOAL,surviveValue-this.hpChange);
+            worldModel.SetGoalValue(AutonomousCharacter.SURVIVE_GOAL, surviveValue - this.hpChange);
 
             var hp = (int)worldModel.GetProperty(Properties.HP);
-            worldModel.SetProperty(Properties.HP,hp + this.hpChange);
+            worldModel.SetProperty(Properties.HP, hp + this.hpChange);
             var xp = (int)worldModel.GetProperty(Properties.XP);
             worldModel.SetProperty(Properties.XP, xp + this.xpChange);
-           
+
 
             //disables the target object so that it can't be reused again
-            worldModel.SetProperty(this.Target.name,false);
+            worldModel.SetProperty(this.Target.name, false);
         }
 
         public override float f(int featureIndex, WorldModel state)
@@ -98,15 +98,15 @@ namespace Assets.Scripts.DecisionMakingActions
                     //Avoid death at all costs
                     if (this.Target.tag.Equals("Skeleton"))
                     {
-                        return hp-5 <= 0 ? 0 : hp - 5 ;
+                        return hp - 5 <= 0 ? 0 : hp - 5;
                     }
                     else if (this.Target.tag.Equals("Orc"))
                     {
-                        return hp-10 <= 0 ? 0 : hp - 10; ;
+                        return hp - 10 <= 0 ? 0 : hp - 10; ;
                     }
                     else if (this.Target.tag.Equals("Dragon"))
                     {
-                        return hp-20 <= 0 ? 0 : hp - 20; ;
+                        return hp - 20 <= 0 ? 0 : hp - 20; ;
                     }
                     return 0;
                 case 2:     //Money
@@ -116,6 +116,29 @@ namespace Assets.Scripts.DecisionMakingActions
                 default:
                     return 0f;
             }
+        }
+
+        public override float h(WorldModel state)
+        {
+            float distance = GetDuration(state);
+            var hp = (int)state.GetProperty(Properties.HP);
+            var maxHP = (int)state.GetProperty(Properties.MAXHP);
+            var lvl = (int)state.GetProperty(Properties.LEVEL);
+
+            if (this.Target.tag.Equals("Skeleton"))
+            {
+                return hp - 5 <= 0 ? 100.0f + distance : 0.5f + distance;
+            }
+            else if (this.Target.tag.Equals("Orc"))
+            {
+                return hp - 10 <= 0 ? 100.0f + distance : 1.0f + distance;
+            }
+            else if (this.Target.tag.Equals("Dragon"))
+            {
+                return hp - 20 <= 0  ? 100.0f + distance : 0.0f + distance;
+            }
+            return 0 + distance;
+
         }
 
     }

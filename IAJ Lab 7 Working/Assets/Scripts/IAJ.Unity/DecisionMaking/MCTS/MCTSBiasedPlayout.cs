@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using Assets.Scripts.IAJ.Unity.DecisionMaking.GOB;
+using UnityEngine;
 
 namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
 {
@@ -30,7 +31,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             return softmax;
         }
 
-        protected override Reward Playout(WorldModel initialPlayoutState)
+        /*protected override Reward Playout(WorldModel initialPlayoutState)
         {
             GOB.Action action = null;
 
@@ -77,6 +78,59 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             Reward r = new Reward();
             //TODO Verify if reward is this score
             r.Value = currentState.GetScore();
+            r.PlayerID = currentState.GetNextPlayer();
+            return r;
+        }*/
+
+        protected override Reward Playout(WorldModel initialPlayoutState)
+        {
+            GOB.Action action = null;
+
+            var currentState = initialPlayoutState.GenerateChildWorldModel();
+
+            CurrentDepth = 0;
+            while (!currentState.IsTerminal())
+            {
+                var actions = currentState.GetExecutableActions();
+
+                float sumH = 0;
+                
+                foreach (GOB.Action a in actions)
+                {
+                    sumH += a.h(currentState);
+                }
+
+                float actionValue = 0.0f;
+                float gibbsProb = float.MaxValue;
+                float currentGibbsProb = 0.0f;
+                foreach (GOB.Action a in actions)
+                {
+                    actionValue = a.h(currentState);
+                    
+                    currentGibbsProb = actionValue / sumH;
+                    if (currentGibbsProb < gibbsProb)
+                    {
+                        gibbsProb = currentGibbsProb;
+                        action = a;
+                    }
+                }
+                Debug.Log(Time.realtimeSinceStartup + " " + CurrentDepth + " Action: " + action.Name + "H: " + action.h(currentState) + " L: " + actions.Length);
+                action.ApplyActionEffects(currentState);
+                currentState.CalculateNextPlayer();
+                CurrentDepth++;
+            }
+            if (CurrentDepth > MaxPlayoutDepthReached)
+                MaxPlayoutDepthReached = CurrentDepth;
+
+            
+            Reward r = new Reward();
+            //TODO Verify if reward is this score
+            r.Value = currentState.GetScore();
+            r.PlayerID = currentState.GetNextPlayer();
+            if (r.Value == 1.0f)
+            {
+                r.Value = 1.0f;
+            }
             return r;
         }
 
@@ -114,16 +168,5 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             return result;
         }
 
-        protected MCTSNode Expand(WorldModel parentState, GOB.Action action)
-        {
-            //MCTSNode new_child = new MCTSNode(parentState.GenerateChildWorldModel());
-            //action.ApplyActionEffects(new_child.State);
-            //new_child.Action = action;
-            //new_child.Parent = parentState.;
-
-            //parent.ChildNodes.Add(new_child);
-            //return new_child;
-            throw new NotImplementedException();
-        }
     }
 }

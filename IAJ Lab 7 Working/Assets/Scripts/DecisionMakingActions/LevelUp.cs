@@ -98,5 +98,26 @@ namespace Assets.Scripts.DecisionMakingActions
             }
         }
 
+        public override float h(WorldModel state)
+        {
+           float distance = GetDuration(state);
+            var lvl = (int)state.GetProperty(Properties.LEVEL);
+            if(lvl == 0)
+            {
+                return 0.0f + distance;
+            } else if (lvl == 1)
+            {
+                return 0.5f + distance;
+            }
+            else if(lvl == 2)
+            {
+                return 5.0f + distance;
+            } else if (lvl == 3)
+            {
+                return 20.0f + distance;
+            }
+            return 0 + distance;
+        }
+
     }
 }

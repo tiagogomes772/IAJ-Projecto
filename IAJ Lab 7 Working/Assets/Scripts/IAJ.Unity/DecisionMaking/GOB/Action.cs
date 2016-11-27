@@ -61,5 +61,10 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.GOB
             return 0f;
         }
 
+        public virtual float h(WorldModel state)
+        {
+            return 0f;
+        }
+
     }
 }

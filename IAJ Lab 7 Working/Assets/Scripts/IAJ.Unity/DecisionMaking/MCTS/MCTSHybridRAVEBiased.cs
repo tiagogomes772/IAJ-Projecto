@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UnityEngine;
 
 namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
 {
@@ -17,7 +18,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
         {
         }
 
-        protected override Reward Playout(WorldModel initialPlayoutState)
+        /*protected override Reward Playout(WorldModel initialPlayoutState)
         {
             ActionHistory = new List<Pair<int, GOB.Action>>();
 
@@ -56,6 +57,59 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                 {
                     action = actions[actions.Length - 1];
                 }
+                #endregion
+
+                #region RAVE
+                ActionHistory.Add(new Pair<int, GOB.Action>(currentState.GetNextPlayer(), action));
+                #endregion
+                action.ApplyActionEffects(currentState);
+                currentState.CalculateNextPlayer();
+                CurrentDepth++;
+            }
+            if (CurrentDepth > MaxPlayoutDepthReached)
+                MaxPlayoutDepthReached = CurrentDepth;
+
+            Reward r = new Reward();
+            //TODO Verify if reward is this score
+            r.Value = currentState.GetScore();
+            return r;
+        }*/
+
+        protected override Reward Playout(WorldModel initialPlayoutState)
+        {
+            ActionHistory = new List<Pair<int, GOB.Action>>();
+
+            GOB.Action action = null;
+
+            var currentState = initialPlayoutState.GenerateChildWorldModel();
+
+            CurrentDepth = 0;
+            while (!currentState.IsTerminal())
+            {
+                var actions = currentState.GetExecutableActions();
+                #region BiasedPlayout
+                float sumH = 0;
+
+                foreach (GOB.Action a in actions)
+                {
+                    sumH += a.h(currentState);
+                }
+
+                float actionValue = 0.0f;
+                float gibbsProb = float.MaxValue;
+                float currentGibbsProb = 0.0f;
+                foreach (GOB.Action a in actions)
+                {
+                    actionValue = a.h(currentState);
+
+                    currentGibbsProb = actionValue / sumH;
+                    if (currentGibbsProb < gibbsProb)
+                    {
+                        gibbsProb = currentGibbsProb;
+                        action = a;
+                    }
+                }
+               // Debug.Log(Time.realtimeSinceStartup + " " + CurrentDepth + " Action: " + action.Name + "H: " + action.h(currentState) + " L: " + actions.Length);
                 #endregion
 
                 #region RAVE

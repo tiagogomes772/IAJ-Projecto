@@ -1,27 +1,21 @@
 ﻿using System.Collections.Generic;
-using Assets.Scripts.GameManager;
 using System.Linq;
-using UnityEngine;
 
 namespace Assets.Scripts.IAJ.Unity.DecisionMaking.GOB
 {
     public class WorldModel
     {
-        private Dictionary<string, float> GoalValues { get; set; }
-
-        private object[] Properties { get; set; }
-        private Dictionary<string, int> IndexProperties { get; set; }
-
+        private Dictionary<string, object> Properties { get; set; }
         private List<Action> Actions { get; set; }
         protected IEnumerator<Action> ActionEnumerator { get; set; }
+
+        private Dictionary<string, float> GoalValues { get; set; }
 
         protected WorldModel Parent { get; set; }
 
         public WorldModel(List<Action> actions)
         {
-
-            this.Properties = new object[22];
-            this.IndexProperties = fillIndexProperties();
+            this.Properties = new Dictionary<string, object>();
             this.GoalValues = new Dictionary<string, float>();
             this.Actions = actions;
             this.ActionEnumerator = actions.GetEnumerator();
@@ -29,10 +23,8 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.GOB
 
         public WorldModel(WorldModel parent)
         {
-            this.Properties = new object[22];
-            parent.Properties.CopyTo(this.Properties, 0);
-            this.IndexProperties = parent.IndexProperties;
-
+            this.Properties = new Dictionary<string, object>();
+            this.GoalValues = new Dictionary<string, float>();
             this.Actions = parent.Actions;
             this.Parent = parent;
             this.ActionEnumerator = this.Actions.GetEnumerator();
@@ -40,16 +32,57 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.GOB
 
         public virtual object GetProperty(string propertyName)
         {
-
-
-            return this.Properties[this.IndexProperties[propertyName]];
-
+            //recursive implementation of WorldModel
+            if (this.Properties.ContainsKey(propertyName))
+            {
+                return this.Properties[propertyName];
+            }
+            else if (this.Parent != null)
+            {
+                return this.Parent.GetProperty(propertyName);
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public virtual void SetProperty(string propertyName, object value)
         {
-            this.Properties.SetValue(value, this.IndexProperties[propertyName]);
+            this.Properties[propertyName] = value;
+        }
 
+        public virtual float GetGoalValue(string goalName)
+        {
+            //recursive implementation of WorldModel
+            if (this.GoalValues.ContainsKey(goalName))
+            {
+                return this.GoalValues[goalName];
+            }
+            else if (this.Parent != null)
+            {
+                return this.Parent.GetGoalValue(goalName);
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+        public virtual void SetGoalValue(string goalName, float value)
+        {
+            var limitedValue = value;
+            if (value > 10.0f)
+            {
+                limitedValue = 10.0f;
+            }
+
+            else if (value < 0.0f)
+            {
+                limitedValue = 0.0f;
+            }
+
+            this.GoalValues[goalName] = limitedValue;
         }
 
         public virtual WorldModel GenerateChildWorldModel()
@@ -57,64 +90,18 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.GOB
             return new WorldModel(this);
         }
 
-        private Dictionary<string, int> fillIndexProperties()
+        public float CalculateDiscontentment(List<Goal> goals)
         {
-            int i = 0;
-            Dictionary<string, int> aux = new Dictionary<string, int>();
-            aux.Add(Assets.Scripts.GameManager.Properties.MANA, 0);
-            this.Properties[0] = 10;
-            aux.Add(Assets.Scripts.GameManager.Properties.HP, 1);
-            this.Properties[1] = 10;
-            aux.Add(Assets.Scripts.GameManager.Properties.MAXHP, 2);
-            this.Properties[2] = 0;
-            aux.Add(Assets.Scripts.GameManager.Properties.XP, 3);
-            this.Properties[3] = 2;
-            aux.Add(Assets.Scripts.GameManager.Properties.TIME, 4);
-            this.Properties[4] = 0.0f;
-            aux.Add(Assets.Scripts.GameManager.Properties.MONEY, 5);
-            this.Properties[5] = 1;
-            aux.Add(Assets.Scripts.GameManager.Properties.LEVEL, 6);
-            this.Properties[6] = 0;
-            aux.Add(Assets.Scripts.GameManager.Properties.POSITION, 7);
-            this.Properties[7] = new Vector3((float)14.39999, 1, (float)16.6);
-            i = 7;
-            foreach (var chest in GameObject.FindGameObjectsWithTag("Chest"))
+            var discontentment = 0.0f;
+
+            foreach (var goal in goals)
             {
-                i = i + 1;
-                aux.Add(chest.name, i);
-                this.Properties[i] = true;
-            }
-            foreach (var skeleton in GameObject.FindGameObjectsWithTag("Skeleton"))
-            {
-                i = i + 1;
-                aux.Add(skeleton.name, i);
-                this.Properties[i] = true;
-            }
-            foreach (var orc in GameObject.FindGameObjectsWithTag("Orc"))
-            {
-                i = i + 1;
-                aux.Add(orc.name, i);
-                this.Properties[i] = true;
-            }
-            foreach (var manaPotion in GameObject.FindGameObjectsWithTag("ManaPotion"))
-            {
-                i = i + 1;
-                aux.Add(manaPotion.name, i);
-                this.Properties[i] = true;
-            }
-            foreach (var healthPotion in GameObject.FindGameObjectsWithTag("HealthPotion"))
-            {
-                i = i + 1;
-                aux.Add(healthPotion.name, i);
-                this.Properties[i] = true;
+                var newValue = this.GetGoalValue(goal.Name);
+
+                discontentment += goal.GetDiscontentment(newValue);
             }
 
-            i++;
-            aux.Add(GameObject.FindGameObjectsWithTag("Dragon").First().name, i);
-            this.Properties[i] = true;
-
-
-            return aux;
+            return discontentment;
         }
 
         public virtual Action GetNextAction()
@@ -165,30 +152,5 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.GOB
         public virtual void CalculateNextPlayer()
         {
         }
-
-        public virtual float GetGoalValue(string goalName)
-        {
-            return 1.0f;
-        }
-
-        public virtual void SetGoalValue(string goalName, float value)
-        {
-           
-        }
-
-        public float CalculateDiscontentment(List<Goal> goals)
-        {
-            var discontentment = 0.0f;
-
-            foreach (var goal in goals)
-            {
-                var newValue = this.GetGoalValue(goal.Name);
-
-                discontentment += goal.GetDiscontentment(newValue);
-            }
-
-            return discontentment;
-        }
-
     }
 }
