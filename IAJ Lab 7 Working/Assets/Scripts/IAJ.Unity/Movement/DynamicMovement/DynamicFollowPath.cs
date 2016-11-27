@@ -1,5 +1,4 @@
 ﻿using Assets.Scripts.IAJ.Unity.Pathfinding.Path;
-using System;
 
 namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
 {
@@ -15,34 +14,40 @@ namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
 
         public DynamicFollowPath(KinematicData character, Path path) 
         {
+            //arrive properties
+            this.SlowRadius = 4.0f;
+            this.TimeToTargetSpeed = 0.25f;
+            this.TargetRadius = 1.0f;
+            this.MaxAcceleration = 40.0f;
+            this.MaxSpeed = 40.0f;
+
             this.Target = new KinematicData();
             this.Character = character;
             this.Path = path;
+            this.CurrentParam = 0.0f;
+            this.PathOffset = 3.0f;
             this.EmptyMovementOutput = new MovementOutput();
-            PathOffset = 1.0f;
-            CurrentParam = 0.0f;
-            //don't forget to set all properties
-            //arrive properties
-            //maxSpeed = 20.0f;
-            //this.MaxAcceleration = 10.0f;
-            stopRadius = 0.0f;
-            slowRadius = 4.0f;
-    }
+        }
 
-        float targetParam;
         public override MovementOutput GetMovement()
         {
-            if (Path.PathEnd(CurrentParam))
+            if (this.Path == null)
             {
-                return EmptyMovementOutput;
+                return this.EmptyMovementOutput;
             }
-            else
+
+            this.CurrentParam = this.Path.GetParam(this.Character.position, this.CurrentParam);
+
+            if (this.Path.PathEnd(this.CurrentParam))
             {
-                CurrentParam = Path.GetParam(base.Character.position, CurrentParam);
-                targetParam = CurrentParam + PathOffset;
-                Target.position = Path.GetPosition(targetParam);
                 return base.GetMovement();
             }
+
+            var targetParam = this.CurrentParam + PathOffset;
+
+            Target.position = this.Path.GetPosition(targetParam);
+
+            return base.GetMovement();
         }
     }
 }
