@@ -47,16 +47,6 @@ namespace Assets.Scripts.GameManager
             return true;
         }
 
-        public override float GetGoalValue(string goalName)
-        {
-            return this.Goals[goalName].InsistenceValue;
-        }
-
-        public override void SetGoalValue(string goalName, float goalValue)
-        {
-            //this method does nothing, because you should not directly set a goal value of the CurrentStateWorldModel
-        }
-
         public override void SetProperty(string propertyName, object value)
         {
             //this method does nothing, because you should not directly set a property of the CurrentStateWorldModel
