@@ -87,26 +87,24 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             while (!currentState.IsTerminal())
             {
                 var actions = currentState.GetExecutableActions();
-                int hp = (int)currentState.GetProperty(Properties.HP);
-                int money = (int)currentState.GetProperty(Properties.MONEY);
 
-                if ( hp >= 25 && money >= 20)
-                {
-                    #region Immediate win
-                    foreach (GOB.Action a in actions)
-                    {
-                        if (a.TypeOfAction.Equals("PickUpChest"))
-                        {
-                            action = a;
-                            break;
-                        }
-                    }
-                    #endregion
-                }
-                
-                
-                else
-                {
+                //if (currentState.IsImmediateWin())
+                //{
+                //    #region Immediate win
+                //    foreach (GOB.Action a in actions)
+                //    {
+                //        if (a.TypeOfAction.Equals("PickUpChest"))
+                //        {
+                //            action = a;
+                //            break;
+                //        }
+                //    }
+                //    #endregion
+                //}
+
+
+                //else
+                //{
                     #region BiasedPlayout
                     float sumH = 0;
 
@@ -131,12 +129,12 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                     }
                     // Debug.Log(Time.realtimeSinceStartup + " " + CurrentDepth + " Action: " + action.Name + "H: " + action.h(currentState) + " L: " + actions.Length);
                     #endregion
+                //}
 
-                    #region RAVE
-                    ActionHistory.Add(new Pair<int, GOB.Action>(currentState.GetNextPlayer(), action));
-                    #endregion
-                    
-                }
+                #region RAVE
+                ActionHistory.Add(new Pair<int, GOB.Action>(currentState.GetNextPlayer(), action));
+                #endregion
+
                 action.ApplyActionEffects(currentState);
                 currentState.CalculateNextPlayer();
                 CurrentDepth++;
@@ -145,7 +143,6 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                 MaxPlayoutDepthReached = CurrentDepth;
 
             Reward r = new Reward();
-            //TODO Verify if reward is this score
             r.Value = currentState.GetScore();
             return r;
         }
@@ -162,10 +159,10 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
 
             //step 1, calculate beta and 1-beta. beta does not change from child to child. So calculate this only once
             // Mean Squared Error
-            //float beta = node.NRAVE / (node.N + node.NRAVE + 4 * node.N * node.NRAVE * b * b);
+            float beta = node.NRAVE / (node.N + node.NRAVE + 4 * node.N * node.NRAVE * b * b);
 
-            float k = this.MaxIterations / 2;
-            float beta = (float)Math.Sqrt(k / (3 * node.N + k));
+            //float k = this.MaxIterations / 2;
+            //float beta = (float)Math.Sqrt(k / (3 * node.N + k));
 
             //step 2, calculate the MCTS value, the RAVE value, and the UCT for each child and determine the best one
             foreach (MCTSNode child in node.ChildNodes)
@@ -191,7 +188,6 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             while (node != null)
             {
                 node.N++;
-                //TODO VERIFY this
                 node.Q = node.Q + reward.GetRewardForNode(node);
 
 
@@ -273,17 +269,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             return result;
         }
 
-        protected MCTSNode Expand(WorldModel parentState, GOB.Action action)
-        {
-            //MCTSNode new_child = new MCTSNode(parentState.GenerateChildWorldModel());
-            //action.ApplyActionEffects(new_child.State);
-            //new_child.Action = action;
-            //new_child.Parent = parentState.;
-
-            //parent.ChildNodes.Add(new_child);
-            //return new_child;
-            throw new NotImplementedException();
-        }
+       
         #endregion
 
     }

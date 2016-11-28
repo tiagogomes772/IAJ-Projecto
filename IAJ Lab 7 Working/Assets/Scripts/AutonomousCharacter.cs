@@ -168,7 +168,7 @@ namespace Assets.Scripts
                     this.MCTSDecisionMaking = new MCTSHybridRAVEBiased(worldModel);
                     break;
                 default:
-                    this.MCTSDecisionMaking = new MCTSRAVE(worldModel);
+                    this.MCTSDecisionMaking = new MCTSHybridRAVEBiased(worldModel);
                     break;
             }
 

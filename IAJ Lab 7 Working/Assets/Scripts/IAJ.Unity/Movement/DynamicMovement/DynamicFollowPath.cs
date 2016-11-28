@@ -17,14 +17,14 @@ namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
             //arrive properties
             this.SlowRadius = 4.0f;
             this.TimeToTargetSpeed = 0.25f;
-            this.TargetRadius = 1.0f;
+            //this.TargetRadius = 1.0f;
             this.MaxAcceleration = 90.0f;
             this.MaxSpeed = 40.0f;
 
             this.Target = new KinematicData();
             this.Character = character;
             this.Path = path;
-            this.CurrentParam = 0.0f;
+            this.CurrentParam = 0.2f;
             this.PathOffset = 3.0f;
             this.EmptyMovementOutput = new MovementOutput();
         }

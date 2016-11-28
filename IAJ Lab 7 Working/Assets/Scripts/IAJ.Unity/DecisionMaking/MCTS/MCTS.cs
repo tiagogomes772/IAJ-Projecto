@@ -76,7 +76,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                 CurrentIterations++;
                 CurrentIterationsInFrame++;
             }
-            this.BestFirstChild = BestChild(this.InitialNode);
+            this.BestFirstChild = BestUCTChild(this.InitialNode);
 
             MCTSNode BestChildNode = this.BestFirstChild;
 
@@ -99,7 +99,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             this.TotalProcessingTime += Time.realtimeSinceStartup - startTime;
             #endregion
             
-            return BestChild(this.InitialNode).Action;
+            return BestUCTChild(this.InitialNode).Action;
         }
 
         private MCTSNode Selection(MCTSNode initialNode)
@@ -179,13 +179,14 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
         protected virtual MCTSNode BestUCTChild(MCTSNode node)
         {
 
-            int r = RandomGenerator.Next(node.ChildNodes.Count);
-            float bestNodeValue = node.ChildNodes[r].Q + C * (float)Math.Sqrt(Math.Log(node.ChildNodes[r].Parent.N) / node.N);
-            MCTSNode bestChild = node.ChildNodes[r];
+            //int r = RandomGenerator.Next(node.ChildNodes.Count);
+            //float bestNodeValue = (node.ChildNodes[r].Q / node.ChildNodes[r].N) + C * (float)Math.Sqrt(Math.Log(node.ChildNodes[r].Parent.N) / node.N);
+            MCTSNode bestChild = null;
+            float bestNodeValue = float.MinValue;
 
             foreach (MCTSNode child in node.ChildNodes)
             {
-                float value = child.Q + C * (float )Math.Sqrt(Math.Log(child.Parent.N) / node.N);
+                float value = (child.Q/child.N) + C * (float )Math.Sqrt(Math.Log(child.Parent.N) / node.N);
 
                 if (value > bestNodeValue)
                 {
@@ -201,12 +202,12 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
         private MCTSNode BestChild(MCTSNode node)
         {
             int r = RandomGenerator.Next(node.ChildNodes.Count);
-            float bestNodeValue = node.ChildNodes[r].Q + C * (float)Math.Sqrt(Math.Log(node.ChildNodes[r].Parent.N) / node.N);
+            float bestNodeValue = node.ChildNodes[r].Q/ node.ChildNodes[r].N;
             MCTSNode bestChild = node.ChildNodes[r];
 
             foreach (MCTSNode child in node.ChildNodes)
             {
-                float value = child.Q + (float)Math.Sqrt(Math.Log(child.Parent.N) / node.N);
+                float value = child.Q / child.N;
                 if (value > bestNodeValue)
                 {
                     bestChild = child;

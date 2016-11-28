@@ -26,10 +26,10 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
 
             //step 1, calculate beta and 1-beta. beta does not change from child to child. So calculate this only once
             // Mean Squared Error
-            //float beta = node.NRAVE / (node.N + node.NRAVE + 4 * node.N * node.NRAVE * b * b);
-            
-            float k = this.MaxIterations / 2;
-            float beta = (float)Math.Sqrt(k / (3 * node.N + k));
+            float beta = node.NRAVE / (node.N + node.NRAVE + 4 * node.N * node.NRAVE * b * b);
+
+            //float k = this.MaxIterations / 2;
+            //float beta = (float)Math.Sqrt(k / (3 * node.N + k));
 
             float oneMinusBeta = 1 - beta;
 

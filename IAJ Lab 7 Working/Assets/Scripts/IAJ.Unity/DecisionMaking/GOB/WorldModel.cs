@@ -152,5 +152,10 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.GOB
         public virtual void CalculateNextPlayer()
         {
         }
+
+        public virtual bool IsImmediateWin()
+        {
+            return false;
+        }
     }
 }

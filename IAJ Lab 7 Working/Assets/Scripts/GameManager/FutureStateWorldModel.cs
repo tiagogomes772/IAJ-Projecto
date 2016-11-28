@@ -34,7 +34,7 @@ namespace Assets.Scripts.GameManager
             float time = (float)this.GetProperty(Properties.TIME);
             int money = (int)this.GetProperty(Properties.MONEY);
 
-            return HP <= 0 ||  time >= 200 || (this.NextPlayer == 0 && money == 25);
+            return HP <= 0 ||  time >= 200 || /*(this.NextPlayer == 0 &&*/ money >= 25;
         }
 
         public override float GetScore()
@@ -96,6 +96,18 @@ namespace Assets.Scripts.GameManager
             }
             else return base.GetExecutableActions();
         }
+
+
+        public override bool IsImmediateWin()
+        {
+            int money = (int)this.GetProperty(Properties.MONEY);
+            int HP = (int)this.GetProperty(Properties.HP);
+            if (HP >= 25 && money >= 20)
+                return true;
+            else
+                return false;
+        }
+
 
     }
 }
