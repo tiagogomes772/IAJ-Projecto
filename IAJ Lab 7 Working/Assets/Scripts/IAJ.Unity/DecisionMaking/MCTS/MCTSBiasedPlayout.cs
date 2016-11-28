@@ -149,10 +149,6 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             //TODO Verify if reward is this score
             r.Value = currentState.GetScore();
             r.PlayerID = currentState.GetNextPlayer();
-            if (r.Value == 1.0f)
-            {
-                r.Value = 1.0f;
-            }
             return r;
         }
 
