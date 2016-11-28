@@ -179,8 +179,9 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
         protected virtual MCTSNode BestUCTChild(MCTSNode node)
         {
 
-            float bestNodeValue = float.MinValue;
-            MCTSNode bestChild = node.ChildNodes[0];
+            int r = RandomGenerator.Next(node.ChildNodes.Count);
+            float bestNodeValue = node.ChildNodes[r].Q + C * (float)Math.Sqrt(Math.Log(node.ChildNodes[r].Parent.N) / node.N);
+            MCTSNode bestChild = node.ChildNodes[r];
 
             foreach (MCTSNode child in node.ChildNodes)
             {
@@ -199,8 +200,9 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
         //the exploration factor
         private MCTSNode BestChild(MCTSNode node)
         {
-            float bestNodeValue = float.MinValue;
-            MCTSNode bestChild = node.ChildNodes[0];
+            int r = RandomGenerator.Next(node.ChildNodes.Count);
+            float bestNodeValue = node.ChildNodes[r].Q + C * (float)Math.Sqrt(Math.Log(node.ChildNodes[r].Parent.N) / node.N);
+            MCTSNode bestChild = node.ChildNodes[r];
 
             foreach (MCTSNode child in node.ChildNodes)
             {
