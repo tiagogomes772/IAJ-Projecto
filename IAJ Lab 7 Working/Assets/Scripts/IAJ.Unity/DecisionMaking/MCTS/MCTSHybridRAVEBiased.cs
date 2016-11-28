@@ -11,7 +11,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
 {
     class MCTSHybridRAVEBiased: MCTS
     {
-        protected const float b = 1; //FIXME: verificar este valor 
+        protected const float b = 0.5f; //FIXME: verificar este valor 
         protected List<Pair<int, GOB.Action>> ActionHistory { get; set; }
 
         public MCTSHybridRAVEBiased(CurrentStateWorldModel worldModel) :base(worldModel)
@@ -139,7 +139,11 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             MCTSNode bestNode = null;
 
             //step 1, calculate beta and 1-beta. beta does not change from child to child. So calculate this only once
-            float beta = node.NRAVE / (node.N + node.NRAVE + 4 * node.N * node.NRAVE * b * b);
+            // Mean Squared Error
+            //float beta = node.NRAVE / (node.N + node.NRAVE + 4 * node.N * node.NRAVE * b * b);
+
+            float k = this.MaxIterations / 2;
+            float beta = (float)Math.Sqrt(k / (3 * node.N + k));
 
             //step 2, calculate the MCTS value, the RAVE value, and the UCT for each child and determine the best one
             foreach (MCTSNode child in node.ChildNodes)

@@ -24,7 +24,7 @@ namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
             this.Target = new KinematicData();
             this.Character = character;
             this.Path = path;
-            this.CurrentParam = 0.0f;
+            this.CurrentParam = 1.0f;
             this.PathOffset = 3.0f;
             this.EmptyMovementOutput = new MovementOutput();
         }
