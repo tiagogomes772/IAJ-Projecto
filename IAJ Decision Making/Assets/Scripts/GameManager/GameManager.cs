@@ -20,6 +20,8 @@ namespace Assets.Scripts.GameManager
         public Text LevelText;
         public Text MoneyText;
 
+        public int Max_Depth=3;
+
         //private fields
         public List<GameObject> chests;
         public List<GameObject> skeletons;

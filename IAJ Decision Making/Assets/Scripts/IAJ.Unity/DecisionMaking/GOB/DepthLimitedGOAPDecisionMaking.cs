@@ -5,7 +5,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.GOB
 {
     public class DepthLimitedGOAPDecisionMaking
     {
-        public const int MAX_DEPTH = 3;
+        public int MAX_DEPTH = 3;
         public int ActionCombinationsProcessedPerFrame { get; set; }
         public float TotalProcessingTime { get; set; }
         public int TotalActionCombinationsProcessed { get; set; }
@@ -47,7 +47,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.GOB
         public Action ChooseAction()
         {
             #region DEBUG
-            var processedActions = 0;
+            TotalActionCombinationsProcessed = 0;
 
             var startTime = Time.realtimeSinceStartup;
             #endregion
@@ -75,7 +75,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.GOB
                 if (nextAction != null)
                 {
                     #region DEBUG
-                    processedActions++;
+                    TotalActionCombinationsProcessed++;
                     #endregion
                     Models[this.CurrentDepth + 1] = Models[this.CurrentDepth].GenerateChildWorldModel();
                     nextAction.ApplyActionEffects(Models[this.CurrentDepth + 1]);

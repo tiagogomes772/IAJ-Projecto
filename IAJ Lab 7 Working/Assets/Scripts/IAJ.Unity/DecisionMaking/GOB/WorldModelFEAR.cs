@@ -31,24 +31,22 @@
 //        {
 //            this.Properties = new object[22];
 //            parent.Properties.CopyTo(this.Properties, 0);
-//            this.IndexProperties = parent.IndexProperties;
-
-//            this.Actions = parent.Actions;
+//            this.IndexProperties = new Dictionary<string, int>(parent.IndexProperties); //parent.IndexProperties.ToDictionary(entry => entry.Key,
+//                                                                                        //entry => entry.Value);
+//            this.Actions = new List<Action>(parent.Actions);//.ToList();
 //            this.Parent = parent;
 //            this.ActionEnumerator = this.Actions.GetEnumerator();
 //        }
 
 //        public virtual object GetProperty(string propertyName)
 //        {
-
-
 //            return this.Properties[this.IndexProperties[propertyName]];
 
 //        }
 
 //        public virtual void SetProperty(string propertyName, object value)
 //        {
-//            this.Properties.SetValue(value, this.IndexProperties[propertyName]);
+//            this.Properties[this.IndexProperties[propertyName]] = value;
 
 //        }
 
@@ -62,19 +60,19 @@
 //            int i = 0;
 //            Dictionary<string, int> aux = new Dictionary<string, int>();
 //            aux.Add(Assets.Scripts.GameManager.Properties.MANA, 0);
-//            this.Properties[0] = 10;
+//            this.Properties[0] = 0;
 //            aux.Add(Assets.Scripts.GameManager.Properties.HP, 1);
 //            this.Properties[1] = 10;
 //            aux.Add(Assets.Scripts.GameManager.Properties.MAXHP, 2);
-//            this.Properties[2] = 0;
+//            this.Properties[2] = 10;
 //            aux.Add(Assets.Scripts.GameManager.Properties.XP, 3);
-//            this.Properties[3] = 2;
+//            this.Properties[3] = 0;
 //            aux.Add(Assets.Scripts.GameManager.Properties.TIME, 4);
 //            this.Properties[4] = 0.0f;
 //            aux.Add(Assets.Scripts.GameManager.Properties.MONEY, 5);
-//            this.Properties[5] = 1;
+//            this.Properties[5] = 0;
 //            aux.Add(Assets.Scripts.GameManager.Properties.LEVEL, 6);
-//            this.Properties[6] = 0;
+//            this.Properties[6] = 1;
 //            aux.Add(Assets.Scripts.GameManager.Properties.POSITION, 7);
 //            this.Properties[7] = new Vector3((float)14.39999, 1, (float)16.6);
 //            i = 7;
