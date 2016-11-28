@@ -8,7 +8,7 @@ namespace Assets.Scripts.DecisionMakingActions
     public class Fireball : WalkToTargetAndExecuteAction
     {
         private int xpChange;
-        private int manaChange = 5;
+        private int manaChange = -5;
         private int hpChange = 0;
 
         public Fireball(AutonomousCharacter character, GameObject target) : base("Fireball", character, target)
@@ -74,8 +74,10 @@ namespace Assets.Scripts.DecisionMakingActions
             var mana = (int)worldModel.GetProperty(Properties.MANA);
             worldModel.SetProperty(Properties.MANA, mana + this.manaChange);
 
+
             //disables the target object so that it can't be reused again
-            worldModel.SetProperty(this.Target.name, false);
+            if (!Target.tag.Equals("Dragon"))
+                worldModel.SetProperty(this.Target.name, false);
         }
 
 
