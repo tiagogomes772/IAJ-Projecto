@@ -11,7 +11,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
 {
     class MCTSHybridRAVEBiased: MCTS
     {
-        protected const float b = 0.5f; //FIXME: verificar este valor 
+        protected const float b = 1.0f; //FIXME: verificar este valor 
         protected List<Pair<int, GOB.Action>> ActionHistory { get; set; }
 
         public MCTSHybridRAVEBiased(CurrentStateWorldModel worldModel) :base(worldModel)

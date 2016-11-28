@@ -82,6 +82,28 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             return r;
         }*/
 
+
+        protected override MCTSNode BestUCTChild(MCTSNode node)
+        {
+
+            int r = RandomGenerator.Next(node.ChildNodes.Count);
+            float bestNodeValue = (node.ChildNodes[r].Q / node.ChildNodes[r].N) + C * (float)Math.Sqrt(Math.Log(node.ChildNodes[r].Parent.N) / node.N);
+            MCTSNode bestChild = node.ChildNodes[r];
+            //float bestNodeValue = float.MinValue;
+
+            foreach (MCTSNode child in node.ChildNodes)
+            {
+                float value = (child.Q / child.N) + C * (float)Math.Sqrt(Math.Log(child.Parent.N) / node.N);
+
+                if (value > bestNodeValue)
+                {
+                    bestChild = child;
+                    bestNodeValue = value;
+                }
+            }
+            return bestChild;
+        }
+
         protected override Reward Playout(WorldModel initialPlayoutState)
         {
             GOB.Action action = null;
@@ -114,7 +136,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                         action = a;
                     }
                 }
-                Debug.Log(Time.realtimeSinceStartup + " " + CurrentDepth + " Action: " + action.Name + "H: " + action.h(currentState) + " L: " + actions.Length);
+               // Debug.Log(Time.realtimeSinceStartup + " " + CurrentDepth + " Action: " + action.Name + "H: " + action.h(currentState) + " L: " + actions.Length);
                 action.ApplyActionEffects(currentState);
                 currentState.CalculateNextPlayer();
                 CurrentDepth++;

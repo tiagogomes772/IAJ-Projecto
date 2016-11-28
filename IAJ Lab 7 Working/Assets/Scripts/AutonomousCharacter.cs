@@ -244,6 +244,7 @@ namespace Assets.Scripts
             {
                 if(this.CurrentAction.CanExecute())
                 {
+                    this.MCTSDecisionMaking.UpdateWorld(CurrentAction);
                     this.CurrentAction.Execute();
                 }
             }
@@ -278,7 +279,6 @@ namespace Assets.Scripts
                 if (action != null)
                 {
                     this.CurrentAction = action;
-                    this.CurrentAction.ApplyActionEffects(this.MCTSDecisionMaking.CurrentStateWorldModel);
                 }
             }
 

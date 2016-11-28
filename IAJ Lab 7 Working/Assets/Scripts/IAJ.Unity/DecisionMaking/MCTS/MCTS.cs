@@ -225,5 +225,9 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             throw new NotImplementedException();
         }
 
+        internal void UpdateWorld(GOB.Action currentAction)
+        {
+            currentAction.ApplyActionEffects(this.CurrentStateWorldModel);
+        }
     }
 }
