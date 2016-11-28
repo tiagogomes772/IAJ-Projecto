@@ -33,8 +33,8 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.GOB
 
         private Dictionary<string, float> GoalValues { get; set; }
 
-        private object[] PropertiesCharacter { get; set; }
-        private object[] PropertiesWorld { get; set; }
+        public object[] PropertiesCharacter { get; set; }
+        public object[] PropertiesWorld { get; set; }
 
         private List<Action> Actions { get; set; }
         protected IEnumerator<Action> ActionEnumerator { get; set; }

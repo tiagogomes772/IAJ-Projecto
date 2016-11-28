@@ -1,5 +1,6 @@
 ﻿using Assets.Scripts.IAJ.Unity.DecisionMaking.GOB;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Assets.Scripts.GameManager
 {
@@ -56,6 +57,49 @@ namespace Assets.Scripts.GameManager
         {
             //in the current state, the next player is always player 0
             return 0;
+        }
+
+        public void updateWorld()
+        {
+            this.PropertiesCharacter[MANA] = this.GameManager.characterData.Mana;
+            this.PropertiesCharacter[XP] = this.GameManager.characterData.XP;
+            this.PropertiesCharacter[MAXHP] = this.GameManager.characterData.MaxHP;
+            this.PropertiesCharacter[HP] = this.GameManager.characterData.HP;
+            this.PropertiesCharacter[MONEY] = this.GameManager.characterData.Money;
+            this.PropertiesCharacter[TIME] = this.GameManager.characterData.Time;
+            this.PropertiesCharacter[LEVEL] = this.GameManager.characterData.Level;
+            this.PropertiesCharacter[POSITION] = this.GameManager.characterData.CharacterGameObject.transform.position;
+
+            for(int i=0; i < 14; i++)
+            {
+                this.PropertiesWorld[i] = false;
+            }
+
+            foreach (var chest in GameObject.FindGameObjectsWithTag("Chest"))
+            {
+                base.SetProperty(chest.name, true);
+            }
+            foreach (var orc in GameObject.FindGameObjectsWithTag("Orc"))
+            {
+                base.SetProperty(orc.name, true);
+            }
+            foreach (var skeleton in GameObject.FindGameObjectsWithTag("Skeleton"))
+            {
+                base.SetProperty(skeleton.name, true);
+            }
+            foreach (var potion in GameObject.FindGameObjectsWithTag("ManaPotion"))
+            {
+                base.SetProperty(potion.name, true);
+            }
+            foreach (var potion in GameObject.FindGameObjectsWithTag("HealthPotion"))
+            {
+                base.SetProperty(potion.name, true);
+            }
+            foreach (var dragon in GameObject.FindGameObjectsWithTag("Dragon"))
+            {
+                base.SetProperty(dragon.name, true);
+            }
+
         }
     }
 }

@@ -23,7 +23,7 @@ namespace Assets.Scripts
         public const string BE_QUICK_GOAL = "BeQuick";
         public const string GET_RICH_GOAL = "GetRich";
 
-        public const float DECISION_MAKING_INTERVAL = 50.0f;
+        public const float DECISION_MAKING_INTERVAL = 20.0f;
         //public fields to be set in Unity Editor
         public GameManager.GameManager GameManager;
         public Text SurviveGoalText;
@@ -180,6 +180,8 @@ namespace Assets.Scripts
         {
             if (Time.time > this.nextUpdateTime || this.GameManager.WorldChanged)
             {
+                if (this.GameManager.WorldChanged)
+                    this.MCTSDecisionMaking.UpdateWorld();
                 this.GameManager.WorldChanged = false;
                 this.nextUpdateTime = Time.time + DECISION_MAKING_INTERVAL;
 
@@ -244,7 +246,7 @@ namespace Assets.Scripts
             {
                 if(this.CurrentAction.CanExecute())
                 {
-                    this.MCTSDecisionMaking.UpdateWorld(CurrentAction);
+                    //this.MCTSDecisionMaking.UpdateWorld(CurrentAction);
                     this.CurrentAction.Execute();
                 }
             }
