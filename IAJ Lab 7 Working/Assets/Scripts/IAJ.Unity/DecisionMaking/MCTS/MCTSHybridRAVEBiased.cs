@@ -87,34 +87,56 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             while (!currentState.IsTerminal())
             {
                 var actions = currentState.GetExecutableActions();
-                #region BiasedPlayout
-                float sumH = 0;
+                int hp = (int)currentState.GetProperty(Properties.HP);
+                int money = (int)currentState.GetProperty(Properties.MONEY);
 
-                foreach (GOB.Action a in actions)
+                if ( hp >= 25 && money >= 20)
                 {
-                    sumH += a.h(currentState);
-                }
-
-                float actionValue = 0.0f;
-                float gibbsProb = float.MaxValue;
-                float currentGibbsProb = 0.0f;
-                foreach (GOB.Action a in actions)
-                {
-                    actionValue = a.h(currentState);
-
-                    currentGibbsProb = actionValue / sumH;
-                    if (currentGibbsProb < gibbsProb)
+                    #region Immediate win
+                    foreach (GOB.Action a in actions)
                     {
-                        gibbsProb = currentGibbsProb;
-                        action = a;
+                        if (a.TypeOfAction.Equals("PickUpChest"))
+                        {
+                            action = a;
+                            break;
+                        }
                     }
+                    #endregion
                 }
-               // Debug.Log(Time.realtimeSinceStartup + " " + CurrentDepth + " Action: " + action.Name + "H: " + action.h(currentState) + " L: " + actions.Length);
-                #endregion
+                
+                
+                else
+                {
+                    #region BiasedPlayout
+                    float sumH = 0;
 
-                #region RAVE
-                ActionHistory.Add(new Pair<int, GOB.Action>(currentState.GetNextPlayer(), action));
-                #endregion
+                    foreach (GOB.Action a in actions)
+                    {
+                        sumH += a.h(currentState);
+                    }
+
+                    float actionValue = 0.0f;
+                    float gibbsProb = float.MaxValue;
+                    float currentGibbsProb = 0.0f;
+                    foreach (GOB.Action a in actions)
+                    {
+                        actionValue = a.h(currentState);
+
+                        currentGibbsProb = actionValue / sumH;
+                        if (currentGibbsProb < gibbsProb)
+                        {
+                            gibbsProb = currentGibbsProb;
+                            action = a;
+                        }
+                    }
+                    // Debug.Log(Time.realtimeSinceStartup + " " + CurrentDepth + " Action: " + action.Name + "H: " + action.h(currentState) + " L: " + actions.Length);
+                    #endregion
+
+                    #region RAVE
+                    ActionHistory.Add(new Pair<int, GOB.Action>(currentState.GetNextPlayer(), action));
+                    #endregion
+                    
+                }
                 action.ApplyActionEffects(currentState);
                 currentState.CalculateNextPlayer();
                 CurrentDepth++;
@@ -162,7 +184,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
         }
 
 
-        
+
 
         protected override void Backpropagate(MCTSNode node, Reward reward)
         {
@@ -173,12 +195,12 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                 node.Q = node.Q + reward.GetRewardForNode(node);
 
 
-                if (node.Parent != null) ActionHistory.Add(new Pair<int, GOB.Action>(node.Parent.State.GetNextPlayer(), node.Action));
+                if (node.Parent != null) ActionHistory.Add(new Pair<int, GOB.Action>(node.Parent.PlayerID, node.Action));
                 node = node.Parent;
 
                 if (node != null)
                 {
-                    int player = node.State.GetNextPlayer();
+                    int player = node.PlayerID;
                     foreach (MCTSNode c in node.ChildNodes)
                     {
 

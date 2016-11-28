@@ -1,47 +1,53 @@
-﻿using System;
-using UnityEngine;
-
-namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
+﻿namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
 {
     public class DynamicArrive : DynamicVelocityMatch
     {
         public override string Name
         {
-            get
-            {
-                return "DynamicArrive";
-            }
+            get { return "Arrive"; }
         }
 
-        public float maxSpeed;
-        public float stopRadius;
-        public float slowRadius;
+        public float MaxSpeed { get; set; }
+
+        public float StopRadius { get; set; }
+
+        public float SlowRadius { get; set; }
+
+        public DynamicArrive()
+        {
+            this.MovingTarget = new KinematicData();
+            MaxSpeed = 20.0f;
+            StopRadius = 0.1f;
+            SlowRadius = 5.0f;
+        }
 
         public override MovementOutput GetMovement()
         {
-            float targetSpeed;
-            Vector3 direction = Target.position - Character.position;
-            float distance = direction.sqrMagnitude;
+            //var output = new MovementOutput();
+            var direction = this.Target.position - this.Character.position;
+            var distance = direction.magnitude;
+            var targetSpeed = 0.0f;
 
-            if (distance < stopRadius)
+            if (distance < StopRadius)
             {
-                targetSpeed = 0;
+                targetSpeed = 0.0f;
             }
-
-            if (distance > slowRadius)
+            else if (distance > SlowRadius)
             {
-                targetSpeed = maxSpeed;
+                targetSpeed = MaxSpeed;
             }
             else
             {
-                targetSpeed = maxSpeed * (direction.magnitude / slowRadius);
+                targetSpeed = MaxSpeed * (distance / SlowRadius);
             }
 
-            Target.velocity = direction.normalized * targetSpeed;
+            this.MovingTarget.velocity = direction.normalized * targetSpeed;
 
-            MovingTarget = this.Target;
 
             return base.GetMovement();
         }
+
     }
 }
+
+

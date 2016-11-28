@@ -27,16 +27,18 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             //step 1, calculate beta and 1-beta. beta does not change from child to child. So calculate this only once
             // Mean Squared Error
             //float beta = node.NRAVE / (node.N + node.NRAVE + 4 * node.N * node.NRAVE * b * b);
-
+            
             float k = this.MaxIterations / 2;
             float beta = (float)Math.Sqrt(k / (3 * node.N + k));
+
+            float oneMinusBeta = 1 - beta;
 
             //step 2, calculate the MCTS value, the RAVE value, and the UCT for each child and determine the best one
             foreach (MCTSNode child in node.ChildNodes)
             {
                 MCTSValue = child.Q/child.N;
                 RAVEValue = child.QRAVE / child.NRAVE;
-                UCTValue = ((1 - beta) * MCTSValue + beta * RAVEValue) + C * (float)Math.Sqrt(Math.Log(node.N) / child.N);
+                UCTValue = (oneMinusBeta * MCTSValue + beta * RAVEValue) + C * (float)Math.Sqrt(Math.Log(node.N) / child.N);
 
                 if(bestUCT < UCTValue)
                 {
@@ -91,12 +93,12 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                 node.Q = node.Q + reward.GetRewardForNode(node);
 
 
-                if (node.Parent != null) ActionHistory.Add(new Pair<int, GOB.Action>(node.Parent.State.GetNextPlayer(), node.Action));
+                if (node.Parent != null) ActionHistory.Add(new Pair<int, GOB.Action>(node.Parent.PlayerID, node.Action));
                 node = node.Parent;
 
                 if (node != null)
                 {
-                    int player = node.State.GetNextPlayer();
+                    int player = node.PlayerID;
                     foreach(MCTSNode c in node.ChildNodes)
                     {
                         

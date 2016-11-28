@@ -8,7 +8,7 @@ namespace Assets.Scripts.DecisionMakingActions
     {
         public AutonomousCharacter Character { get; private set; }
 
-        public LevelUp(AutonomousCharacter character) : base("LevelUp")
+        public LevelUp(AutonomousCharacter character) : base("LevelUp","LevelUp")
         {
             this.Character = character;
         }

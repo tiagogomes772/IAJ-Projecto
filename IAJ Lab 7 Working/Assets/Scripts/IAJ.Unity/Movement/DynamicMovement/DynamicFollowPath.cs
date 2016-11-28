@@ -6,25 +6,25 @@ namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
     {
         public Path Path { get; set; }
         public float PathOffset { get; set; }
-
+        public float TargetRadius { get; set; }
         public float CurrentParam { get; set; }
 
         private MovementOutput EmptyMovementOutput { get; set; }
-        public float TargetRadius { get; private set; }
+
 
         public DynamicFollowPath(KinematicData character, Path path) 
         {
             //arrive properties
-            this.slowRadius = 4.0f;
+            this.SlowRadius = 4.0f;
             this.TimeToTargetSpeed = 0.25f;
-            this.stopRadius = 1.0f;
-            this.MaxAcceleration = 40.0f;
-            this.maxSpeed = 40.0f;
+            this.TargetRadius = 1.0f;
+            this.MaxAcceleration = 90.0f;
+            this.MaxSpeed = 40.0f;
 
             this.Target = new KinematicData();
             this.Character = character;
             this.Path = path;
-            this.CurrentParam = 1.0f;
+            this.CurrentParam = 0.0f;
             this.PathOffset = 3.0f;
             this.EmptyMovementOutput = new MovementOutput();
         }

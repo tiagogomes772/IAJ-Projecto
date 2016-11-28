@@ -88,7 +88,7 @@ public class PathfindingManager : MonoBehaviour {
 	            this.character.Movement = new DynamicFollowPath(this.character.KinematicData, this.currentSmoothedSolution)
 	            {
 	                MaxAcceleration = 40.0f,
-	                maxSpeed = 20.0f
+                    MaxSpeed = 20.0f
 	            };
 
 	        }

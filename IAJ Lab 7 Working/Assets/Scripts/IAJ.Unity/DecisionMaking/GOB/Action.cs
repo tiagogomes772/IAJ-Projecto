@@ -7,10 +7,12 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.GOB
         public string Name { get; set; }
         private Dictionary<Goal, float> GoalEffects { get; set; }
         public float Duration { get; set; }
+        public string TypeOfAction { get; set; }
 
-        public Action(string name)
+        public Action(string name,string typeOfAction)
         {
             this.Name = name;
+            this.TypeOfAction = typeOfAction;
             this.GoalEffects = new Dictionary<Goal, float>();
         }
 

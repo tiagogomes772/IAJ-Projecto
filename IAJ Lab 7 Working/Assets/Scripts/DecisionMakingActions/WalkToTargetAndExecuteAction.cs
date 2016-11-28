@@ -11,7 +11,7 @@ namespace Assets.Scripts.DecisionMakingActions
 
         protected GameObject Target { get; set; }
 
-        protected WalkToTargetAndExecuteAction(string actionName, AutonomousCharacter character, GameObject target) : base(actionName+"("+target.name+")")
+        protected WalkToTargetAndExecuteAction(string actionName, AutonomousCharacter character, GameObject target) : base(actionName+"("+target.name+")",actionName)
         {
             this.Character = character;
             this.Target = target;
