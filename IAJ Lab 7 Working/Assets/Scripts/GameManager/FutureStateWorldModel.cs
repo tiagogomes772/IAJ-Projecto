@@ -98,15 +98,15 @@ namespace Assets.Scripts.GameManager
         }
 
 
-        public override bool IsImmediateWin()
-        {
-            int money = (int)this.GetProperty(Properties.MONEY);
-            int HP = (int)this.GetProperty(Properties.HP);
-            if (HP >= 25 && money >= 20)
-                return true;
-            else
-                return false;
-        }
+        //public override bool IsImmediateWin()
+        //{
+        //    int money = (int)this.GetProperty(Properties.MONEY);
+        //    int HP = (int)this.GetProperty(Properties.HP);
+        //    if (HP >= 25 && money >= 20)
+        //        return true;
+        //    else
+        //        return false;
+        //}
 
 
     }

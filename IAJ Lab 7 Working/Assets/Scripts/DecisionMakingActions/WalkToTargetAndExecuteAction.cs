@@ -33,7 +33,8 @@ namespace Assets.Scripts.DecisionMakingActions
             //return (this.Target.transform.position - currentPosition).magnitude / 20.0f;
             var characterNode = this.Character.AStarPathFinding.NavMeshGraph.QuantizeToNode(currentPosition, 1.0f);
             var targetNode = this.Character.AStarPathFinding.NavMeshGraph.QuantizeToNode(this.Target.transform.position, 1.0f);
-
+            if(targetNode == null || characterNode == null)
+                return (this.Target.transform.position - currentPosition).magnitude / 20.0f;
             var distance = this.Character.AStarPathFinding.Heuristic.H(characterNode, targetNode);
             return distance / this.Character.Character.MaxSpeed;
         }

@@ -278,6 +278,7 @@ namespace Assets.Scripts
                 if (action != null)
                 {
                     this.CurrentAction = action;
+                    this.CurrentAction.ApplyActionEffects(this.MCTSDecisionMaking.CurrentStateWorldModel);
                 }
             }
 

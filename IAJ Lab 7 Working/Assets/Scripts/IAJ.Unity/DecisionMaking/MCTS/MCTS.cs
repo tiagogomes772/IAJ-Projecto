@@ -23,7 +23,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
         protected int CurrentIterationsInFrame { get; set; }
         protected int CurrentDepth { get; set; }
 
-        protected CurrentStateWorldModel CurrentStateWorldModel { get; set; }
+        public CurrentStateWorldModel CurrentStateWorldModel { get; set; }
         protected MCTSNode InitialNode { get; set; }
         protected System.Random RandomGenerator { get; set; }
         
